@@ -1,15 +1,6 @@
 title: CIM 423 - Building a 3D World
 description: >-
-  Documentation of a semester-long Unity project for CIM 423 at the
-  University of Miami: a short story, a 3D world built from it, and
+  A one-page build log for a semester-long Unity project for CIM 423 at
+  the University of Miami: a short story, a 3D world built from it, and
   custom interactions added to that world.
-theme: minima
-minima:
-  skin: classic
-
-show_excerpts: true
-
-plugins:
-  - jekyll-feed
-
-permalink: /:year/:month/:day/:title/
+footer: Nicholas Moffett — CIM 423, University of Miami
