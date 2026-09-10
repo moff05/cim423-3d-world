@@ -115,6 +115,31 @@
   em.placeholder {
     color: var(--muted);
   }
+  .ai-disclosure {
+    max-width: 700px;
+    margin: 1.75rem auto 0;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--code-bg);
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .ai-disclosure strong { color: var(--text); }
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.15em 0.55em;
+    border-radius: 4px;
+    margin-left: 0.5em;
+    vertical-align: middle;
+  }
+  .tag.script { background: var(--orange); color: #fff; }
+  .tag.noscript { background: transparent; color: var(--muted); border: 1px solid var(--rule); }
   footer {
     max-width: 700px;
     margin: 0 auto;
@@ -127,8 +152,10 @@
 <body>
 <header class="site-header">
   <h1>{{ site.title }}</h1>
-  <p>{{ site.description }}</p>
 </header>
+<div class="ai-disclosure">
+  <strong>AI disclosure:</strong> I used Claude to draft and revise the story's prose. Every creative call — setting, characters, the ending, and which room maps to which interaction — was mine, and I checked each interaction below against Unity's XR Interaction Toolkit docs before including it.
+</div>
 <main>
   {{ content }}
 </main>
