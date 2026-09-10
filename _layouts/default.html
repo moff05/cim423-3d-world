@@ -47,11 +47,30 @@
     border-radius: 14px;
     box-shadow: 0 4px 28px rgba(59, 38, 30, 0.07);
   }
+  header.site-header .eyebrow {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.7rem;
+  }
   header.site-header h1 {
-    font-size: 1.75rem;
-    margin: 0 0 0.4rem;
-    letter-spacing: -0.01em;
+    font-size: 2rem;
+    margin: 0 0 0.9rem;
+    letter-spacing: -0.02em;
     color: var(--rust);
+    background: linear-gradient(90deg, var(--rust), var(--orange) 55%, var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header.site-header .accent-bar {
+    width: 52px;
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--rust), var(--orange), var(--purple));
   }
   header.site-header p {
     color: var(--muted);
@@ -77,6 +96,11 @@
     text-transform: uppercase;
     color: var(--purple);
     margin-bottom: 0.6rem;
+  }
+  .chapter-date {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: -1rem 0 1.5rem;
   }
   main > h2:not(:first-of-type) {
     border-top: 1px solid var(--rule);
@@ -200,7 +224,9 @@
   <div class="space-rail right"></div>
 </div>
 <header class="site-header">
+  <span class="eyebrow">University of Miami · CIM 423</span>
   <h1>{{ site.title }}</h1>
+  <div class="accent-bar"></div>
 </header>
 <nav class="chapter-nav">
   <div class="chapter-nav-inner">

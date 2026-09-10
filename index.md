@@ -5,6 +5,8 @@ title: Home
 
 ## Assignment 1: Generate Your Story {#assignment-1}
 
+<p class="chapter-date">Posted September 9, 2026</p>
+
 <div class="ai-disclosure">
   <strong>AI disclosure:</strong> I used Claude to draft and revise the story. Every creative decision (setting, characters, ending, and which room maps to which interaction) was mine.
 </div>
@@ -90,16 +92,18 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
 
 ## Assignment 2: Build the 3D World {#assignment-2}
 
+<p class="chapter-date">Started September 10, 2026 · in progress</p>
+
 <div class="ai-disclosure">
   <strong>AI disclosure:</strong> Not written yet — will describe any AI use in building the scene once this assignment is underway.
 </div>
 
-<em class="placeholder">In progress — scene screenshots and asset list will go here.</em>
+<em class="placeholder">Scene screenshots and asset list will go here.</em>
 
 ## Assignment 3: Add Interactions {#assignment-3}
+
+<p class="chapter-date">Not started yet</p>
 
 <div class="ai-disclosure">
   <strong>AI disclosure:</strong> Not written yet — will describe any AI use in scripting the interactions once this assignment is underway.
 </div>
-
-<em class="placeholder">Not started yet.</em>
