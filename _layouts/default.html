@@ -134,9 +134,39 @@
     color: var(--muted);
     font-size: 0.85rem;
   }
+  .space-decor {
+    display: none;
+  }
+  @media (min-width: 1150px) {
+    .space-decor {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .space-decor img {
+      position: absolute;
+      opacity: 0.55;
+    }
+  }
 </style>
 </head>
 <body>
+<div class="space-decor" aria-hidden="true">
+  <img src="{{ '/assets/images/space/astronaut.png' | relative_url }}" style="top:6vh; left:2.5vw; width:70px;" alt="">
+  <img src="{{ '/assets/images/space/moon.png' | relative_url }}" style="top:26vh; left:3.5vw; width:55px;" alt="">
+  <img src="{{ '/assets/images/space/planet.png' | relative_url }}" style="top:46vh; left:2vw; width:80px;" alt="">
+  <img src="{{ '/assets/images/space/comet.png' | relative_url }}" style="top:66vh; left:3vw; width:75px;" alt="">
+  <img src="{{ '/assets/images/space/satellite.png' | relative_url }}" style="top:86vh; left:4vw; width:62px;" alt="">
+
+  <img src="{{ '/assets/images/space/rocket.png' | relative_url }}" style="top:8vh; right:2.5vw; width:62px;" alt="">
+  <img src="{{ '/assets/images/space/stars.png' | relative_url }}" style="top:28vh; right:3.5vw; width:58px;" alt="">
+  <img src="{{ '/assets/images/space/galaxy.png' | relative_url }}" style="top:48vh; right:2vw; width:85px;" alt="">
+  <img src="{{ '/assets/images/space/shuttle.png' | relative_url }}" style="top:68vh; right:3vw; width:78px;" alt="">
+  <img src="{{ '/assets/images/space/rover.png' | relative_url }}" style="top:87vh; right:2.5vw; width:65px;" alt="">
+</div>
 <header class="site-header">
   <h1>{{ site.title }}</h1>
 </header>
