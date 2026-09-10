@@ -3,7 +3,11 @@ layout: default
 title: Home
 ---
 
-## Assignment 1: Generate Your Story
+## Assignment 1: Generate Your Story {#assignment-1}
+
+<div class="ai-disclosure">
+  <strong>AI disclosure:</strong> I used Claude to draft and revise the story. Every creative decision (setting, characters, ending, and which room maps to which interaction) was mine.
+</div>
 
 The player character has no fixed name — it's entered on the start screen and referred to below as **{PlayerName}**. The ship AI companion is **ECHO**.
 
@@ -84,10 +88,18 @@ Selecting it shifts its material from dim blue to bright pulsing white, and the 
 | Lab | *(same room)* | Activate artifact | Select/Activate + Material |
 | End Screen | UI panel | — | — |
 
-## Assignment 2: Build the 3D World
+## Assignment 2: Build the 3D World {#assignment-2}
+
+<div class="ai-disclosure">
+  <strong>AI disclosure:</strong> Not written yet — will describe any AI use in building the scene once this assignment is underway.
+</div>
 
 <em class="placeholder">In progress — scene screenshots and asset list will go here.</em>
 
-## Assignment 3: Add Interactions
+## Assignment 3: Add Interactions {#assignment-3}
+
+<div class="ai-disclosure">
+  <strong>AI disclosure:</strong> Not written yet — will describe any AI use in scripting the interactions once this assignment is underway.
+</div>
 
 <em class="placeholder">Not started yet.</em>
