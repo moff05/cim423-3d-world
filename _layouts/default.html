@@ -40,8 +40,12 @@
   }
   header.site-header {
     max-width: 700px;
-    margin: 0 auto;
-    padding: 3rem 1.25rem 0;
+    margin: 1.5rem auto 0;
+    padding: 2.25rem 1.75rem;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    box-shadow: 0 4px 28px rgba(59, 38, 30, 0.07);
   }
   header.site-header h1 {
     font-size: 1.75rem;
@@ -175,7 +179,7 @@
     }
     .space-rail {
       position: fixed;
-      top: 150px;
+      top: 0;
       bottom: 0;
       width: calc((100vw - 748px) / 2);
       z-index: -1;
@@ -184,11 +188,9 @@
       background-image: url("{{ '/assets/images/space/tile.png' | relative_url }}");
       background-repeat: repeat;
       background-position: top left;
-      transition: top 0.15s ease-out;
     }
     .space-rail.left { left: 0; }
     .space-rail.right { right: 0; transform: scaleX(-1); }
-    .space-rail.docked { top: 46px; }
   }
 </style>
 </head>
@@ -236,25 +238,6 @@
 
   var navEl = document.querySelector('.chapter-nav');
   var links = document.querySelectorAll('.chapter-nav a[href^="#"]');
-  var headerEl = document.querySelector('.site-header');
-  var rails = document.querySelectorAll('.space-rail');
-
-  if (headerEl && rails.length) {
-    var dockThreshold = headerEl.offsetHeight;
-    var ticking = false;
-    function updateDock() {
-      var docked = window.scrollY >= dockThreshold;
-      rails.forEach(function (r) { r.classList.toggle('docked', docked); });
-      ticking = false;
-    }
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        requestAnimationFrame(updateDock);
-        ticking = true;
-      }
-    }, { passive: true });
-    updateDock();
-  }
 
   links.forEach(function (link) {
     link.addEventListener('click', function (e) {
