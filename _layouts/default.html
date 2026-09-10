@@ -134,9 +134,99 @@
     color: var(--muted);
     font-size: 0.85rem;
   }
+  .space-decor {
+    display: none;
+  }
+  @media (min-width: 1150px) {
+    .space-decor {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .space-decor .deco {
+      position: absolute;
+    }
+    .space-decor svg {
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.4;
+    }
+    .space-decor .sparkle {
+      fill: currentColor;
+      stroke: none;
+      opacity: 0.5;
+    }
+  }
 </style>
 </head>
 <body>
+<div class="space-decor" aria-hidden="true">
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="deco-sparkle" viewBox="0 0 24 24">
+      <path d="M12 2 L13.3 10.7 L22 12 L13.3 13.3 L12 22 L10.7 13.3 L2 12 L10.7 10.7 Z"/>
+    </symbol>
+    <symbol id="deco-planet" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="13"/>
+      <ellipse cx="32" cy="32" rx="27" ry="6" transform="rotate(-18 32 32)"/>
+    </symbol>
+    <symbol id="deco-rocket" viewBox="0 0 64 64">
+      <path d="M32 6c9 9 11 24 11 34H21c0-10 2-25 11-34Z"/>
+      <circle cx="32" cy="24" r="4.5"/>
+      <path d="M21 32 12 46l9-4M43 32l9 14-9-4"/>
+      <path d="M27 40l-2 12M37 40l2 12"/>
+    </symbol>
+    <symbol id="deco-astronaut" viewBox="0 0 64 64">
+      <circle cx="32" cy="18" r="10"/>
+      <path d="M23 16a9 9 0 0 1 18 0"/>
+      <rect x="20" y="28" width="24" height="26" rx="9"/>
+      <path d="M20 34 8 30M44 34l12-4"/>
+      <path d="M25 54 21 63M39 54l4 9"/>
+      <rect x="27" y="32" width="10" height="8" rx="2"/>
+    </symbol>
+  </svg>
+
+  <div class="deco" style="top:5vh; left:2.5vw; color:var(--mauve);">
+    <svg width="16" height="16"><use href="#deco-sparkle"/></svg>
+  </div>
+  <div class="deco" style="top:9vh; left:5.5vw; color:var(--orange);">
+    <svg width="10" height="10"><use href="#deco-sparkle"/></svg>
+  </div>
+  <div class="deco" style="top:26vh; left:3vw; color:var(--rust);">
+    <svg width="52" height="52"><use href="#deco-astronaut"/></svg>
+  </div>
+  <div class="deco" style="top:52vh; left:4vw; color:var(--purple);">
+    <svg width="60" height="60"><use href="#deco-planet"/></svg>
+  </div>
+  <div class="deco" style="top:74vh; left:2vw; color:var(--mauve);">
+    <svg width="12" height="12"><use href="#deco-sparkle"/></svg>
+  </div>
+  <div class="deco" style="top:88vh; left:6vw; color:var(--orange);">
+    <svg width="9" height="9"><use href="#deco-sparkle"/></svg>
+  </div>
+
+  <div class="deco" style="top:8vh; right:3vw; color:var(--rust);">
+    <svg width="56" height="56"><use href="#deco-rocket"/></svg>
+  </div>
+  <div class="deco" style="top:34vh; right:4.5vw; color:var(--orange);">
+    <svg width="11" height="11"><use href="#deco-sparkle"/></svg>
+  </div>
+  <div class="deco" style="top:38vh; right:2.5vw; color:var(--mauve);">
+    <svg width="14" height="14"><use href="#deco-sparkle"/></svg>
+  </div>
+  <div class="deco" style="top:58vh; right:3vw; color:var(--purple);">
+    <svg width="44" height="44"><use href="#deco-planet"/></svg>
+  </div>
+  <div class="deco" style="top:82vh; right:5vw; color:var(--rust);">
+    <svg width="10" height="10"><use href="#deco-sparkle"/></svg>
+  </div>
+</div>
 <header class="site-header">
   <h1>{{ site.title }}</h1>
 </header>
