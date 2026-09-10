@@ -7,12 +7,10 @@ title: Home
 
 The player character has no fixed name — it's entered on the start screen and referred to below as **{PlayerName}**. The ship AI companion is **ECHO**.
 
-Each interaction is tagged <span class="tag script">Script</span> if it needs custom C# code, or <span class="tag noscript">No script</span> if it's just wiring up built-in XR Interaction Toolkit components.
-
 #### Start Screen
-*Custom UI Interaction* <span class="tag script">Script</span>
+*Custom UI Interaction*
 
-A simple UI panel: station logo, a text input field labeled "Enter your call sign," and a **Begin** button. A short script reads the input field's text on button press and stores it as {PlayerName}.
+A simple UI panel: station logo, a text input field labeled "Enter your call sign," and a **Begin** button.
 
 ---
 
@@ -25,8 +23,8 @@ A simple UI panel: station logo, a text input field labeled "Enter your call sig
 >
 > **ECHO:** Crew roster says fourteen people, {PlayerName}. But the station's activity log — every entry, every day, automatic — only has records for nine of them. The other five just stop showing up. That's not what a normal reassignment looks like.
 
-**Airlock Door** · *Hover / Select / Activate* <span class="tag noscript">No script</span>
-The door glows on hover, then opens on select, moving the player into the corridor — a built-in XR Simple Interactable, no custom code needed.
+**Airlock Door** · *Hover / Select / Activate*
+The door glows on hover, then opens on select, moving the player into the corridor.
 
 ---
 
@@ -42,7 +40,7 @@ The door glows on hover, then opens on select, moving the player into the corrid
 
 > **ECHO:** Terminal's still got power. Might be worth a look before you start pulling wiring.
 
-**Terminal** · *Information Panel* <span class="tag noscript">No script</span>
+**Terminal** · *Information Panel*
 Selecting the terminal opens a UI panel showing a written journal entry left by the crew — distinct from the automated activity log mentioned earlier.
 
 > **JOURNAL — Day 180:** "Resonance from the artifact is climbing again. Director wants to run a full-power test tomorrow. I've logged my objection."
@@ -56,13 +54,13 @@ Selecting the terminal opens a UI panel showing a written journal entry left by 
 
 > **ECHO:** This is the room the journal entry meant.
 
-**Recorder** · *Hover Enter/Exit* <span class="tag noscript">No script</span>
+**Recorder** · *Hover Enter/Exit*
 Scales up and lights on hover, returns to normal on exit. Selecting it plays a second journal entry:
 
 > **JOURNAL — Day 181:** "He ran the test. The cradle lit up, and for a few seconds the whole crew just wasn't in the room anymore. I don't know where they went. I'm shutting it down and sealing this lab."
 
-**Artifact** · *Select/Activate + Changing Material* <span class="tag script">Script</span>
-Selecting it shifts its material from dim blue to bright pulsing white, and the room lights flicker for a few seconds before everything settles back to normal. A script lerps the material color and light intensity over time — the one interaction here that needs real code rather than just component settings.
+**Artifact** · *Select/Activate + Changing Material*
+Selecting it shifts its material from dim blue to bright pulsing white, and the room lights flicker for a few seconds before everything settles back to normal.
 
 > **ECHO:** {PlayerName}. Whatever that was, it's done now. Don't touch it again.
 >
@@ -76,15 +74,15 @@ Selecting it shifts its material from dim blue to bright pulsing white, and the 
 
 ### World & Interaction Map
 
-| Room | 3D Elements | Interaction | Type | Script? |
-|---|---|---|---|---|
-| Start Screen | UI panel | Name entry | Custom UI | Yes |
-| Docking Bay | Crates, cargo sled, airlock door | Open door | Select/Activate | No |
-| Corridor | Wall/floor pieces, lighting | — | — | — |
-| Control Room | Console/terminal, chair, monitor | View journal entry | Information Panel | No |
-| Lab | Desk, recorder, artifact pedestal | Hover recorder | Hover Enter/Exit | No |
-| Lab | *(same room)* | Activate artifact | Select/Activate + Material | Yes |
-| End Screen | UI panel | — | — | — |
+| Room | 3D Elements | Interaction | Type |
+|---|---|---|---|
+| Start Screen | UI panel | Name entry | Custom UI |
+| Docking Bay | Crates, cargo sled, airlock door | Open door | Select/Activate |
+| Corridor | Wall/floor pieces, lighting | — | — |
+| Control Room | Console/terminal, chair, monitor | View journal entry | Information Panel |
+| Lab | Desk, recorder, artifact pedestal | Hover recorder | Hover Enter/Exit |
+| Lab | *(same room)* | Activate artifact | Select/Activate + Material |
+| End Screen | UI panel | — | — |
 
 ## Assignment 2: Build the 3D World
 
