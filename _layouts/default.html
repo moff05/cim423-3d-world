@@ -88,7 +88,7 @@
   }
   h2::before {
     counter-increment: none;
-    content: "Assignment " counter(chapter);
+    content: "Assignment " counter(chapter, decimal-leading-zero);
     display: block;
     font-size: 0.72rem;
     font-weight: 700;
