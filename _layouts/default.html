@@ -7,25 +7,18 @@
 <meta name="description" content="{{ site.description }}">
 <style>
   :root {
-    color-scheme: light dark;
-    --bg: #fdfcfa;
-    --text: #1b1b1b;
-    --muted: #6b6b6b;
-    --rule: #e4e0d9;
-    --accent: #8a5cf6;
-    --quote-bg: #f4f1ec;
-    --code-bg: #f0eee9;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #16151a;
-      --text: #ececec;
-      --muted: #9a9a9a;
-      --rule: #302e35;
-      --accent: #b39bfa;
-      --quote-bg: #201f26;
-      --code-bg: #201f26;
-    }
+    color-scheme: light;
+    --bg: #FBF3EC;
+    --text: #3B2A26;
+    --muted: #93726A;
+    --rule: #E9D2C4;
+    --rust: #A2574F;
+    --orange: #E68057;
+    --mauve: #BF7587;
+    --purple: #993A8B;
+    --accent: var(--rust);
+    --quote-bg: #F3E3D6;
+    --code-bg: #F0E1D4;
   }
   * { box-sizing: border-box; }
   body {
@@ -38,41 +31,57 @@
   main {
     max-width: 700px;
     margin: 0 auto;
-    padding: 3rem 1.25rem 5rem;
+    padding: 2.5rem 1.25rem 6rem;
+    counter-reset: chapter;
   }
   header.site-header {
     max-width: 700px;
     margin: 0 auto;
-    padding: 2.5rem 1.25rem 0;
+    padding: 3rem 1.25rem 0;
   }
   header.site-header h1 {
     font-size: 1.75rem;
     margin: 0 0 0.4rem;
     letter-spacing: -0.01em;
+    color: var(--rust);
   }
   header.site-header p {
     color: var(--muted);
     margin: 0;
     font-size: 1.02rem;
   }
-  h1, h2, h3, h4 { letter-spacing: -0.01em; }
+  h1, h3, h4 { letter-spacing: -0.01em; }
   h2 {
-    font-size: 1.5rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
+    counter-increment: chapter;
+    font-size: 1.6rem;
+    margin: 0 0 1.5rem;
+    padding-top: 3.5rem;
+    letter-spacing: -0.01em;
+  }
+  h2::before {
+    counter-increment: none;
+    content: "Chapter " counter(chapter, decimal-leading-zero);
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.6rem;
+  }
+  main > h2:not(:first-of-type) {
     border-top: 1px solid var(--rule);
   }
-  main > h2:first-of-type { border-top: none; padding-top: 0; }
-  h3 { font-size: 1.15rem; margin-top: 2.2rem; }
-  h4 { font-size: 1rem; margin-top: 1.6rem; color: var(--muted); }
+  h3 { font-size: 1.1rem; margin-top: 2rem; color: var(--rust); }
+  h4 { font-size: 0.95rem; margin-top: 1.4rem; color: var(--muted); }
   p, li { font-size: 1.02rem; }
-  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
-  a:hover { opacity: 0.8; }
+  a { color: var(--purple); text-decoration: none; border-bottom: 1px solid currentColor; }
+  a:hover { opacity: 0.75; }
   blockquote {
-    margin: 1.2rem 0;
-    padding: 0.7rem 1.1rem;
+    margin: 1.1rem 0;
+    padding: 0.65rem 1.1rem;
     background: var(--quote-bg);
-    border-left: 3px solid var(--accent);
+    border-left: 3px solid var(--orange);
     border-radius: 4px;
   }
   blockquote p { margin: 0.3rem 0; font-size: 0.98rem; }
@@ -85,12 +94,12 @@
   hr {
     border: none;
     border-top: 1px solid var(--rule);
-    margin: 2.2rem 0;
+    margin: 1.8rem 0;
   }
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     margin: 1.2rem 0;
     display: block;
     overflow-x: auto;
@@ -103,12 +112,15 @@
   }
   th { color: var(--muted); font-weight: 600; }
   img { max-width: 100%; border-radius: 6px; }
+  em.placeholder {
+    color: var(--muted);
+  }
   footer {
     max-width: 700px;
     margin: 0 auto;
     padding: 0 1.25rem 3rem;
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: 0.85rem;
   }
 </style>
 </head>
