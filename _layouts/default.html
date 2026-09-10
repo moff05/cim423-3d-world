@@ -145,13 +145,13 @@
       position: fixed;
       top: 0;
       bottom: 0;
-      width: 190px;
+      width: calc((100vw - 748px) / 2);
       z-index: -1;
       pointer-events: none;
       opacity: 0.5;
       background-image: url("{{ '/assets/images/space/tile.png' | relative_url }}");
-      background-repeat: repeat-y;
-      background-position: top center;
+      background-repeat: repeat;
+      background-position: top left;
     }
     .space-rail.left { left: 0; }
     .space-rail.right { right: 0; transform: scaleX(-1); }
