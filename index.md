@@ -78,7 +78,7 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
 
 *"You sealed the lab and logged the coordinates for recovery. Whatever happened to the crew, it's not your problem to solve today."* Buttons: **Restart** / **Quit**.
 
-### World & Interaction Map
+### World & Interaction Map {#world-map}
 
 | Room | 3D Elements | Interaction | Type |
 |---|---|---|---|
@@ -98,7 +98,24 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
   <strong>AI disclosure:</strong> Not written yet — will describe any AI use in building the scene once this assignment is underway.
 </div>
 
-<em class="placeholder">Scene screenshots and asset list will go here.</em>
+Room-by-room notes for building the layout from the [World & Interaction Map](#world-map) above. Screenshots go here once the scene exists.
+
+- **Docking Bay** — Kenney Space Kit hangar/dock pieces, crates, the half-loaded cargo sled, airlock door on the far wall.
+- **Corridor** — repeated modular wall/floor/ceiling pieces from the same kit, strip-light prefabs. Kept short — flavor only, no interaction.
+- **Control Room** — Kenney console/terminal piece, wall monitor, one desk + chair from the Furniture Kit.
+- **Lab** — desk + chair, recorder prop, artifact on a pedestal (primitive + emissive material — no shader needed), and five crew silhouettes built from stretched capsules and spheres (unlit black material, arms angled outward), inactive by default until the artifact triggers.
+
+Lighting stays dim and practical-fixture-driven everywhere to match the dead-station mood; only the Lab's light needs to be rigged for the flicker, which gets scripted in Assignment 3.
+
+### Asset List
+
+| Source | Assets | Used For |
+|---|---|---|
+| [Kenney "Space Kit"](https://kenney.nl/assets/space-kit) | Modular corridor/wall pieces, airlock door, console, crates, cargo sled | Docking Bay, Corridor, Control Room |
+| Kenney "Furniture Kit" | Desk, chair | Control Room, Lab |
+| [Poly Haven](https://polyhaven.com) | Space skybox/HDRI | Background outside any windows/viewports |
+| Built from primitives | Artifact (emissive material, no shader), recorder prop, 5 crew silhouettes | Lab |
+| [Freesound.org](https://freesound.org) (CC0) | Breathing loop, ECHO beeps/stings, screech/howl one-shot | Ambient audio + artifact trigger (wired up in Assignment 3) |
 
 ## Add Interactions {#assignment-3}
 
