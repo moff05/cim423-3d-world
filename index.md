@@ -11,6 +11,8 @@ title: Home
 
 The player character has no fixed name — it's entered on the start screen and referred to below as **{PlayerName}**. The ship AI companion is **ECHO**.
 
+The station stays dead silent throughout — just {PlayerName}'s breathing and ECHO's voice — except for the one moment in the Lab where that breaks.
+
 #### Start Screen
 *Custom UI Interaction*
 
@@ -25,7 +27,7 @@ A simple UI panel: station logo, a text input field labeled "Enter your call sig
 >
 > **{PlayerName}:** Great. More parts for us, then.
 >
-> **ECHO:** Crew roster says fourteen people, {PlayerName}. But the station's activity log — every entry, every day, automatic — only has records for nine of them. The other five just stop showing up. That's not what a normal reassignment looks like.
+> **ECHO:** Crew roster says five people, {PlayerName}. The station's activity log — every entry, every day, automatic — stops dead on the same day, for all five. Not staggered. Not partial. Same day. That's not what a normal evacuation looks like.
 
 **Airlock Door** · *Hover / Select / Activate*
 The door glows on hover, then opens on select, moving the player into the corridor.
@@ -59,14 +61,12 @@ Selecting the terminal opens a UI panel showing a written journal entry left by 
 > **ECHO:** This is the room the journal entry meant.
 
 **Recorder** · *Hover Enter/Exit*
-Scales up and lights on hover, returns to normal on exit. Selecting it plays a second journal entry:
-
-> **JOURNAL — Day 181:** "He ran the test. The cradle lit up, and for a few seconds the whole crew just wasn't in the room anymore. I don't know where they went. I'm shutting it down and sealing this lab."
+Scales up and lights on hover, returns to normal on exit. Selecting it plays back the last few seconds it ever recorded: static, one ragged breath, then nothing. No one made a Day 181 entry — there was no one left to make it.
 
 **Artifact** · *Select/Activate + Changing Material*
-Selecting it shifts its material from dim blue to bright pulsing white, and the room lights flicker for a few seconds before everything settles back to normal.
+Selecting it shifts its material from dim blue to bright pulsing white. The walls cut out. A screech rises, and five silhouettes stand in the dark that's left behind, arms reaching toward {PlayerName}. A few seconds later the walls snap back, the artifact goes dark, and the lab is silent again.
 
-> **ECHO:** {PlayerName}. Whatever that was, it's done now. Don't touch it again.
+> **ECHO:** {PlayerName}. Whatever that was — whatever they were — it's done now. Don't touch it again.
 >
 > **{PlayerName}:** Wasn't planning on it.
 
