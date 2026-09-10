@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-## Assignment 1: Generate Your Story {#assignment-1}
+## Generate Your Story {#assignment-1}
 
 <p class="chapter-date">Posted September 9, 2026</p>
 
@@ -90,7 +90,7 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
 | Lab | *(same room)* | Activate artifact | Select/Activate + Material |
 | End Screen | UI panel | — | — |
 
-## Assignment 2: Build the 3D World {#assignment-2}
+## Build the 3D World {#assignment-2}
 
 <p class="chapter-date">Started September 10, 2026 · in progress</p>
 
@@ -100,7 +100,7 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
 
 <em class="placeholder">Scene screenshots and asset list will go here.</em>
 
-## Assignment 3: Add Interactions {#assignment-3}
+## Add Interactions {#assignment-3}
 
 <p class="chapter-date">Not started yet</p>
 
