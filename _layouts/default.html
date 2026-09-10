@@ -184,9 +184,11 @@
       background-image: url("{{ '/assets/images/space/tile.png' | relative_url }}");
       background-repeat: repeat;
       background-position: top left;
+      transition: top 0.15s ease-out;
     }
     .space-rail.left { left: 0; }
     .space-rail.right { right: 0; transform: scaleX(-1); }
+    .space-rail.docked { top: 46px; }
   }
 </style>
 </head>
@@ -234,6 +236,25 @@
 
   var navEl = document.querySelector('.chapter-nav');
   var links = document.querySelectorAll('.chapter-nav a[href^="#"]');
+  var headerEl = document.querySelector('.site-header');
+  var rails = document.querySelectorAll('.space-rail');
+
+  if (headerEl && rails.length) {
+    var dockThreshold = headerEl.offsetHeight;
+    var ticking = false;
+    function updateDock() {
+      var docked = window.scrollY >= dockThreshold;
+      rails.forEach(function (r) { r.classList.toggle('docked', docked); });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(updateDock);
+        ticking = true;
+      }
+    }, { passive: true });
+    updateDock();
+  }
 
   links.forEach(function (link) {
     link.addEventListener('click', function (e) {
