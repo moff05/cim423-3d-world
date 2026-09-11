@@ -95,7 +95,7 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
 <p class="chapter-date">September 10, 2026</p>
 
 <div class="ai-disclosure">
-  <strong>AI disclosure:</strong> Claude Code built this scene end to end — driving the Unity Editor directly (via its CLI automation) to construct the room geometry, create materials, import and place the Kenney and Poly Haven assets below, write the free-look script used to test-walk the station, and capture the screenshots and video. My part was the judgment calls: which assets to source, catching that the airlock didn't visually seal the doorway and fixing it, and pushing back when props were tucked in corners instead of visible from each room's entrance.
+  <strong>AI disclosure:</strong> I directed this build — sourcing and approving the Kenney and Poly Haven assets below, reviewing the scene at every stage, and catching two issues that needed fixing: the airlock not visually sealing the doorway, and props tucked in corners instead of visible from each room's entrance. Claude Code executed the construction, driving the Unity Editor directly to place geometry, assets, and lighting.
 </div>
 
 Room-by-room build, following the [World & Interaction Map](#world-map) above:
