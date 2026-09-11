@@ -92,29 +92,41 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
 
 ## Build the 3D World {#assignment-2}
 
-<p class="chapter-date">Started September 10, 2026 · in progress</p>
+<p class="chapter-date">September 10, 2026</p>
 
 <div class="ai-disclosure">
-  <strong>AI disclosure:</strong> Not written yet — will describe any AI use in building the scene once this assignment is underway.
+  <strong>AI disclosure:</strong> Claude Code built this scene end to end — driving the Unity Editor directly (via its CLI automation) to construct the room geometry, create materials, import and place the Kenney and Poly Haven assets below, write the free-look script used to test-walk the station, and capture the screenshots and video. My part was the judgment calls: which assets to source, catching that the airlock didn't visually seal the doorway and fixing it, and pushing back when props were tucked in corners instead of visible from each room's entrance.
 </div>
 
-Room-by-room notes for building the layout from the [World & Interaction Map](#world-map) above. Screenshots go here once the scene exists.
+Room-by-room build, following the [World & Interaction Map](#world-map) above:
 
-- **Docking Bay** — Kenney Space Kit hangar/dock pieces, crates, the half-loaded cargo sled, airlock door on the far wall.
-- **Corridor** — repeated modular wall/floor/ceiling pieces from the same kit, strip-light prefabs. Kept short — flavor only, no interaction.
-- **Control Room** — Kenney console/terminal piece, wall monitor, one desk + chair from the Furniture Kit.
-- **Lab** — desk + chair, recorder prop, artifact on a pedestal (primitive + emissive material — no shader needed), and five crew silhouettes built from stretched capsules and spheres (unlit black material, arms angled outward), inactive by default until the artifact triggers.
+- **Docking Bay** — primitive-built room shell, populated with real Kenney Space Kit props: five barrels doubling as storage crates, a barrel-laden rail cart as the half-loaded cargo sled, and a Kenney "gate" piece framing a sealed, glowing door panel as the airlock.
+- **Corridor** — primitive shell with two emissive ceiling strip-lights. Kept short — flavor only, no interaction.
+- **Control Room** — Kenney Furniture Kit desk + chair, Kenney Space Kit computer console + monitor, arranged so the workstation is visible the moment you walk in from the corridor.
+- **Lab** — Kenney Furniture Kit desk + chair, a recorder prop, the artifact on a pedestal (primitive + emissive material — no shader needed), and five crew silhouettes built from stretched capsules (unlit black material), inactive by default until the artifact triggers.
 
-Lighting stays dim and practical-fixture-driven everywhere to match the dead-station mood; only the Lab's light needs to be rigged for the flicker, which gets scripted in Assignment 3.
+Lighting stays dim and practical-fixture-driven everywhere to match the dead-station mood; only the Lab's light needs to be rigged for the flicker, which gets scripted in Assignment 3. A Poly Haven starfield HDRI is wired in as the scene's skybox/environment lighting.
+
+### Screenshots
+
+<img src="/assets/images/a2_docking_bay.png" alt="Docking Bay, viewed from the spawn point, showing the barrels, cargo cart, and airlock" />
+
+<img src="/assets/images/a2_lab.png" alt="Lab, showing the desk and recorder on the left and the artifact pedestal on the right" />
+
+### Video Walkthrough
+
+<video controls style="width:100%;max-width:960px;">
+  <source src="/assets/videos/assignment2_walkthrough.mp4" type="video/mp4">
+</video>
 
 ### Asset List
 
 | Source | Assets | Used For |
 |---|---|---|
-| [Kenney "Space Kit"](https://kenney.nl/assets/space-kit) | Modular corridor/wall pieces, airlock door, console, crates, cargo sled | Docking Bay, Corridor, Control Room |
-| Kenney "Furniture Kit" | Desk, chair | Control Room, Lab |
-| [Poly Haven](https://polyhaven.com) | Space skybox/HDRI | Background outside any windows/viewports |
-| Built from primitives | Artifact (emissive material, no shader), recorder prop, 5 crew silhouettes | Lab |
+| [Kenney "Space Kit"](https://kenney.nl/assets/space-kit) | Barrels, barrel rail cart, gate frame, computer console, computer screen/monitor | Docking Bay, Control Room |
+| [Kenney "Furniture Kit"](https://kenney.nl/assets/furniture-kit) | Desk, chair | Control Room, Lab |
+| [Poly Haven — Kloppenheim 02](https://polyhaven.com/a/kloppenheim_02) | Starfield HDRI | Scene skybox / environment lighting |
+| Built from primitives | Room shells (walls/floor/ceiling), airlock door panel, artifact (emissive material, no shader), recorder prop, 5 crew silhouettes, strip lights | All rooms |
 | [Freesound.org](https://freesound.org) (CC0) | Breathing loop, ECHO beeps/stings, screech/howl one-shot | Ambient audio + artifact trigger (wired up in Assignment 3) |
 
 ## Add Interactions {#assignment-3}

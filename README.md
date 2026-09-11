@@ -6,7 +6,7 @@ One plain, single-page build log for the CIM 423 semester project at the Univers
 - Everything lives on one page: each assignment is a `##` section appended to `index.md` as it's finished, in order. Nothing to click into, nothing to navigate.
 - The asset-tracking table (for the Assignment 2 text submission) is the last section on the same page, not a separate page
 - Screenshots go in `assets/images/` and are committed directly
-- Videos are NOT committed — recorded, uploaded to YouTube as unlisted, and linked/embedded in the relevant section
+- Videos are committed directly under `assets/videos/` and embedded with a native `<video>` tag (decided against YouTube for Assignment 2 to skip the manual upload step)
 - Deploy with `vercel --prod` from this directory (project: `nicholas-projects12/cim423-3d-world`)
 
 Live at: https://cim423-3d-world.vercel.app
