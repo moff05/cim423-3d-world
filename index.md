@@ -92,29 +92,40 @@ Selecting it shifts its material from dim blue to bright pulsing white. The wall
 
 ## Build the 3D World {#assignment-2}
 
-<p class="chapter-date">Started September 10, 2026 · in progress</p>
+<p class="chapter-date">September 11, 2026</p>
 
 <div class="ai-disclosure">
-  <strong>AI disclosure:</strong> Not written yet — will describe any AI use in building the scene once this assignment is underway.
+  <strong>AI disclosure:</strong> I directed this build over many rounds of review — approving the asset sourcing, deciding how rooms trigger dialogue, choosing to host the walkthrough video directly, and directing a full atmosphere pass (decay decals, real 3D ringed planets outside the windows, space suits, a research chalkboard, bunk beds, more equipment) with fixes at each step based on what I flagged while walking through it myself. Claude Code executed all of it, driving the Unity Editor directly.
 </div>
 
-Room-by-room notes for building the layout from the [World & Interaction Map](#world-map) above. Screenshots go here once the scene exists.
+Room-by-room build, following the [World & Interaction Map](#world-map) above:
 
-- **Docking Bay** — Kenney Space Kit hangar/dock pieces, crates, the half-loaded cargo sled, airlock door on the far wall.
-- **Corridor** — repeated modular wall/floor/ceiling pieces from the same kit, strip-light prefabs. Kept short — flavor only, no interaction.
-- **Control Room** — Kenney console/terminal piece, wall monitor, one desk + chair from the Furniture Kit.
-- **Lab** — desk + chair, recorder prop, artifact on a pedestal (primitive + emissive material — no shader needed), and five crew silhouettes built from stretched capsules and spheres (unlit black material, arms angled outward), inactive by default until the artifact triggers.
+- **Docking Bay** — primitive-built room shell with a paneled floor/wall/ceiling texture, populated with Kenney Space Kit props: barrels doubling as storage crates, a barrel-laden rail cart as the half-loaded cargo sled, a satellite dish, and a gate frame with a sealed, glowing hazard-striped door as the airlock. Two primitive-built space suit mannequins stand on display platforms, and a window looks out on deep space.
+- **Corridor** — primitive shell, two emissive ceiling strip-lights, and a window onto a ringed planet. Kept short — flavor only, no interaction.
+- **Control Room** — Kenney Furniture Kit desk + chair, Kenney Space Kit computer console + monitor (facing the corridor entrance so it's visible on arrival), a bunk bed and three wall posters, and a second window looking out on a different ringed planet.
+- **Lab** — Kenney Furniture Kit desk + chair, a recorder prop, the artifact on a pedestal (primitive + emissive material — no shader needed), five crew silhouettes built from stretched capsules (unlit black material, inactive by default until the artifact triggers), two wall-mounted bookcases stocked with primitive vials/bottles/gadgets, a wall-mounted chalkboard, and a scattered pile of papers in the corner.
 
-Lighting stays dim and practical-fixture-driven everywhere to match the dead-station mood; only the Lab's light needs to be rigged for the flicker, which gets scripted in Assignment 3.
+Lighting stays dim and practical-fixture-driven everywhere to match the dead-station mood, with mold and grease decay decals scattered across every room; only the Lab's light needs to be rigged for the flicker, which gets scripted in Assignment 3. The skybox is a procedurally generated starfield (not a stock HDRI) with three real 3D ringed planets — actual sphere + tilted alpha-cutout disc geometry, not a painted texture — positioned so each window looks out on one.
+
+### Screenshots
+
+<img src="/assets/images/a2_docking_bay.png" alt="Docking Bay, showing the space suits, satellite dish, barrels, cargo cart, and the glowing airlock" />
+
+<img src="/assets/images/a2_lab.png" alt="Lab, showing the artifact on its pedestal and the research chalkboard" />
+
+### Video Walkthrough
+
+<video controls style="width:100%;max-width:960px;">
+  <source src="/assets/videos/assignment2_walkthrough.mp4" type="video/mp4">
+</video>
 
 ### Asset List
 
 | Source | Assets | Used For |
 |---|---|---|
-| [Kenney "Space Kit"](https://kenney.nl/assets/space-kit) | Modular corridor/wall pieces, airlock door, console, crates, cargo sled | Docking Bay, Corridor, Control Room |
-| Kenney "Furniture Kit" | Desk, chair | Control Room, Lab |
-| [Poly Haven](https://polyhaven.com) | Space skybox/HDRI | Background outside any windows/viewports |
-| Built from primitives | Artifact (emissive material, no shader), recorder prop, 5 crew silhouettes | Lab |
+| [Kenney "Space Kit"](https://kenney.nl/assets/space-kit) | Barrels, barrel rail cart, gate frame, computer console, computer screen/monitor, window frame, satellite dish | Docking Bay, Corridor, Control Room |
+| [Kenney "Furniture Kit"](https://kenney.nl/assets/furniture-kit) | Desk, chair, two bookcases, bunk bed | Control Room, Lab |
+| Built from primitives | Room shells and paneled surface textures, airlock door panel + glass, artifact (emissive material, no shader), recorder prop, 5 crew silhouettes, strip lights, space suit mannequins, decay decals, wall posters, chalkboard, paper pile, and a procedural starfield skybox with 3 real 3D ringed planets | All rooms |
 | [Freesound.org](https://freesound.org) (CC0) | Breathing loop, ECHO beeps/stings, screech/howl one-shot | Ambient audio + artifact trigger (wired up in Assignment 3) |
 
 ## Add Interactions {#assignment-3}
