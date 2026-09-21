@@ -130,8 +130,46 @@ Lighting stays dim and practical-fixture-driven everywhere to match the dead-sta
 
 ## Add Interactions {#assignment-3}
 
-<p class="chapter-date">Not started yet</p>
+<p class="chapter-date">Posted September 21, 2026</p>
 
 <div class="ai-disclosure">
-  <strong>AI disclosure:</strong> Not written yet — will describe any AI use in scripting the interactions once this assignment is underway.
+  <strong>AI disclosure:</strong> I directed this build over many rounds of review — deciding which interaction went where, rejecting several art/asset options before approving the cinematic ship and the pink-alien reveal effect, and explicitly requesting the door mechanic be a twist gesture rather than a simple point-and-select for a better VR feel. Claude Code wrote and wired all the scripts, driving the Unity Editor and XR Interaction Toolkit directly, with fixes at each step based on what I flagged testing it myself.
 </div>
+
+Five points of interaction, layered onto the rooms from the [World & Interaction Map](#world-map):
+
+#### 1. Start Screen — Custom UI Interaction
+Station logo, a text input field labeled "Enter your call sign," and a **Begin** button. The name you enter becomes **{PlayerName}** in every line of dialogue for the rest of the run.
+
+#### 2. Airlock & Lab Doors — 3 XR Simple Interactables, Hover / Select / Activate
+Both vault-style doors glow on hover and, on desktop, open on click — but in VR that's not enough anymore. Each door now has a second, dedicated grab point on its wheel handle: reach out, grab it, and physically twist your hand around the wheel's axis to spin it open, tracked continuously so partial turns and re-grabs still accumulate correctly. Point-and-select alone no longer opens the door in VR — only finishing the twist does. That's 4 `XRSimpleInteractable`s across the two doors (door panel + wheel, ×2), on top of one each on the Terminal console, the Recorder, and the Artifact below — 7 in the scene total, well past the minimum of 3.
+
+<img src="/assets/images/a3_wheel_handle.png" alt="Close-up of the vault door's wheel handle, the new twist-to-open grab point" />
+
+#### 3. Recorder — 3D Object Hover Enter/Exit State
+The handheld recorder scales up and lights up on hover, and returns to its resting size and dim state on exit — a pure GameObject-level hover response, no UI involved. Selecting it plays back its last recording: static, one ragged breath, then nothing.
+
+#### 4. Terminal — Information Panel (UI Canvas Element)
+Selecting the console in the Control Room opens a UI panel over a single chained click sequence, surfacing the crew's last journal entry before it closes on the final line.
+
+<img src="/assets/images/a3_control.png" alt="Control Room console, source of the Information Panel interaction" />
+
+#### 5. Artifact — Select/Activate + Changing Materials/Background
+Selecting the artifact shifts its material from dim blue to pulsing white, then the whole room's presentation changes: the walls and pedestal hide, an alien skybox and an enclosing glitch-panel dome swap in so there's nothing visible in any direction but the reveal, four room lights strobe through a glitch color cycle in sync with distortion stingers, and five crew silhouettes fly erratically through the dark before everything snaps back to the room's normal dim lighting.
+
+<img src="/assets/images/a3_lab.png" alt="Lab at rest, showing the desk, recorder, and artifact on its pedestal before activation" />
+
+Plus the bookend UI screens already in place from Assignment 1: the **Start Screen** (custom UI, name entry) and the **End Screen** (Restart/Quit), both shown once per full run rather than per-interaction.
+
+### Video Walkthrough
+
+<p><em>5-point interaction video recorded on-device (Quest) — to be added here once captured.</em></p>
+
+### Asset & Package Notes
+
+| Source | Used For |
+|---|---|
+| XR Interaction Toolkit 3.6.0 (`XRSimpleInteractable`, select/hover events) | All 6 interactables above |
+| Custom `TwistHandle.cs` script | Grab-and-twist door wheel mechanic — no built-in XRI knob component existed in this XRI version, so the rotation tracking (hand angle around the wheel's local axis, wraparound-safe) was hand-built |
+| [Freesound.org](https://freesound.org) (CC0) + "Voices Sound Effect Library" by Little Robot Sound Factory (CC-BY 3.0) | Ambient loops, ECHO stings, recorder breath, artifact glitch stingers — see `Assets/CREDITS.txt` for full attribution |
+| Locally-synthesized audio (ffmpeg) | Bass rumble, glitch stingers |
