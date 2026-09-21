@@ -133,7 +133,7 @@ Lighting's dim everywhere, practical-fixture style, to match the whole dead-stat
 <p class="chapter-date">Posted September 21, 2026</p>
 
 <div class="ai-disclosure">
-  <strong>AI disclosure:</strong> Same deal as before — I made the calls (what each interaction does, rejecting art I didn't like, asking for a twist-to-open door instead of a plain click). Claude Code built it out in Unity.
+  <strong>AI disclosure:</strong> Same deal as before — I made the calls (what each interaction does, rejecting art I didn't like). Claude Code built it out in Unity.
 </div>
 
 Five points of interaction, on top of the rooms from the [World & Interaction Map](#world-map):
@@ -142,9 +142,9 @@ Five points of interaction, on top of the rooms from the [World & Interaction Ma
 Station logo, call sign field, **Begin** button. Whatever you type becomes **{PlayerName}** for the rest of the run.
 
 #### 2. Airlock & Lab Doors — 3 XR Simple Interactables, Hover / Select / Activate
-Both vault doors still glow on hover and open on click for desktop testing, but in VR a click alone isn't enough anymore. Each door has a grab point on the wheel handle now — grab it, twist your hand around the wheel's axis, and it opens as you turn it. Partial turns and re-grabs still count toward the total. That's 4 `XRSimpleInteractable`s across the two doors (panel + wheel, times two), plus one each on the Terminal, Recorder, and Artifact — 7 in the scene, well over the minimum of 3.
+Both vault doors glow on hover and open on select. Each one also has a second interactable built into the wheel handle for a more hands-on VR grab, which still needs a proper headset pass in Assignment 4 before I call it done. Counting the wheel handles, that's 4 `XRSimpleInteractable`s across the two doors (panel + wheel, times two), plus one each on the Terminal, Recorder, and Artifact — 7 in the scene, well over the minimum of 3.
 
-<img src="/assets/images/a3_wheel_handle.png" alt="Close-up of the vault door's wheel handle, the new twist-to-open grab point" />
+<img src="/assets/images/a3_wheel_handle.png" alt="Close-up of the vault door's wheel handle grab point" />
 
 #### 3. Recorder — 3D Object Hover Enter/Exit State
 Scales up and lights up on hover, drops back down when you look away. Straight GameObject-level hover, no UI involved. Select it and it plays back its last recording: static, one ragged breath, nothing.
@@ -163,7 +163,7 @@ Plus the Start Screen and End Screen from Assignment 1, which bookend the whole 
 
 ### Video Walkthrough
 
-Desktop playthrough — the twist-to-open door is VR-only, so this one just clicks the doors open like everything else.
+Desktop playthrough. VR pass with a headset comes in Assignment 4.
 
 <video controls style="width:100%;max-width:960px;">
   <source src="/assets/videos/assignment3_walkthrough.mp4" type="video/mp4">
@@ -174,6 +174,6 @@ Desktop playthrough — the twist-to-open door is VR-only, so this one just clic
 | Source | Used For |
 |---|---|
 | XR Interaction Toolkit 3.6.0 (`XRSimpleInteractable`, select/hover events) | All 6 interactables above |
-| Custom `TwistHandle.cs` script | Grab-and-twist door wheel — this XRI version didn't ship a built-in knob component, so I had it build the rotation tracking (hand angle around the wheel's axis, handles wraparound) from scratch |
+| Custom `TwistHandle.cs` script | Door wheel grab interactable — this XRI version didn't ship a built-in knob component, so I had it build the rotation tracking (hand angle around the wheel's axis, handles wraparound) from scratch |
 | [Freesound.org](https://freesound.org) (CC0) + "Voices Sound Effect Library" by Little Robot Sound Factory (CC-BY 3.0) | Ambient loops, ECHO stings, recorder breath, artifact glitch stingers — see `Assets/CREDITS.txt` for full attribution |
 | Locally-synthesized audio (ffmpeg) | Bass rumble, glitch stingers |
