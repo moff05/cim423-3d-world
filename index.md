@@ -133,7 +133,7 @@ Lighting stays dim and practical-fixture-driven everywhere to match the dead-sta
 <p class="chapter-date">Posted September 21, 2026</p>
 
 <div class="ai-disclosure">
-  <strong>AI disclosure:</strong> I directed this build over many rounds of review — deciding which interaction went where, rejecting several art/asset options before approving the cinematic ship and the pink-alien reveal effect, and explicitly requesting the door mechanic be a twist gesture rather than a simple point-and-select for a better VR feel. Claude Code wrote and wired all the scripts, driving the Unity Editor and XR Interaction Toolkit directly, with fixes at each step based on what I flagged testing it myself.
+  <strong>AI disclosure:</strong> I directed this build over many rounds of review — deciding which interaction went where, rejecting several art/asset options before approving the cinematic ship and the pink-alien reveal effect, and explicitly requesting the door mechanic be a twist gesture rather than a simple point-and-select for a better VR feel. Claude Code wrote and wired all the scripts, driving the Unity Editor and XR Interaction Toolkit directly, with fixes at each step based on what I flagged testing it myself. The desktop walkthrough video below was also captured by Claude Code at my direction: it scripted a full run through all 5 interactions in the Editor and stitched the recording together, standing in for a manual desktop playthrough while an in-headset recording is still pending.
 </div>
 
 Five points of interaction, layered onto the rooms from the [World & Interaction Map](#world-map):
@@ -163,7 +163,11 @@ Plus the bookend UI screens already in place from Assignment 1: the **Start Scre
 
 ### Video Walkthrough
 
-<p><em>5-point interaction video recorded on-device (Quest) — to be added here once captured.</em></p>
+<p class="chapter-date" style="margin-top:0;">Desktop playthrough (scripted run-through of all 5 interaction points) — an in-headset recording will replace this once I've done a Quest pass.</p>
+
+<video controls style="width:100%;max-width:960px;">
+  <source src="/assets/videos/assignment3_walkthrough.mp4" type="video/mp4">
+</video>
 
 ### Asset & Package Notes
 
