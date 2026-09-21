@@ -161,6 +161,14 @@ Selecting it shifts the material from dim blue to pulsing white, then the room c
 
 Plus the Start Screen and End Screen from Assignment 1, which bookend the whole run rather than being tied to any one interaction.
 
+### Video Walkthrough
+
+Desktop playthrough — the twist-to-open door is VR-only, so this one just clicks the doors open like everything else.
+
+<video controls style="width:100%;max-width:960px;">
+  <source src="/assets/videos/assignment3_walkthrough.mp4" type="video/mp4">
+</video>
+
 ### Asset & Package Notes
 
 | Source | Used For |
