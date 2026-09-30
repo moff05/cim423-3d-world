@@ -7,10 +7,6 @@ title: Home
 
 <p class="chapter-date">Posted September 9, 2026</p>
 
-<div class="ai-disclosure">
-  <strong>AI disclosure:</strong> Used Claude to help draft the story. Setting, characters, ending, which room does what — all my calls.
-</div>
-
 The player character doesn't have a fixed name — you type it in on the start screen and it shows up below as **{PlayerName}**. The ship AI is **ECHO**.
 
 It's dead quiet the whole time, just {PlayerName} breathing and ECHO talking, except for one moment in the Lab where that breaks.
@@ -94,10 +90,6 @@ Select it and its material shifts from dim blue to bright white. The walls cut o
 
 <p class="chapter-date">September 11, 2026</p>
 
-<div class="ai-disclosure">
-  <strong>AI disclosure:</strong> I called every shot on this build — assets, how rooms trigger dialogue, the whole atmosphere pass (decals, the ringed planets, suits, chalkboard, bunks). Claude Code did the actual Unity work off my direction.
-</div>
-
 Room by room, following the [World & Interaction Map](#world-map) above:
 
 - **Docking Bay** — primitive-built room with a paneled floor/wall/ceiling texture, plus Kenney Space Kit props: barrels doubling as crates, a barrel-loaded rail cart as the cargo sled, a satellite dish, and a gate frame as the airlock (sealed, glowing, hazard-striped). Two space suit mannequins on display platforms, window looking out on deep space.
@@ -130,40 +122,66 @@ Lighting's dim everywhere, practical-fixture style, to match the whole dead-stat
 
 ## Add Interactions {#assignment-3}
 
-<p class="chapter-date">Posted September 21, 2026</p>
+<p class="chapter-date">Posted September 21, 2026 · Updated September 30, 2026</p>
 
-<div class="ai-disclosure">
-  <strong>AI disclosure:</strong> Same deal as before — I made the calls (what each interaction does, rejecting art I didn't like). Claude Code built it out in Unity.
-</div>
+The build now runs on a real Meta Quest headset, not just in the Editor. Everything below reflects the current version. Full source and commit history are in the [GitHub repo](https://github.com/moff05/cim423-unity-project).
 
-Five points of interaction, on top of the rooms from the [World & Interaction Map](#world-map):
+### The Run
 
-#### 1. Start Screen — Custom UI Interaction
-Station logo, call sign field, **Begin** button. Whatever you type becomes **{PlayerName}** for the rest of the run.
+Six interactions have to happen in order, and each one only responds on its turn:
 
-#### 2. Airlock & Lab Doors — 3 XR Simple Interactables, Hover / Select / Activate
-Both vault doors glow on hover and open on select. Each one also has a second interactable built into the wheel handle for a more hands-on VR grab, which still needs a proper headset pass in Assignment 4 before I call it done. Counting the wheel handles, that's 4 `XRSimpleInteractable`s across the two doors (panel + wheel, times two), plus one each on the Terminal, Recorder, and Artifact — 7 in the scene, well over the minimum of 3.
+1. **Airlock door**
+2. **Corridor door**
+3. **Terminal**
+4. **Lab door**
+5. **Recorder**
+6. **Artifact**
+
+A small objective HUD tells you what to do next, and every interactable shows a floating hint ("PULL TRIGGER", "GRAB, THEN MOVE IN A CIRCLE") when you point at it. Out-of-order objects don't react at all, so there's no way to get stuck.
+
+### Five Points of Interaction
+
+Covering the assignment's required interaction types, on top of the rooms from the [World & Interaction Map](#world-map):
+
+#### 1. Start Screen: Custom UI Interaction
+Station logo, call sign field, **Begin** button. Whatever you type becomes **{PlayerName}** for the rest of the run. Quest's system keyboard doesn't work inside a fully immersive app, so I built an in-scene QWERTY keyboard (letters, space, delete) out of ordinary UI buttons. You type by pointing a controller ray at keys and pulling the trigger, same as pressing Begin.
+
+#### 2. Airlock, Corridor & Lab Doors: XR Simple Interactables, Hover / Select / Activate
+Each vault door glows on hover and opens on select. In VR the real control is the wheel handle: grab it and move your hand in a circle. The custom `TwistHandle.cs` tracks the hand's angle around the wheel's axis, and each wheel is tied to its own step so it only turns when it's that door's turn.
 
 <img src="/assets/images/a3_wheel_handle.png" alt="Close-up of the vault door's wheel handle grab point" />
 
-#### 3. Recorder — 3D Object Hover Enter/Exit State
+#### 3. Recorder: 3D Object Hover Enter/Exit State
 Scales up and lights up on hover, drops back down when you look away. Straight GameObject-level hover, no UI involved. Select it and it plays back its last recording: static, one ragged breath, nothing.
 
-#### 4. Terminal — Information Panel (UI Canvas Element)
+#### 4. Terminal: Information Panel (UI Canvas Element)
 Selecting the console pulls up a panel with the crew's last journal entry, closing itself after the final line.
 
 <img src="/assets/images/a3_control.png" alt="Control Room console, source of the Information Panel interaction" />
 
-#### 5. Artifact — Select/Activate + Changing Materials/Background
-Selecting it shifts the material from dim blue to pulsing white, then the room changes around it: walls and pedestal hide, an alien skybox and a glitch-panel dome take over so there's nothing normal visible in any direction, the room lights strobe through colors in sync with some distortion stingers, and the five crew silhouettes fly around erratically before everything snaps back to normal.
+#### 5. Artifact: Select/Activate + Changing Materials/Background
+Selecting it shifts the material from dim blue to bright white. Then the room shakes and the lights flicker red while an alarm siren builds. The room cuts out and you're floating in open space among spinning stars with only your own breathing to listen to. After about twelve seconds everything snaps back to normal and ECHO closes out the story. I tried crew silhouettes in this moment and cut them. The simple version is creepier.
 
 <img src="/assets/images/a3_lab.png" alt="Lab at rest, showing the desk, recorder, and artifact on its pedestal before activation" />
 
-Plus the Start Screen and End Screen from Assignment 1, which bookend the whole run rather than being tied to any one interaction.
+The Start Screen and End Screen from Assignment 1 bookend the run. The End Screen has **Restart** and **Quit**.
+
+### What Changed After Headset Testing
+
+Testing on a real Quest turned up problems the Editor never showed:
+
+- **Dead controllers on the start screen.** An Editor-only input simulator was shipping in the Android build and fighting the real controllers. It's now tagged `EditorOnly` so Unity strips it from builds.
+- **Dialogue that never advanced.** "Click to continue" only listened for a mouse. It now accepts any controller button.
+- **UI that didn't render in VR.** All five canvases were screen-space overlays. They're now world-space panels that re-center when you turn away, with controller-ray raycasters on the ones with buttons.
+- **A soft-lock.** The corridor door had no wheel handle, so the run couldn't finish. Fixed.
+- **Motion-sickness in the opening cinematic.** The cinematic camera wasn't tracking head rotation. Fixed.
+- **Stuck in space.** The float coroutine lived on an object that got hidden, so it never resumed. It now runs from a persistent host object.
+
+I also added a desktop point-and-click mode for testing in the Editor. Real Quest builds always use VR.
 
 ### Video Walkthrough
 
-Desktop playthrough. VR pass with a headset comes in Assignment 4.
+This is the September 21 desktop playthrough, from before the headset fixes above. An updated recording is coming.
 
 <video controls style="width:100%;max-width:960px;">
   <source src="/assets/videos/assignment3_walkthrough.mp4" type="video/mp4">
@@ -173,7 +191,10 @@ Desktop playthrough. VR pass with a headset comes in Assignment 4.
 
 | Source | Used For |
 |---|---|
-| XR Interaction Toolkit 3.6.0 (`XRSimpleInteractable`, select/hover events) | All 6 interactables above |
-| Custom `TwistHandle.cs` script | Door wheel grab interactable — this XRI version didn't ship a built-in knob component, so I had it build the rotation tracking (hand angle around the wheel's axis, handles wraparound) from scratch |
-| [Freesound.org](https://freesound.org) (CC0) + "Voices Sound Effect Library" by Little Robot Sound Factory (CC-BY 3.0) | Ambient loops, ECHO stings, recorder breath, artifact glitch stingers — see `Assets/CREDITS.txt` for full attribution |
-| Locally-synthesized audio (ffmpeg) | Bass rumble, glitch stingers |
+| XR Interaction Toolkit 3.6.0 (`XRSimpleInteractable`, select/hover events) | Terminal, recorder, artifact, doors, door wheels |
+| Custom scripts (`TwistHandle`, `InteractionSequencer`, `OnScreenKeyboard`, `WorldSpaceUIFollow`, `ObjectiveHUD`) | Wheel grab rotation, step ordering, VR typing, VR-safe UI, objective HUD |
+| "Star Sparrow Modular Spaceship" by Ebal Studios | Ship in the opening cinematic |
+| [Freesound.org](https://freesound.org) (CC0) + "Voices Sound Effect Library" by Little Robot Sound Factory (CC-BY 3.0) | Ambient loops, ECHO stings, recorder breath |
+| Locally-synthesized audio (ffmpeg) | Bass rumble, glitch stingers, alarm siren |
+
+Full attribution is in `Assets/CREDITS.txt` in the repo.
