@@ -7,9 +7,9 @@ title: Home
 
 <p class="chapter-date">Posted September 9, 2026</p>
 
-The player character doesn't have a fixed name — you type it in on the start screen and it shows up below as **{PlayerName}**. The ship AI is **ECHO**.
+The player is a salvage pilot, and the player character doesn't have a fixed name. You type a call sign on the start screen and it shows up below as **{PlayerName}**. The ship AI is **ECHO**.
 
-It's dead quiet the whole time, just {PlayerName} breathing and ECHO talking, except for one moment in the Lab where that breaks.
+It's dead quiet the whole time, just the hum of the station and ECHO talking, until the Lab, where that breaks.
 
 #### Start Screen
 *Custom UI Interaction*
@@ -18,17 +18,26 @@ Station logo, a text field for your call sign, and a **Begin** button.
 
 ---
 
+#### Opening: The Jump
+A short cinematic before you step aboard. Your ship makes a jump to the station.
+
+> **ECHO:** Departing, {PlayerName}. Punching the jump drive in three.
+>
+> **ECHO:** Jump complete. Bringing us in to dock.
+>
+> **ECHO:** Anything glowing gold is something you can interact with. Point your controller at it and pull the trigger.
+
+---
+
 #### Room: Docking Bay
-**3D elements:** crates, a half-loaded cargo sled, an airlock door
+**3D elements:** crates, a half-loaded cargo sled, two space suit mannequins, an airlock door
+
+**Airlock Door** · *Hover / Select / Activate*
+Glows on hover. Selecting it starts ECHO's briefing, and the door opens when it's done.
 
 > **ECHO:** Docking clamps engaged. Life support's still running in there, {PlayerName}. Lights, gravity, air, all of it. Somebody left the lights on for six months.
 >
 > **{PlayerName}:** Great. More parts for us, then.
->
-> **ECHO:** Crew roster says five people, {PlayerName}. The station's activity log — every entry, every day, automatic — stops dead on the same day, for all five. Not staggered. Not partial. Same day. That's not what a normal evacuation looks like.
-
-**Airlock Door** · *Hover / Select / Activate*
-Glows on hover, opens on select, and you walk into the corridor.
 
 ---
 
@@ -40,14 +49,18 @@ Glows on hover, opens on select, and you walk into the corridor.
 ---
 
 #### Room: Control Room
-**3D elements:** a console/terminal, a chair, a wall monitor
-
-> **ECHO:** Terminal's still got power. Might be worth a look before you start pulling wiring.
+**3D elements:** a console/terminal, a chair, a wall monitor, a bunk bed
 
 **Terminal** · *Information Panel*
-Selecting it pulls up a written journal entry the crew left — different from the automated log ECHO already mentioned.
+ECHO's first line is about the power, and its second is about the crew.
 
-> **JOURNAL — Day 180:** "Resonance from the artifact is climbing again. Director wants to run a full-power test tomorrow. I've logged my objection."
+> **ECHO:** Terminal's still got power. Might be worth a look before you start pulling wiring.
+>
+> **ECHO:** Crew roster says five people, {PlayerName}. The station's activity log, every entry, every day, automatic, stops dead on the same day, for all five. Not staggered. Not partial. Same day. That's not what a normal evacuation looks like.
+
+Then a written journal entry the crew left comes up, different from the automated log ECHO mentioned.
+
+> **JOURNAL, Day 180:** "Resonance from the artifact is climbing again. Director wants to run a full-power test tomorrow. I've logged my objection."
 
 > **{PlayerName}:** Well, that's not ominous at all.
 
@@ -59,12 +72,12 @@ Selecting it pulls up a written journal entry the crew left — different from t
 > **ECHO:** This is the room the journal entry meant.
 
 **Recorder** · *Hover Enter/Exit*
-Scales up and lights up when you hover it, back to normal when you don't. Select it and it plays the last thing it ever recorded: static, one ragged breath, nothing. No Day 181 entry — nobody left to make one.
+Scales up and lights up when you hover it, back to normal when you don't. Select it and it plays the last thing it ever recorded: static, one ragged breath, nothing. No Day 181 entry, because there was nobody left to make one.
 
 **Artifact** · *Select/Activate + Changing Material*
-Select it and its material shifts from dim blue to bright white. The walls cut out. A screech, and five silhouettes appear in the dark, arms out toward {PlayerName}. A few seconds later it's over — walls back, artifact dark, lab quiet again.
+Select it and its material shifts from dim blue to bright white. The room starts to shake and the lights go red as an alarm sounds. Then the room is gone and you're floating in open space among spinning stars. All you can hear is breathing. After a few seconds everything snaps back, the artifact dark and the lab quiet again.
 
-> **ECHO:** {PlayerName}. Whatever that was — whatever they were — it's done now. Don't touch it again.
+> **ECHO:** {PlayerName}. Whatever that was, whatever they were, it's done now. Don't touch it again.
 >
 > **{PlayerName}:** Wasn't planning on it.
 
@@ -79,9 +92,9 @@ Select it and its material shifts from dim blue to bright white. The walls cut o
 | Room | 3D Elements | Interaction | Type |
 |---|---|---|---|
 | Start Screen | UI panel | Name entry | Custom UI |
-| Docking Bay | Crates, cargo sled, airlock door | Open door | Select/Activate |
+| Docking Bay | Crates, cargo sled, suits, airlock door | Open door | Select/Activate |
 | Corridor | Wall/floor pieces, lighting | — | — |
-| Control Room | Console/terminal, chair, monitor | View journal entry | Information Panel |
+| Control Room | Console/terminal, chair, monitor, bunk | View journal entry | Information Panel |
 | Lab | Desk, recorder, artifact pedestal | Hover recorder | Hover Enter/Exit |
 | Lab | *(same room)* | Activate artifact | Select/Activate + Material |
 | End Screen | UI panel | — | — |
@@ -95,7 +108,7 @@ Room by room, following the [World & Interaction Map](#world-map) above:
 - **Docking Bay** — primitive-built room with a paneled floor/wall/ceiling texture, plus Kenney Space Kit props: barrels doubling as crates, a barrel-loaded rail cart as the cargo sled, a satellite dish, and a gate frame as the airlock (sealed, glowing, hazard-striped). Two space suit mannequins on display platforms, window looking out on deep space.
 - **Corridor** — short, mostly flavor. Primitive shell, two emissive ceiling strips, a window onto a ringed planet. No interaction here.
 - **Control Room** — Kenney desk + chair, a console + monitor facing the corridor entrance so it's the first thing you see walking in, a bunk bed, three wall posters, another window with a different ringed planet.
-- **Lab** — desk + chair, the recorder prop, the artifact on a pedestal (just a primitive with an emissive material, no shader needed), five crew silhouettes built from stretched capsules (black, unlit, hidden until the artifact goes off), two bookcases with random vials/bottles/gadgets, a chalkboard, a pile of papers in the corner.
+- **Lab** — desk + chair, the recorder prop, the artifact on a pedestal (just a primitive with an emissive material, no shader needed), two bookcases with random vials/bottles/gadgets, a chalkboard, a pile of papers in the corner.
 
 Lighting's dim everywhere, practical-fixture style, to match the whole dead-station thing, with decay decals scattered around. Only the Lab light actually needs to flicker, which gets scripted in Assignment 3. Skybox is a starfield I generated (not a stock HDRI) with three actual 3D ringed planets — real geometry, not a texture — placed so each window looks out on one.
 
@@ -117,7 +130,7 @@ Lighting's dim everywhere, practical-fixture style, to match the whole dead-stat
 |---|---|---|
 | [Kenney "Space Kit"](https://kenney.nl/assets/space-kit) | Barrels, barrel rail cart, gate frame, computer console, computer screen/monitor, window frame, satellite dish | Docking Bay, Corridor, Control Room |
 | [Kenney "Furniture Kit"](https://kenney.nl/assets/furniture-kit) | Desk, chair, two bookcases, bunk bed | Control Room, Lab |
-| Built from primitives | Room shells and paneled surface textures, airlock door panel + glass, artifact (emissive material, no shader), recorder prop, 5 crew silhouettes, strip lights, space suit mannequins, decay decals, wall posters, chalkboard, paper pile, and a procedural starfield skybox with 3 real 3D ringed planets | All rooms |
+| Built from primitives | Room shells and paneled surface textures, airlock door panel + glass, artifact (emissive material, no shader), recorder prop, strip lights, space suit mannequins, decay decals, wall posters, chalkboard, paper pile, and a procedural starfield skybox with 3 real 3D ringed planets | All rooms |
 | [Freesound.org](https://freesound.org) (CC0) | Breathing loop, ECHO beeps/stings, screech/howl one-shot | Ambient audio + artifact trigger (wired up in Assignment 3) |
 
 ## Add Interactions {#assignment-3}
