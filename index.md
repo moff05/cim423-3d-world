@@ -85,7 +85,7 @@ Select it and its material shifts from dim blue to bright white. The room starts
 
 #### End Screen
 
-*"You sealed the lab and logged the coordinates for recovery. Whatever happened to the crew, it's not your problem to solve today."* Buttons: **Restart** / **Quit**.
+*"You sealed the lab and logged the coordinates for recovery. Whatever happened to the crew, it's not your problem to solve today."* Button: **Restart**, which reloads the run from the opening.
 
 ### World & Interaction Map {#world-map}
 
@@ -177,7 +177,7 @@ Selecting it shifts the material from dim blue to bright white. Then the room sh
 
 <img src="/assets/images/a3_lab.png" alt="Lab at rest, showing the desk, recorder, and artifact on its pedestal before activation" />
 
-The Start Screen and End Screen from Assignment 1 bookend the run. The End Screen has **Restart** and **Quit**.
+The Start Screen and End Screen from Assignment 1 bookend the run. The End Screen has a single **Restart** button that takes you back to the opening sequence.
 
 ### What Changed After Headset Testing
 
@@ -189,6 +189,7 @@ Testing on a real Quest turned up problems the Editor never showed:
 - **A soft-lock.** The corridor door had no wheel handle, so the run couldn't finish. Fixed.
 - **Motion-sickness in the opening cinematic.** The cinematic camera wasn't tracking head rotation. Fixed.
 - **Stuck in space.** The float coroutine lived on an object that got hidden, so it never resumed. It now runs from a persistent host object.
+- **Falling out of the world at the ending.** This one took the longest to find. The station would never reappear and Restart couldn't be clicked, and I spent several rounds fixing symptoms. The headset log finally showed the real cause: the camera was at y = -669 when the station came back. The ending hides the whole station, including the floor, and the XR rig's gravity kept pulling for the entire twelve-second float, about 700 meters of free fall. The fix is to freeze all locomotion (gravity included) while the room is gone, then put the player back exactly where they were standing. I also have to freeze it again at the end screen, because that step turns off the room's colliders to keep them from blocking the controller ray, and the floor is one of them. With that, the station reappears around you and Restart works on the headset.
 
 I also added a desktop point-and-click mode for testing in the Editor. Real Quest builds always use VR.
 
