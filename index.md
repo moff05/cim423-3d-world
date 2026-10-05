@@ -152,8 +152,6 @@ Six interactions have to happen in order, and each one only responds on its turn
 
 A small objective HUD tells you what to do next, and every interactable shows a floating hint ("PULL TRIGGER", "GRAB, THEN MOVE IN A CIRCLE") when you point at it. Out-of-order objects don't react at all, so there's no way to get stuck.
 
-There are also two optional side interactions that aren't needed to finish: a keycard you can plug into a wall socket, and a wall keypad that opens a small supply locker if you enter the right code. Each one gets a one-line reaction from ECHO.
-
 ### Five Points of Interaction
 
 Covering the assignment's required interaction types, on top of the rooms from the [World & Interaction Map](#world-map):
