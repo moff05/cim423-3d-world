@@ -3,6 +3,13 @@ layout: default
 title: Home
 ---
 
+<section id="playthrough" style="scroll-margin-top:4.5rem;margin:0 0 1rem;">
+<p class="chapter-date">Full playthrough · final build on a Meta Quest 3 · me playing in the corner</p>
+<video controls preload="metadata" poster="/assets/images/a3_walkthrough_poster.jpg" style="width:100%;max-width:960px;border-radius:8px;">
+  <source src="/assets/videos/assignment3_headset_walkthrough.mp4" type="video/mp4">
+</video>
+</section>
+
 ## Generate Your Story {#assignment-1}
 
 <p class="chapter-date">Posted September 9, 2026</p>
@@ -196,11 +203,7 @@ I also added a desktop point-and-click mode for testing in the Editor. Real Ques
 
 ### Video Walkthrough
 
-A full playthrough of the final build on a Meta Quest 3, start screen to the Restart screen, about two and a half minutes. The picture-in-picture is me playing, cut out of my phone footage.
-
-<video controls preload="metadata" poster="/assets/images/a3_walkthrough_poster.jpg" style="width:100%;max-width:960px;">
-  <source src="/assets/videos/assignment3_headset_walkthrough.mp4" type="video/mp4">
-</video>
+The full headset playthrough is at the [top of this page](#playthrough).
 
 ### Asset & Package Notes
 
