@@ -77,7 +77,7 @@ Scales up and lights up when you hover it, back to normal when you don't. Select
 **Artifact** · *Select/Activate + Changing Material*
 Select it and its material shifts from dim blue to bright white. The room starts to shake and the lights go red as an alarm sounds. Then the room is gone and you're floating in open space among spinning stars. All you can hear is breathing. After a few seconds everything snaps back, the artifact dark and the lab quiet again.
 
-> **ECHO:** {PlayerName}. Whatever that was, whatever they were, it's done now. Don't touch it again.
+> **ECHO:** {PlayerName}. Whatever that was, it's done now. Don't touch it again.
 >
 > **{PlayerName}:** Wasn't planning on it.
 
@@ -135,7 +135,7 @@ Lighting's dim everywhere, practical-fixture style, to match the whole dead-stat
 
 ## Add Interactions {#assignment-3}
 
-<p class="chapter-date">Posted September 21, 2026 · Updated September 30, 2026</p>
+<p class="chapter-date">Posted September 21, 2026 · Updated October 5, 2026</p>
 
 The build now runs on a real Meta Quest headset, not just in the Editor. Everything below reflects the current version. Full source and commit history are in the [GitHub repo](https://github.com/moff05/cim423-unity-project).
 
@@ -151,6 +151,8 @@ Six interactions have to happen in order, and each one only responds on its turn
 6. **Artifact**
 
 A small objective HUD tells you what to do next, and every interactable shows a floating hint ("PULL TRIGGER", "GRAB, THEN MOVE IN A CIRCLE") when you point at it. Out-of-order objects don't react at all, so there's no way to get stuck.
+
+There are also two optional side interactions that aren't needed to finish: a keycard you can plug into a wall socket, and a wall keypad that opens a small supply locker if you enter the right code. Each one gets a one-line reaction from ECHO.
 
 ### Five Points of Interaction
 
@@ -184,7 +186,8 @@ The Start Screen and End Screen from Assignment 1 bookend the run. The End Scree
 Testing on a real Quest turned up problems the Editor never showed:
 
 - **Dead controllers on the start screen.** An Editor-only input simulator was shipping in the Android build and fighting the real controllers. It's now tagged `EditorOnly` so Unity strips it from builds.
-- **Dialogue that never advanced.** "Click to continue" only listened for a mouse. It now accepts any controller button.
+- **Dialogue that never advanced.** "Click to continue" only listened for a mouse, so on the headset every line hung forever.
+- **Dialogue that skipped itself.** My first fix accepted any button on any device, which on a Quest includes touch sensors and tracking flags that fire constantly, so lines vanished before they could be read. Now only the trigger (or a face button) advances a line, each line ignores input for a short read time scaled to its length, and lines queue instead of cutting each other off. Nothing auto-dismisses anymore.
 - **UI that didn't render in VR.** All five canvases were screen-space overlays. They're now world-space panels that re-center when you turn away, with controller-ray raycasters on the ones with buttons.
 - **A soft-lock.** The corridor door had no wheel handle, so the run couldn't finish. Fixed.
 - **Motion-sickness in the opening cinematic.** The cinematic camera wasn't tracking head rotation. Fixed.
@@ -195,10 +198,10 @@ I also added a desktop point-and-click mode for testing in the Editor. Real Ques
 
 ### Video Walkthrough
 
-This is the September 21 desktop playthrough, from before the headset fixes above. An updated recording is coming.
+A full playthrough of the final build on a Meta Quest 3, start screen to the Restart screen, about two and a half minutes. The picture-in-picture is me playing, cut out of my phone footage.
 
-<video controls style="width:100%;max-width:960px;">
-  <source src="/assets/videos/assignment3_walkthrough.mp4" type="video/mp4">
+<video controls preload="metadata" poster="/assets/images/a3_walkthrough_poster.jpg" style="width:100%;max-width:960px;">
+  <source src="/assets/videos/assignment3_headset_walkthrough.mp4" type="video/mp4">
 </video>
 
 ### Asset & Package Notes
