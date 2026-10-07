@@ -254,7 +254,7 @@ Votes are stored permanently, so the All-Time Four can change between visits, an
 
 - A visitor can like each artist once per visit. I could not find a per-person identity in the platform, so someone who comes back later can like again.
 - Five of the 80 portraits are placeholder cards because those images could not be generated, and one artist has no portrait.
-- I tested counting, ranking, frames, text and models in a live session. The like buttons were tested through the same code path rather than by a real mouse click in my automated browser.
+- I tested counting, ranking, frames, text and models in a live session. The like buttons, stage pads and Golden Records still need a real-mouse test; my automated browser could not click them, so I only exercised the like code path directly.
 
 ### Credits
 
