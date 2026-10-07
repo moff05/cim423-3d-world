@@ -3,6 +3,8 @@ layout: default
 title: Home
 ---
 
+<p class="project-banner" id="project-1">Project 1 · Day 181 · Unity on Meta Quest · CIM 423</p>
+
 <section id="playthrough" style="scroll-margin-top:4.5rem;margin:0 0 1rem;">
 <p class="chapter-date">Full playthrough · final build on a Meta Quest 3 · me playing in the corner</p>
 <video controls preload="metadata" poster="/assets/images/a3_walkthrough_poster.jpg" style="width:100%;max-width:960px;border-radius:8px;">
@@ -217,7 +219,9 @@ The full headset playthrough is at the [top of this page](#playthrough).
 
 Full attribution is in `Assets/CREDITS.txt` in the repo.
 
-## Music World (MUD Foundation) {#music-world}
+<p class="project-banner" id="project-2">Project 2 · Music World · MUD Foundation · CIM 423</p>
+
+## Music World {#music-world .proj}
 
 **Live space:** [Music World on MUD Foundation](https://verse.mud.foundation/F7tYf8B) (Development build; only one visitor can be active at a time, so extra tabs become spectators).
 
