@@ -231,7 +231,7 @@ Music World is a shared place for music fans to argue about who belongs at the t
 
 ### Spatial Design
 
-- **Hub: the studio.** A neon "MUSIC WORLD" sign, a welcome panel explaining the idea, a Golden Records tracker, and four colored corridors, each leading to a room. The corridor color matches the room it goes to, which is the wayfinding.
+- **Hub: the studio.** Every sign sits on a wall in its own spot: the title, a how-to-play board, a welcome panel, a Golden Records tracker and a live "Community Right Now" board showing each room's top artist and the total likes. Four colored corridors, each leading to a room. The corridor color matches the room it goes to, which is the wayfinding.
 - **Four genre rooms.** Each is its own zone with its own look: amps and a drum kit for Rock, a block-party stage for Hip-Hop, a checkered dance floor with lasers for Electronic, hay bales and string lights for Country. Every room has a "Back to the Studio" sign above its door.
 - **Lounges.** Each room has a seating area with sofas, tables and a rug, for talking with other visitors instead of just clicking.
 - **Environmental storytelling.** Signs like "Sold Out Tonight" and "Block Party" set the scene, and the empty All-Time Four frames ("Vote to fill this spot") tell you what to do before you read any instructions.
@@ -241,14 +241,16 @@ Music World is a shared place for music fans to argue about who belongs at the t
 | Feature | Purpose | How visitors use it | How it shapes the space |
 |---|---|---|---|
 | **All-Time Four frames** (community-generated content collection) | Show the community's taste | Like artists on the wall of 20 buttons; the top four portraits appear in the frames | The frames change as votes come in, so the room reflects everyone who has visited |
-| **Artist boards** (information and media display) | Make the current standings visible | Walk up and read the live like counts for all 20 artists | Visitors can compare and argue over the rankings |
+| **Artist boards and community board** (information and media display) | Make the current standings visible | Read the live like counts for all 20 artists in a room, or the hub board with each room's top artist and total likes | Visitors can compare and argue over the rankings |
 | **Lounges** (area for discussion and group interaction) | Give people a reason to stay and talk | Sit near the furniture and chat by voice or text with whoever else is in the room | Turns a voting page into a place to hang out |
 
 ### Interactions
 
-- **Like buttons.** Clicking an artist adds a like that persists between visits, and the frames re-rank.
-- **Stage pad.** Clicking the pad in each room changes the neon lighting color.
-- **Golden Records.** One hidden golden record per room; the hub counter tracks how many you have found (0 of 4).
+- **Like and unlike.** Click an artist to like them and click again to unlike. A message confirms it, the count persists between visits, and the All-Time Four frames re-rank.
+- **Encore button.** A big red button in each room triggers a confetti shower and a lighting show.
+- **Jukebox.** Click it in the Rock or Country room to cycle that room's music for yourself.
+- **Audio zones.** The hub and each room have their own music. It switches as you walk between them, and it is mixed quietly so voice chat stays clear.
+- **Golden Record hunt.** One hidden record per room. Each find shows a message, and the hub counter tracks your total. Finding all four unlocks a spinning gold trophy and a confetti shower in the hub.
 
 ### Community and Return Visits
 
@@ -258,8 +260,9 @@ Votes are stored permanently, so the All-Time Four can change between visits, an
 
 - A visitor can like each artist once per visit. I could not find a per-person identity in the platform, so someone who comes back later can like again.
 - Five of the 80 portraits are placeholder cards because those images could not be generated, and one artist has no portrait.
-- I tested counting, ranking, frames, text and models in a live session. The like buttons, stage pads and Golden Records still need a real-mouse test; my automated browser could not click them, so I only exercised the like code path directly.
+- I verified the build in a live session: all 80 portraits load, the scripts start without errors, and the likes reset cleanly. My automated browser could not register mouse clicks, so the like buttons, encore buttons, jukebox and Golden Records were tested by hand, not by script.
+- Players cannot get custom avatars from the script, so visitors use MUD's own avatar menu.
 
 ### Credits
 
-Furniture: Kenney Furniture Kit (CC0). Guitar: Quaternius (CC0). DJ Booth by Fredi L (CC-BY), via Poly Pizza. Artist portraits were supplied separately and their reuse rights are unverified.
+Furniture: Kenney Furniture Kit (CC0). Concert stage model: downloaded by me, original source and license unknown. Guitar: Quaternius (CC0). DJ Booth by Fredi L (CC-BY), via Poly Pizza. Artist portraits were supplied separately and their reuse rights are unverified.
