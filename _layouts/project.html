@@ -18,7 +18,7 @@
   <h1>{{ page.title }}</h1>
   <div class="accent-bar"></div>
   <p class="tagline">{{ page.tagline }}</p>
-  {% if page.links %}<p class="repo-link">{% for l in page.links %}<a href="{{ l.url }}"{% if l.primary %} class="btn-primary"{% endif %}>{{ l.label }} ↗</a>{% endfor %}</p>{% endif %}
+  {% if page.links %}<p class="repo-link">{% for l in page.links %}<a href="{{ l.url }}" target="_blank" rel="noopener"{% if l.primary %} class="btn-primary"{% endif %}>{{ l.label }} ↗</a>{% endfor %}</p>{% endif %}
 </header>
 <nav class="chapter-nav">
   <div class="chapter-nav-inner">
