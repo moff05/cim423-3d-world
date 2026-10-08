@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VR Projects | Nicholas Moffett</title>
 <meta name="description" content="{{ site.description }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="/assets/css/home.css">
 </head>
 <body>
@@ -15,14 +16,14 @@
 </header>
 <main class="cards">
   {% assign projs = site.projects | sort: "order" %}
-  {% for p in projs %}
+  {% for p in projs %}{% assign n = forloop.index %}
   <a class="card theme-{{ p.theme }}" href="{{ p.url }}">
     <div class="card-art"{% if p.thumb %} style="background-image:url('{{ p.thumb }}')"{% endif %}></div>
     <div class="card-body">
-      <span class="card-kicker">{{ p.slug_label }} · {{ p.meta }}</span>
+      <span class="card-kicker"><b>0{{ n }}</b> {{ p.meta }}</span>
       <h2>{{ p.title }}</h2>
       <p>{{ p.tagline }}</p>
-      <span class="card-go">Read the build log →</span>
+      <span class="card-go">Read the build log <i>→</i></span>
     </div>
   </a>
   {% endfor %}

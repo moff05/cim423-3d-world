@@ -1,25 +1,30 @@
-:root { --bg:#FBF3EC; --text:#3B2A26; --muted:#93726A; --rule:#E9D2C4; --purple:#993A8B; --rust:#A2574F; }
-* { box-sizing: border-box; }
-body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; line-height:1.6; }
-header, .cards, footer { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
-header { padding-top: 4rem; padding-bottom: 2rem; }
-.eyebrow { font-size:.75rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--purple); }
-h1 { font-size:clamp(2.5rem,7vw,4rem); margin:.4rem 0 .8rem; letter-spacing:-.02em; color:var(--rust); }
-header p { color:var(--muted); max-width:560px; font-size:1.1rem; margin:0; }
-.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; padding-bottom:3rem; }
-.card { display:flex; flex-direction:column; border-radius:16px; overflow:hidden; text-decoration:none; color:#fff; border:1px solid rgba(0,0,0,.08); box-shadow:0 6px 30px rgba(59,38,30,.12); transition:transform .2s; }
-.card:hover { transform:translateY(-4px); }
-.card-art { height:200px; background-size:cover; background-position:center; }
-.card-body { padding:1.4rem 1.5rem 1.6rem; flex:1; display:flex; flex-direction:column; gap:.5rem; }
-.card-kicker { font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; opacity:.75; }
-.card h2 { margin:0; font-size:1.7rem; letter-spacing:-.01em; }
-.card p { margin:0; opacity:.85; flex:1; }
-.card-go { font-weight:700; margin-top:.6rem; }
-.card.theme-space { background:linear-gradient(160deg,#0b1020,#2a1745); }
-.card.theme-space .card-art { background-color:#0b1020; }
-.card.theme-music { background:linear-gradient(160deg,#17101f,#3a0f2e); }
+:root { --bg:#f4f4f2; --ink:#111114; --muted:#6b6b73; --line:#d9d9d4; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter,-apple-system,Helvetica,Arial,sans-serif; line-height:1.55; }
+header, .cards, footer { max-width:1040px; margin:0 auto; padding:0 1.5rem; }
+header { padding-top:4.5rem; padding-bottom:3rem; }
+.eyebrow { font-size:.75rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+h1 { font-size:clamp(3rem,10vw,6.5rem); font-weight:800; letter-spacing:-.05em; line-height:.95; margin:.8rem 0 1.2rem; }
+header p { color:var(--muted); max-width:520px; font-size:1.1rem; margin:0; }
+.cards { padding-bottom:3rem; }
+.card { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center; padding:2rem 0; border-top:1px solid var(--line); color:inherit; text-decoration:none; }
+.card:last-child { border-bottom:1px solid var(--line); }
+.card-art { order:2; aspect-ratio:16/9; border-radius:12px; background-size:cover; background-position:center; transition:transform .3s; }
+.card:hover .card-art { transform:scale(1.02); }
+.card-kicker { font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); display:block; }
+.card-kicker b { color:var(--ink); margin-right:.6rem; }
+.card h2 { margin:.6rem 0; font-size:clamp(2.4rem,6vw,4rem); line-height:1; }
+.card p { margin:0 0 1.2rem; color:var(--muted); font-size:1.05rem; max-width:420px; }
+.card-go { font-weight:700; border-bottom:2px solid var(--ink); padding-bottom:2px; }
+.card-go i { font-style:normal; display:inline-block; transition:transform .2s; }
+.card:hover .card-go i { transform:translateX(5px); }
+/* each project's title keeps its own personality */
+.card.theme-space h2 { color:#A2574F; letter-spacing:-.02em; font-weight:800; }
+.card.theme-music h2 { font-family:"Bebas Neue",Impact,sans-serif; font-weight:400; letter-spacing:.02em; font-size:clamp(3rem,7.5vw,5rem);
+  background:linear-gradient(90deg,#ff2e93,#ffc83d 55%,#22e1ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .card.theme-music .card-art { background:
-  radial-gradient(circle at 20% 30%,#ff2e93aa,transparent 45%),
-  radial-gradient(circle at 80% 20%,#22e1ffaa,transparent 40%),
-  radial-gradient(circle at 60% 90%,#ffc83daa,transparent 45%), #17101f; }
+  radial-gradient(circle at 20% 30%,#ff2e93cc,transparent 45%),
+  radial-gradient(circle at 80% 20%,#22e1ffcc,transparent 40%),
+  radial-gradient(circle at 60% 90%,#ffc83dcc,transparent 45%), #17101f; }
 footer { padding-bottom:3rem; color:var(--muted); font-size:.85rem; }
+@media (max-width:720px) { .card { grid-template-columns:1fr; gap:1rem; } .card-art { order:0; } }
