@@ -41,5 +41,6 @@
   <div>{{ site.footer }}</div>
 </footer>
 <script src="/assets/js/nav.js"></script>
+{% for sc in page.scripts %}<script src="{{ sc }}"></script>{% endfor %}
 </body>
 </html>
