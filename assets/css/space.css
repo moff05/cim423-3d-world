@@ -1,0 +1,221 @@
+
+  :root {
+    color-scheme: light;
+    --bg: #FBF3EC;
+    --text: #3B2A26;
+    --muted: #93726A;
+    --rule: #E9D2C4;
+    --rust: #A2574F;
+    --orange: #E68057;
+    --mauve: #BF7587;
+    --purple: #993A8B;
+    --accent: var(--rust);
+    --quote-bg: #F3E3D6;
+    --code-bg: #F0E1D4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+  }
+  main {
+    max-width: 700px;
+    margin: 1.5rem auto 3rem;
+    padding: 2.5rem 1.75rem 3.5rem;
+    counter-reset: chapter;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    box-shadow: 0 4px 28px rgba(59, 38, 30, 0.07);
+  }
+  header.site-header {
+    max-width: 700px;
+    margin: 1.5rem auto 0;
+    padding: 2.25rem 1.75rem;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    box-shadow: 0 4px 28px rgba(59, 38, 30, 0.07);
+  }
+  header.site-header .eyebrow {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.7rem;
+  }
+  header.site-header h1 {
+    font-size: 2rem;
+    margin: 0 0 0.9rem;
+    letter-spacing: -0.02em;
+    color: var(--rust);
+    background: linear-gradient(90deg, var(--rust), var(--orange) 55%, var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header.site-header .accent-bar {
+    width: 52px;
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--rust), var(--orange), var(--purple));
+  }
+  header.site-header p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 1.02rem;
+  }
+  h1, h3, h4 { letter-spacing: -0.01em; }
+  h2 {
+    counter-increment: chapter;
+    font-size: 1.6rem;
+    margin: 0 0 1.5rem;
+    padding-top: 3.5rem;
+    letter-spacing: -0.01em;
+    scroll-margin-top: 4.5rem;
+  }
+  h2::before {
+    counter-increment: none;
+    content: "Assignment " counter(chapter, decimal-leading-zero);
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.6rem;
+  }
+  .project-banner {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin: 2.5rem 0 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--purple);
+    scroll-margin-top: 4.5rem;
+  }
+    .chapter-date {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: -1rem 0 1.5rem;
+  }
+  main > h2:not(:first-of-type) {
+    border-top: 1px solid var(--rule);
+  }
+  main > h2:first-of-type {
+    padding-top: 0;
+  }
+  h3 { font-size: 1.1rem; margin-top: 2rem; color: var(--rust); scroll-margin-top: 4.5rem; }
+  h4 { font-size: 0.95rem; margin-top: 1.4rem; color: var(--muted); }
+  p, li { font-size: 1.02rem; }
+  a { color: var(--purple); text-decoration: none; border-bottom: 1px solid currentColor; }
+  a:hover { opacity: 0.75; }
+  blockquote {
+    margin: 1.1rem 0;
+    padding: 0.65rem 1.1rem;
+    background: var(--quote-bg);
+    border-left: 3px solid var(--orange);
+    border-radius: 4px;
+  }
+  blockquote p { margin: 0.3rem 0; font-size: 0.98rem; }
+  code {
+    background: var(--code-bg);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 1.8rem 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 1.2rem 0;
+    display: block;
+    overflow-x: auto;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--rule);
+    white-space: normal;
+  }
+  th { color: var(--muted); font-weight: 600; }
+  img { max-width: 100%; border-radius: 6px; }
+  em.placeholder {
+    color: var(--muted);
+  }
+  .repo-link { margin: 0.9rem 0 0; font-size: 0.95rem; }
+  .chapter-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .chapter-nav-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0.7rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem 1.25rem;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+  }
+  .chapter-nav a {
+    color: var(--rust);
+    border-bottom: none;
+    font-weight: 600;
+  }
+  .chapter-nav a:hover { opacity: 0.7; }
+  .chapter-nav .nav-top {
+    margin-left: auto;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  footer {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.25rem 3rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .space-decor {
+    display: none;
+  }
+  @media (min-width: 1150px) {
+    .space-decor {
+      display: block;
+    }
+    .space-rail {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: calc((100vw - 748px) / 2);
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.5;
+      background-image: url("/assets/images/space/tile.png");
+      background-repeat: repeat;
+      background-position: top left;
+    }
+    .space-rail.left { left: 0; }
+    .space-rail.right { right: 0; transform: scaleX(-1); }
+  }
+
+  .chapter-nav .nav-back { color: var(--muted); font-weight: 500; }
+  header.site-header p.tagline { margin-top: 0.9rem; }
+  header.site-header p.repo-link a { margin-right: 1.25rem; }
+  .hero-video video { width: 100%; border-radius: 8px; }
+  footer { display: flex; flex-direction: column; gap: 0.5rem; }

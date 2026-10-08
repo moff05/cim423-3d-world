@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }} | Nicholas Moffett</title>
+<meta name="description" content="{{ page.tagline }}">
+{% if page.font_url %}<link rel="stylesheet" href="{{ page.font_url }}">{% endif %}
+<link rel="stylesheet" href="/assets/css/{{ page.theme }}.css">
+</head>
+<body id="top" class="theme-{{ page.theme }}">
+<div class="space-decor" aria-hidden="true">
+  <div class="space-rail left"></div>
+  <div class="space-rail right"></div>
+</div>
+<header class="site-header">
+  <span class="eyebrow">{{ page.eyebrow }}</span>
+  <h1>{{ page.title }}</h1>
+  <div class="accent-bar"></div>
+  <p class="tagline">{{ page.tagline }}</p>
+  {% if page.links %}<p class="repo-link">{% for l in page.links %}<a href="{{ l.url }}"{% if l.primary %} class="btn-primary"{% endif %}>{{ l.label }} ↗</a>{% endfor %}</p>{% endif %}
+</header>
+<nav class="chapter-nav">
+  <div class="chapter-nav-inner">
+    <a href="/" class="nav-back">← All projects</a>
+    {% for s in page.sections %}<a href="#{{ s.id }}">{{ s.label }}</a>{% endfor %}
+    <a href="#top" class="nav-top">↑ Top</a>
+  </div>
+</nav>
+<main>
+{% if page.video %}
+<section class="hero-video">
+<video controls preload="metadata"{% if page.poster %} poster="{{ page.poster }}"{% endif %}><source src="{{ page.video }}" type="video/mp4"></video>
+</section>
+{% endif %}
+{{ content }}
+</main>
+<footer>
+  {% assign others = site.projects | sort: "order" %}
+  {% for p in others %}{% unless p.url == page.url %}<a href="{{ p.url }}">Next: {{ p.title }} →</a>{% endunless %}{% endfor %}
+  <div>{{ site.footer }}</div>
+</footer>
+<script src="/assets/js/nav.js"></script>
+</body>
+</html>

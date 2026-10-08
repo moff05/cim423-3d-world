@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VR Projects | Nicholas Moffett</title>
+<meta name="description" content="{{ site.description }}">
+<link rel="stylesheet" href="/assets/css/home.css">
+</head>
+<body>
+<header>
+  <span class="eyebrow">University of Miami · CIM 423</span>
+  <h1>VR Projects</h1>
+  <p>{{ site.description }}</p>
+</header>
+<main class="cards">
+  {% assign projs = site.projects | sort: "order" %}
+  {% for p in projs %}
+  <a class="card theme-{{ p.theme }}" href="{{ p.url }}">
+    <div class="card-art"{% if p.thumb %} style="background-image:url('{{ p.thumb }}')"{% endif %}></div>
+    <div class="card-body">
+      <span class="card-kicker">{{ p.slug_label }} · {{ p.meta }}</span>
+      <h2>{{ p.title }}</h2>
+      <p>{{ p.tagline }}</p>
+      <span class="card-go">Read the build log →</span>
+    </div>
+  </a>
+  {% endfor %}
+</main>
+<footer>{{ site.footer }}</footer>
+</body>
+</html>
