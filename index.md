@@ -225,6 +225,12 @@ Full attribution is in `Assets/CREDITS.txt` in the repo.
 
 **Live space:** [Music World on MUD Foundation](https://verse.mud.foundation/qx7dtAx) (Production build for group visits).
 
+### Project Description
+
+Music World is a shared virtual recording studio in MUD Foundation where music fans settle the question of who belongs at the top. A central studio hub leads to four genre rooms (Rock, Hip-Hop, Electronic, Country), each with 20 artists, a lounge, and its own music. Every visitor can like or unlike artists, and the four most-liked in each room are displayed in that room's All-Time Four frames, so the space is shaped by everyone who has visited.
+
+Visitors do more than vote. A shared Encore button sets off confetti and a lighting show for everyone in the room, a hidden Golden Record in each room rewards exploring, and the lounges give people a place to talk over voice chat. The whole space was scripted in JavaScript inside the MUD XR Creator, using its shared store to keep votes between visits.
+
 ### Purpose and Audience
 
 Music World is a shared place for music fans to argue about who belongs at the top. It is a recording studio hub with four genre rooms (Rock, Hip-Hop, Electronic, Country). Each room has 20 artists, and every visitor can like their favorites. The four most-liked artists in each room appear as portraits in that room's "All-Time Four" frames. The audience is casual music fans and classmates: people who already have strong opinions and want a quick, low-friction way to show them. The reason to visit is that the space is never finished. The frames show whatever the community has picked so far, so the room looks different after every visit.
