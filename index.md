@@ -223,7 +223,7 @@ Full attribution is in `Assets/CREDITS.txt` in the repo.
 
 ## Music World {#music-world .proj}
 
-**Live space:** [Music World on MUD Foundation](https://verse.mud.foundation/F7tYf8B) (Development build; only one visitor can be active at a time, so extra tabs become spectators).
+**Live space:** [Music World on MUD Foundation](https://verse.mud.foundation/qx7dtAx) (Production build for group visits).
 
 ### Purpose and Audience
 
@@ -247,7 +247,7 @@ Music World is a shared place for music fans to argue about who belongs at the t
 ### Interactions
 
 - **Like and unlike.** Click an artist to like them and click again to unlike. A message confirms it, the count persists between visits, and the All-Time Four frames re-rank.
-- **Encore button.** A big red button in each room triggers a confetti shower and a lighting show.
+- **Encore button.** A big red button in each room triggers a confetti shower and a lighting show for everyone in that room, within a couple of seconds, so a group can celebrate together.
 - **Jukebox.** Click it in the Rock or Country room to cycle that room's music for yourself.
 - **Audio zones.** The hub and each room have their own music. It switches as you walk between them, and it is mixed quietly so voice chat stays clear.
 - **Golden Record hunt.** One hidden record per room. Each find shows a message, and the hub counter tracks your total. Finding all four unlocks a spinning gold trophy and a confetti shower in the hub.
