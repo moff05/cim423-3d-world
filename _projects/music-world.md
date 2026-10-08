@@ -60,26 +60,27 @@ Visitors do more than vote. A shared Encore button sets off confetti and a light
 <h2 id="together" class="reveal">Together</h2>
 
 <div class="trio reveal">
-  <div><span class="ic">🖼️</span><h3>All-Time Four frames</h3><p><b>Community-generated collection.</b> Like artists on the wall of 20 buttons and the top four portraits move into the frames. The room reflects everyone who has visited.</p></div>
-  <div><span class="ic">📊</span><h3>Live boards</h3><p><b>Information display.</b> Read the like counts for all 20 artists in a room, or the hub board showing each room's top artist. Great for arguing about rankings.</p></div>
-  <div><span class="ic">🛋️</span><h3>Lounges</h3><p><b>Group interaction area.</b> Sit near the furniture and chat by voice or text. It turns a voting page into a place to hang out.</p></div>
+  <div><span class="ic">Collection</span><h3>All-Time Four frames</h3><p><b>Community-generated collection.</b> Like artists on the wall of 20 buttons and the top four portraits move into the frames. The room reflects everyone who has visited.</p></div>
+  <div><span class="ic">Display</span><h3>Live boards</h3><p><b>Information display.</b> Read the like counts for all 20 artists in a room, or the hub board showing each room's top artist. Great for arguing about rankings.</p></div>
+  <div><span class="ic">Social</span><h3>Lounges</h3><p><b>Group interaction area.</b> Sit near the furniture and chat by voice or text. It turns a voting page into a place to hang out.</p></div>
 </div>
 
-<h3 class="reveal">Try it: vote like a visitor</h3>
+<h3 class="reveal">Try it: fill the All-Time Four</h3>
 
 <div class="demo reveal" id="likeDemo">
-  <p class="demo-note">A tiny demo of the All-Time Four (resets when you refresh). Like artists and watch the top four change.</p>
+  <p class="demo-note">Same idea as the real room, with some of the actual portraits. Like artists and the top four move into the frames (resets on refresh).</p>
+  <div class="frames"></div>
   <ol class="demo-list"></ol>
 </div>
 
 <h2 id="play" class="reveal">Things To Do</h2>
 
 <div class="act-grid">
-  <div class="act reveal"><span class="ic">❤️</span><h3>Like and unlike</h3><p>Click an artist, click again to undo. Frames re-rank.</p></div>
-  <div class="act reveal"><span class="ic">🔴</span><h3>Encore button</h3><p>Confetti and a light show for everyone in the room.</p></div>
-  <div class="act reveal"><span class="ic">📻</span><h3>Jukebox</h3><p>Cycle the room's music for yourself.</p></div>
-  <div class="act reveal"><span class="ic">🎧</span><h3>Audio zones</h3><p>Music changes as you walk between rooms, mixed low so voice chat stays clear.</p></div>
-  <div class="act gold reveal"><span class="ic">📀</span><h3>Golden Record hunt</h3><p>One hidden record per room. Find all four to unlock a spinning gold trophy and confetti in the hub.</p></div>
+  <div class="act reveal"><span class="ic">Vote</span><h3>Like and unlike</h3><p>Click an artist, click again to undo. Frames re-rank.</p></div>
+  <div class="act reveal"><span class="ic">Group</span><h3>Encore button</h3><p>Confetti and a light show for everyone in the room.</p></div>
+  <div class="act reveal"><span class="ic">Solo</span><h3>Jukebox</h3><p>Cycle the room's music for yourself.</p></div>
+  <div class="act reveal"><span class="ic">Ambient</span><h3>Audio zones</h3><p>Music changes as you walk between rooms, mixed low so voice chat stays clear.</p></div>
+  <div class="act gold reveal"><span class="ic">Hunt</span><h3>Golden Record hunt</h3><p>One hidden record per room. Find all four to unlock a spinning gold trophy and confetti in the hub.</p></div>
 </div>
 
 <h2 id="return" class="reveal">Coming Back</h2>
