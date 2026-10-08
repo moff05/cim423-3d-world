@@ -221,7 +221,7 @@ Full attribution is in `Assets/CREDITS.txt` in the repo.
 
 <p class="project-banner" id="project-2">Project 2 · Music World · MUD Foundation · CIM 423</p>
 
-## Music World {#music-world .proj}
+<h2 id="music-world" class="proj">Music World</h2>
 
 **Live space:** [Music World on MUD Foundation](https://verse.mud.foundation/qx7dtAx) (Production build for group visits).
 
