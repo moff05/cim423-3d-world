@@ -1,14 +1,12 @@
-# CIM 423 - 3D World Build Log
+# VR Projects blog
 
-One plain, single-page build log for the CIM 423 semester project at the University of Miami, hosted on Vercel.
+Jekyll site on Vercel (https://cim423-3d-world.vercel.app). Home page lists every project as a card; each project is its own blog page with its own theme.
 
-- Plain Jekyll, no theme, no plugins, no RSS feed — just `index.md` through a minimal custom layout (`_layouts/default.html`)
-- Everything lives on one page: each assignment is a `##` section appended to `index.md` as it's finished, in order. Nothing to click into, nothing to navigate.
-- The asset-tracking table (for the Assignment 2 text submission) is the last section on the same page, not a separate page
-- Screenshots go in `assets/images/` and are committed directly
-- Videos are committed directly under `assets/videos/` and embedded with a native `<video>` tag (decided against YouTube for Assignment 2 to skip the manual upload step)
-- Deploy with `vercel --prod` from this directory (project: `nicholas-projects12/cim423-3d-world`)
+## Add a new project
 
-Live at: https://cim423-3d-world.vercel.app
-
-Previously hosted on GitHub Pages, which nested it under the personal portfolio domain (`nmoffett.com/cim423-3d-world/`) because that domain is set as the custom domain for the `moff05.github.io` user-page repo — GitHub Pages automatically applies a user/org custom domain to every project-page repo on the account. Moved to its own Vercel project to get a clean, unrelated URL; GitHub Pages is disabled on this repo.
+1. Copy `_projects/music-world.md` to `_projects/<name>.md` and edit the front matter:
+   `order`, `title`, `slug_label` (e.g. Project 3), `eyebrow`, `tagline`, `meta`, `theme`, `links`, `sections` (anchor ids for the sticky nav). Optional: `thumb` (card image), `video` + `poster` (hero video at top of page), `font_url`.
+2. Write the body in Markdown. Give each nav section an id (`<h2 id="idea">`, or a `##` heading, which gets an auto id).
+3. Theme: set `theme: space` or `theme: music` to reuse one, or create `assets/css/<theme>.css` (style `.site-header`, `.chapter-nav`, `main`, `footer`) and set `theme: <theme>`. Add a `.card.theme-<theme>` rule in `assets/css/home.css` for the home card.
+4. Images and videos go in `assets/images/` and `assets/videos/`.
+5. Deploy: `vercel --prod` from this directory.
