@@ -19,7 +19,7 @@ header.site-header { padding-top:4.5rem; padding-bottom:2.5rem; }
 .eyebrow { font-size:.75rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--cyan); }
 header.site-header h1 {
   font-family:"Bebas Neue",Impact,sans-serif; font-weight:400; letter-spacing:.02em;
-  font-size:clamp(4rem,14vw,8.5rem); line-height:.9; margin:.6rem 0 1rem;
+  font-size:clamp(3.6rem,12vw,7rem); line-height:.9; margin:.6rem 0 1rem;
   background:linear-gradient(90deg,var(--pink),var(--gold) 55%,var(--cyan));
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
@@ -77,7 +77,7 @@ header.site-header, main, .chapter-nav, footer { position:relative; z-index:1; }
 @keyframes tick { to { transform:translateX(-50%); } }
 /* spinning vinyl on the header */
 header.site-header { position:relative; overflow:visible; }
-header.site-header::after { content:""; position:absolute; right:1.5rem; top:3.5rem; width:clamp(110px,22vw,220px); aspect-ratio:1; border-radius:50%;
+header.site-header::after { content:""; position:absolute; right:1.5rem; top:3.5rem; width:clamp(100px,18vw,190px); aspect-ratio:1; border-radius:50%;
   background:radial-gradient(circle,var(--gold) 0 14%,#111 15% 17%,transparent 18%),
     repeating-radial-gradient(circle,#15101f 0 3px,#241a38 3px 5px);
   box-shadow:0 0 40px rgba(255,46,147,.35); animation:spin 6s linear infinite; }
