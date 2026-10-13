@@ -33,7 +33,7 @@ scripts:
 
 <h2 id="summary" class="reveal">Summary</h2>
 
-<p class="lead reveal"><b>Music World</b> is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. Hit the Encore button for a group light show, or hunt for the hidden Golden Records. <a href="https://verse.mud.foundation/qx7dtAx">Enter the space</a> or <a href="#code">see the code</a>.</p>
+<p class="lead reveal"><b>Music World</b> is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. Hit the Encore button for a group light show, or hunt for the hidden Golden Records. <a href="https://verse.mud.foundation/qx7dtAx" target="_blank" rel="noopener">Enter the space</a> or <a href="#code">see the code</a>.</p>
 
 <h2 id="idea" class="reveal">The Idea</h2>
 
