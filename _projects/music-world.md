@@ -13,11 +13,14 @@ links:
     url: https://verse.mud.foundation/qx7dtAx
     primary: true
 sections:
+  - {id: summary, label: Summary}
   - {id: idea, label: The Idea}
   - {id: space, label: The Space}
   - {id: together, label: Together}
   - {id: play, label: Things To Do}
   - {id: return, label: Coming Back}
+  - {id: media, label: Media}
+  - {id: code, label: Code}
   - {id: credits, label: Credits}
 scripts:
   - /assets/js/music.js
@@ -25,6 +28,14 @@ scripts:
 
 <div class="eq" aria-hidden="true">{% for i in (1..44) %}<i style="--d:{{ i | times: 37 | modulo: 11 | times: 0.09 }}s;--h:{{ i | times: 53 | modulo: 7 | times: 9 | plus: 35 }}%"></i>{% endfor %}</div>
 <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>ROCK ★ HIP-HOP ★ ELECTRONIC ★ COUNTRY ★ ROCK ★ HIP-HOP ★ ELECTRONIC ★ COUNTRY ★ ROCK ★ HIP-HOP ★ ELECTRONIC ★ COUNTRY ★ ROCK ★ HIP-HOP ★ ELECTRONIC ★ COUNTRY ★&nbsp;</span></div></div>
+
+<h2 id="summary" class="reveal">Summary</h2>
+
+<div class="lead reveal">
+
+**Music World** is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. Hit the Encore button for a group light show, or hunt for the hidden Golden Records. [Enter the space](https://verse.mud.foundation/qx7dtAx) or [read the script](/assets/code/music-world-script.js).
+
+</div>
 
 <h2 id="idea" class="reveal">The Idea</h2>
 
@@ -95,6 +106,14 @@ Visitors do more than vote. A shared Encore button sets off confetti and a light
 - Players cannot get custom avatars from the script, so visitors use MUD's own avatar menu.
 
 </details>
+
+<h2 id="media" class="reveal">Media</h2>
+
+<figure class="reveal"><img src="/assets/images/music-world/hub.jpg" alt="The Music World hub with the Rock corridor, the How To Play sign and the Hip-Hop entrance" style="width:100%;border-radius:8px"><figcaption>The studio hub: Rock corridor ahead, Hip-Hop on the right, and the How To Play sign.</figcaption></figure>
+
+<h2 id="code" class="reveal">Code</h2>
+
+<p class="reveal">The whole world runs from one script inside the MUD XR Creator (about 97 dense lines of JavaScript). It builds the rooms and furniture, loads the 80 portraits, handles likes through the shared store, ranks the All-Time Four, and drives the Encore button, jukebox, Golden Records and zone-based music. <a href="/assets/code/music-world-script.js">Download music-world-script.js</a>.</p>
 
 <h2 id="credits" class="reveal">Credits</h2>
 
