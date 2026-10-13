@@ -1,97 +1,2036 @@
+// Music World - full world script (MUD XR Creator). Formatted for readability.
 #pragma lifecycle(startup,update,dispose)
-let encSeen = {}, encT = 0, encBusy = false, sig = '', wp = new THREE.Vector3(), HR = 1024, finale = 0, trophy = null, fconf = [], toastG = null, toastT = null, toastUntil = 0, cq = new THREE.Quaternion(), dirv = new THREE.Vector3(), commTxt = null, jukes = [], jukeIdx = 0, jukeOv = null, lastZone = '';
-let curAud = null, curZone = '', cpos = new THREE.Vector3(), pend = {};
-let curRoom = null, store, buttons = [], slots = {}, ART = {}, LIKED = {}, down = false, busy = false, tick = 0, el = 0, pads = [], recs = [], spin = [], found = 0, foundTxt;
-const R = [{ k: 'rock', n: 'ROCK', c: 0xb03a1a, p: [0, 0, -45], r: 0 }, { k: 'hiphop', n: 'HIP-HOP', c: 0x8a3fd0, p: [45, 0, 0], r: -Math.PI / 2 }, { k: 'electronic', n: 'ELECTRONIC', c: 0x1fb5d6, p: [-45, 0, 0], r: Math.PI / 2 }, { k: 'country', n: 'COUNTRY', c: 0xc88a3a, p: [0, 0, 45], r: Math.PI }];
-const D = { rock: 'The Beatles|the-beatles;The Rolling Stones|the-rolling-stones;Led Zeppelin|led-zeppelin;Pink Floyd|pink-floyd;Queen|queen;Jimi Hendrix|jimi-hendrix;David Bowie|david-bowie;Elvis Presley|elvis-presley;Bruce Springsteen|bruce-springsteen;Fleetwood Mac|fleetwood-mac;Nirvana|nirvana;Metallica|metallica;AC/DC|ac-dc|2;Black Sabbath|black-sabbath;The Who|the-who;U2|u2;Eagles|eagles;Guns N Roses|guns-n-roses;Radiohead|radiohead;Prince|prince', hiphop: 'Tupac Shakur|tupac-shakur;The Notorious B.I.G.|the-notorious-b-i-g;Jay-Z|jay-z;Nas|nas;Kendrick Lamar|kendrick-lamar;Kanye West|kanye-west;Eminem|eminem;Lil Wayne|lil-wayne;Drake|drake;Snoop Dogg|snoop-dogg;Outkast|outkast;N.W.A.|n-w-a;Wu-Tang Clan|wu-tang-clan|2;Rakim|rakim;Nicki Minaj|nicki-minaj;Project Pat|project-pat;50 Cent|50-cent;Run-DMC|run-dmc;J. Cole|j-cole;Travis Scott|travis-scott', electronic: 'Daft Punk|daft-punk;Tiesto|tiesto;David Guetta|david-guetta;deadmau5|deadmau5;Avicii|avicii;Calvin Harris|calvin-harris;Skrillex|skrillex;Swedish House Mafia|swedish-house-mafia;Diplo|diplo;Marshmello|marshmello;John Summit|john-summit;Dom Dolla|dom-dolla;Chris Lake|chris-lake;Its Murph|its-murph;Mau P|mau-p;FISHER|fisher;Fred again..|fred-again;Martin Garrix|martin-garrix;Zedd|zedd;Kygo|kygo', country: 'Johnny Cash|johnny-cash;Dolly Parton|dolly-parton|2;Willie Nelson|willie-nelson;George Strait|george-strait;Garth Brooks|garth-brooks;Reba McEntire|reba-mcentire|2;Hank Williams|hank-williams;Morgan Wallen|morgan-wallen;Luke Combs|luke-combs;Merle Haggard|merle-haggard;Waylon Jennings|waylon-jennings;George Jones|george-jones;Alan Jackson|alan-jackson;Shania Twain|shania-twain;Tim McGraw|tim-mcgraw;Zach Bryan|zach-bryan;Brooks & Dunn|brooks-dunn;Kacey Musgraves|kacey-musgraves;Chris Stapleton|chris-stapleton;Miranda Lambert|miranda-lambert' };
-function box(g, w, h, d, col, x, y, z) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshBasicMaterial({ color: col })); m.position.set(x, y, z); g.add(m); return m; }
-function cyl(g, rt, rb, h, col, x, y, z) { const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, 16), new THREE.MeshBasicMaterial({ color: col })); m.position.set(x, y, z); g.add(m); return m; }
-function sph(g, r, col, x, y, z) { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), new THREE.MeshBasicMaterial({ color: col })); m.position.set(x, y, z); g.add(m); return m; }
-function mkCanvas(w, h) { return Canvas.create(w, h); }
-function ctx2d(c) { let x = null; try { x = c.getContext('2d'); } catch (e) { } if (!x) { try { x = Canvas.get2DContext(c); } catch (e) { } } return x; }
-function paintTxt(t) { const c = ctx2d(t.cv); if (!c) { return; } const W = t.cv.width; const H = t.cv.height; c.clearRect(0, 0, W, H); if (t.fill) { c.fillStyle = t.fill; c.fillRect(0, 0, W, H); } c.fillStyle = t.col; c.textAlign = 'center'; c.textBaseline = 'middle'; const lines = String(t.s).split('\n'); let f = Math.min(t.size * H / t.bh, H * 0.74 / (lines.length * 1.3)); c.font = 'bold ' + f + 'px sans-serif'; while (f > 12 && lines.some(l => c.measureText(l).width > W * 0.8)) { f = f * 0.92; c.font = 'bold ' + f + 'px sans-serif'; } lines.forEach((l, k) => { c.fillText(l, W / 2, H / 2 + (k - (lines.length - 1) / 2) * f * 1.3); }); t.tex.needsUpdate = true; }
-function txt(g, s, size, col, x, y, z, ry, bw, bh) { const w = bw || 7.6; const h = bh || 1; const cv = mkCanvas(HR, Math.max(64, Math.round(HR * h / w))); const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 8; const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true })); m.position.set(x, y, z); m.rotation.y = ry || 0; g.add(m); const t = { cv: cv, tex: tex, size: size, col: col, bh: h, fill: bw ? '#0b0b12' : null, s: s, set text(v) { if (this.s === v) { return; } this.s = v; paintTxt(this); }, get text() { return this.s; }, set color(v) { if (this.col === v) { return; } this.col = v; paintTxt(this); }, get color() { return this.col; } }; paintTxt(t); return t; }
-function rgb(c, f) { const r = Math.min(255, Math.round(((c >> 16) & 255) * f)); const gg = Math.min(255, Math.round(((c >> 8) & 255) * f)); const b = Math.min(255, Math.round((c & 255) * f)); return 'rgb(' + r + ',' + gg + ',' + b + ')'; }
-function paintPat(cv, kind, c1, c2) { const c = ctx2d(cv); if (!c) { return; } const S = 256; c.fillStyle = rgb(c1, 1); c.fillRect(0, 0, S, S); if (kind === 'planks') { for (let i = 0; i < 8; i++) { c.fillStyle = rgb(c1, 0.85 + ((i * 37) % 7) * 0.05); c.fillRect(0, i * 32, S, 32); c.fillStyle = rgb(c2, 1); c.fillRect(0, i * 32, S, 2); c.fillRect((i * 71) % 200 + 20, i * 32, 2, 32); } } else if (kind === 'brick') { c.fillStyle = rgb(c2, 1); c.fillRect(0, 0, S, S); for (let row = 0; row < 8; row++) { for (let k = -1; k < 4; k++) { const x = k * 64 + (row % 2 ? 32 : 0); c.fillStyle = rgb(c1, 0.8 + (((row * 5 + k * 3 + 10) % 5) * 0.08)); c.fillRect(x + 2, row * 32 + 2, 60, 28); } } } else if (kind === 'tiles') { c.fillStyle = rgb(c2, 1); c.fillRect(0, 0, S, S); for (let i = 0; i < 4; i++) { for (let j = 0; j < 4; j++) { c.fillStyle = rgb(c1, 0.9 + (((i * 3 + j * 5) % 4) * 0.06)); c.fillRect(i * 64 + 3, j * 64 + 3, 58, 58); } } } else if (kind === 'panel') { for (let i = 0; i < 4; i++) { c.fillStyle = rgb(c1, 0.9 + (i % 2) * 0.15); c.fillRect(i * 64, 0, 64, S); c.fillStyle = rgb(c1, 0.55); c.fillRect(i * 64, 0, 3, S); } c.fillStyle = rgb(c2, 1); c.fillRect(0, 124, S, 6); } else if (kind === 'barn') { for (let i = 0; i < 8; i++) { c.fillStyle = rgb(c1, 0.8 + ((i * 53) % 9) * 0.04); c.fillRect(i * 32, 0, 32, S); c.fillStyle = rgb(c2, 1); c.fillRect(i * 32, 0, 2, S); c.fillRect(i * 32 + 14, 40, 3, 3); c.fillRect(i * 32 + 14, 200, 3, 3); } } else if (kind === 'ceiling') { c.fillStyle = rgb(c2, 1); c.fillRect(0, 0, S, S); for (let i = 0; i < 4; i++) { for (let j = 0; j < 4; j++) { c.fillStyle = rgb(c1, 0.9 + (((i + j) % 2) * 0.12)); c.fillRect(i * 64 + 2, j * 64 + 2, 60, 60); } } } }
+let encSeen = {},
+  encT = 0,
+  encBusy = false,
+  sig = "",
+  wp = new THREE.Vector3(),
+  HR = 1024,
+  finale = 0,
+  trophy = null,
+  fconf = [],
+  toastG = null,
+  toastT = null,
+  toastUntil = 0,
+  cq = new THREE.Quaternion(),
+  dirv = new THREE.Vector3(),
+  commTxt = null,
+  jukes = [],
+  jukeIdx = 0,
+  jukeOv = null,
+  lastZone = "";
+let curAud = null,
+  curZone = "",
+  cpos = new THREE.Vector3(),
+  pend = {};
+let curRoom = null,
+  store,
+  buttons = [],
+  slots = {},
+  ART = {},
+  LIKED = {},
+  down = false,
+  busy = false,
+  tick = 0,
+  el = 0,
+  pads = [],
+  recs = [],
+  spin = [],
+  found = 0,
+  foundTxt;
+const R = [
+  { k: "rock", n: "ROCK", c: 0xb03a1a, p: [0, 0, -45], r: 0 },
+  { k: "hiphop", n: "HIP-HOP", c: 0x8a3fd0, p: [45, 0, 0], r: -Math.PI / 2 },
+  { k: "electronic", n: "ELECTRONIC", c: 0x1fb5d6, p: [-45, 0, 0], r: Math.PI / 2 },
+  { k: "country", n: "COUNTRY", c: 0xc88a3a, p: [0, 0, 45], r: Math.PI },
+];
+const D = {
+  rock: "The Beatles|the-beatles;The Rolling Stones|the-rolling-stones;Led Zeppelin|led-zeppelin;Pink Floyd|pink-floyd;Queen|queen;Jimi Hendrix|jimi-hendrix;David Bowie|david-bowie;Elvis Presley|elvis-presley;Bruce Springsteen|bruce-springsteen;Fleetwood Mac|fleetwood-mac;Nirvana|nirvana;Metallica|metallica;AC/DC|ac-dc|2;Black Sabbath|black-sabbath;The Who|the-who;U2|u2;Eagles|eagles;Guns N Roses|guns-n-roses;Radiohead|radiohead;Prince|prince",
+  hiphop:
+    "Tupac Shakur|tupac-shakur;The Notorious B.I.G.|the-notorious-b-i-g;Jay-Z|jay-z;Nas|nas;Kendrick Lamar|kendrick-lamar;Kanye West|kanye-west;Eminem|eminem;Lil Wayne|lil-wayne;Drake|drake;Snoop Dogg|snoop-dogg;Outkast|outkast;N.W.A.|n-w-a;Wu-Tang Clan|wu-tang-clan|2;Rakim|rakim;Nicki Minaj|nicki-minaj;Project Pat|project-pat;50 Cent|50-cent;Run-DMC|run-dmc;J. Cole|j-cole;Travis Scott|travis-scott",
+  electronic:
+    "Daft Punk|daft-punk;Tiesto|tiesto;David Guetta|david-guetta;deadmau5|deadmau5;Avicii|avicii;Calvin Harris|calvin-harris;Skrillex|skrillex;Swedish House Mafia|swedish-house-mafia;Diplo|diplo;Marshmello|marshmello;John Summit|john-summit;Dom Dolla|dom-dolla;Chris Lake|chris-lake;Its Murph|its-murph;Mau P|mau-p;FISHER|fisher;Fred again..|fred-again;Martin Garrix|martin-garrix;Zedd|zedd;Kygo|kygo",
+  country:
+    "Johnny Cash|johnny-cash;Dolly Parton|dolly-parton|2;Willie Nelson|willie-nelson;George Strait|george-strait;Garth Brooks|garth-brooks;Reba McEntire|reba-mcentire|2;Hank Williams|hank-williams;Morgan Wallen|morgan-wallen;Luke Combs|luke-combs;Merle Haggard|merle-haggard;Waylon Jennings|waylon-jennings;George Jones|george-jones;Alan Jackson|alan-jackson;Shania Twain|shania-twain;Tim McGraw|tim-mcgraw;Zach Bryan|zach-bryan;Brooks & Dunn|brooks-dunn;Kacey Musgraves|kacey-musgraves;Chris Stapleton|chris-stapleton;Miranda Lambert|miranda-lambert",
+};
+function box(g, w, h, d, col, x, y, z) {
+  const m = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, d),
+    new THREE.MeshBasicMaterial({ color: col }),
+  );
+  m.position.set(x, y, z);
+  g.add(m);
+  return m;
+}
+function cyl(g, rt, rb, h, col, x, y, z) {
+  const m = new THREE.Mesh(
+    new THREE.CylinderGeometry(rt, rb, h, 16),
+    new THREE.MeshBasicMaterial({ color: col }),
+  );
+  m.position.set(x, y, z);
+  g.add(m);
+  return m;
+}
+function sph(g, r, col, x, y, z) {
+  const m = new THREE.Mesh(
+    new THREE.SphereGeometry(r, 16, 12),
+    new THREE.MeshBasicMaterial({ color: col }),
+  );
+  m.position.set(x, y, z);
+  g.add(m);
+  return m;
+}
+function mkCanvas(w, h) {
+  return Canvas.create(w, h);
+}
+function ctx2d(c) {
+  let x = null;
+  try {
+    x = c.getContext("2d");
+  } catch (e) {}
+  if (!x) {
+    try {
+      x = Canvas.get2DContext(c);
+    } catch (e) {}
+  }
+  return x;
+}
+function paintTxt(t) {
+  const c = ctx2d(t.cv);
+  if (!c) {
+    return;
+  }
+  const W = t.cv.width;
+  const H = t.cv.height;
+  c.clearRect(0, 0, W, H);
+  if (t.fill) {
+    c.fillStyle = t.fill;
+    c.fillRect(0, 0, W, H);
+  }
+  c.fillStyle = t.col;
+  c.textAlign = "center";
+  c.textBaseline = "middle";
+  const lines = String(t.s).split("\n");
+  let f = Math.min((t.size * H) / t.bh, (H * 0.74) / (lines.length * 1.3));
+  c.font = "bold " + f + "px sans-serif";
+  while (f > 12 && lines.some((l) => c.measureText(l).width > W * 0.8)) {
+    f = f * 0.92;
+    c.font = "bold " + f + "px sans-serif";
+  }
+  lines.forEach((l, k) => {
+    c.fillText(l, W / 2, H / 2 + (k - (lines.length - 1) / 2) * f * 1.3);
+  });
+  t.tex.needsUpdate = true;
+}
+function txt(g, s, size, col, x, y, z, ry, bw, bh) {
+  const w = bw || 7.6;
+  const h = bh || 1;
+  const cv = mkCanvas(HR, Math.max(64, Math.round((HR * h) / w)));
+  const tex = new THREE.CanvasTexture(cv);
+  tex.anisotropy = 8;
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({ map: tex, transparent: true }),
+  );
+  m.position.set(x, y, z);
+  m.rotation.y = ry || 0;
+  g.add(m);
+  const t = {
+    cv: cv,
+    tex: tex,
+    size: size,
+    col: col,
+    bh: h,
+    fill: bw ? "#0b0b12" : null,
+    s: s,
+    set text(v) {
+      if (this.s === v) {
+        return;
+      }
+      this.s = v;
+      paintTxt(this);
+    },
+    get text() {
+      return this.s;
+    },
+    set color(v) {
+      if (this.col === v) {
+        return;
+      }
+      this.col = v;
+      paintTxt(this);
+    },
+    get color() {
+      return this.col;
+    },
+  };
+  paintTxt(t);
+  return t;
+}
+function rgb(c, f) {
+  const r = Math.min(255, Math.round(((c >> 16) & 255) * f));
+  const gg = Math.min(255, Math.round(((c >> 8) & 255) * f));
+  const b = Math.min(255, Math.round((c & 255) * f));
+  return "rgb(" + r + "," + gg + "," + b + ")";
+}
+function paintPat(cv, kind, c1, c2) {
+  const c = ctx2d(cv);
+  if (!c) {
+    return;
+  }
+  const S = 256;
+  c.fillStyle = rgb(c1, 1);
+  c.fillRect(0, 0, S, S);
+  if (kind === "planks") {
+    for (let i = 0; i < 8; i++) {
+      c.fillStyle = rgb(c1, 0.85 + ((i * 37) % 7) * 0.05);
+      c.fillRect(0, i * 32, S, 32);
+      c.fillStyle = rgb(c2, 1);
+      c.fillRect(0, i * 32, S, 2);
+      c.fillRect(((i * 71) % 200) + 20, i * 32, 2, 32);
+    }
+  } else if (kind === "brick") {
+    c.fillStyle = rgb(c2, 1);
+    c.fillRect(0, 0, S, S);
+    for (let row = 0; row < 8; row++) {
+      for (let k = -1; k < 4; k++) {
+        const x = k * 64 + (row % 2 ? 32 : 0);
+        c.fillStyle = rgb(c1, 0.8 + ((row * 5 + k * 3 + 10) % 5) * 0.08);
+        c.fillRect(x + 2, row * 32 + 2, 60, 28);
+      }
+    }
+  } else if (kind === "tiles") {
+    c.fillStyle = rgb(c2, 1);
+    c.fillRect(0, 0, S, S);
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        c.fillStyle = rgb(c1, 0.9 + ((i * 3 + j * 5) % 4) * 0.06);
+        c.fillRect(i * 64 + 3, j * 64 + 3, 58, 58);
+      }
+    }
+  } else if (kind === "panel") {
+    for (let i = 0; i < 4; i++) {
+      c.fillStyle = rgb(c1, 0.9 + (i % 2) * 0.15);
+      c.fillRect(i * 64, 0, 64, S);
+      c.fillStyle = rgb(c1, 0.55);
+      c.fillRect(i * 64, 0, 3, S);
+    }
+    c.fillStyle = rgb(c2, 1);
+    c.fillRect(0, 124, S, 6);
+  } else if (kind === "barn") {
+    for (let i = 0; i < 8; i++) {
+      c.fillStyle = rgb(c1, 0.8 + ((i * 53) % 9) * 0.04);
+      c.fillRect(i * 32, 0, 32, S);
+      c.fillStyle = rgb(c2, 1);
+      c.fillRect(i * 32, 0, 2, S);
+      c.fillRect(i * 32 + 14, 40, 3, 3);
+      c.fillRect(i * 32 + 14, 200, 3, 3);
+    }
+  } else if (kind === "ceiling") {
+    c.fillStyle = rgb(c2, 1);
+    c.fillRect(0, 0, S, S);
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        c.fillStyle = rgb(c1, 0.9 + ((i + j) % 2) * 0.12);
+        c.fillRect(i * 64 + 2, j * 64 + 2, 60, 60);
+      }
+    }
+  }
+}
 const TC = {};
-function tmat(kind, c1, c2, rx, ry) { const key = kind + c1 + '_' + c2; if (!TC[key]) { const cv = mkCanvas(256, 256); paintPat(cv, kind, c1, c2); TC[key] = cv; } const t = new THREE.CanvasTexture(TC[key]); t.anisotropy = 8; t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.needsUpdate = true; return new THREE.MeshBasicMaterial({ map: t }); }
-function tbox(g, w, h, d, mat, x, y, z) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); g.add(m); return m; }
-const ST = { rock: { fl: ['planks', 0x3b2416, 0x1e120a], wl: ['brick', 0x7a3322, 0x2a1410], ce: ['ceiling', 0x2a1c16, 0x120c0a], tr: 0x1a1a1a }, hiphop: { fl: ['tiles', 0x2a1a44, 0x4a2a7a], wl: ['brick', 0x4a3366, 0x1c1230], ce: ['panel', 0x241638, 0x8a3fd0], tr: 0x14101c }, electronic: { fl: ['tiles', 0x0d2a33, 0x1fb5d6], wl: ['panel', 0x123845, 0x1fb5d6], ce: ['ceiling', 0x0c2229, 0x061418], tr: 0x0a1a20 }, country: { fl: ['planks', 0x86593a, 0x4a2e14], wl: ['barn', 0x7a5530, 0x3a2410], ce: ['planks', 0x5a3a20, 0x2e1c0c], tr: 0x3a2410 }, hub: { fl: ['tiles', 0x1b1b26, 0x34344a], wl: ['panel', 0x1c1c28, 0xff2fa6], ce: ['ceiling', 0x16161f, 0x0a0a10], tr: 0x101018 } };
-function goldRecord(g, p, fx) { const G = new THREE.Group(); G.position.set(p[0], p[1], p[2]); if (fx) { G.rotation.z = Math.PI / 2; } else { G.rotation.x = Math.PI / 2; } const parts = []; const add = (rt, h, col, y) => { const q = new THREE.Mesh(new THREE.CylinderGeometry(rt, rt, h, 28), new THREE.MeshBasicMaterial({ color: col })); q.position.y = y; G.add(q); parts.push(q); }; [0.42, 0.39, 0.37, 0.34, 0.32, 0.29, 0.27, 0.24, 0.22].forEach((rad, i) => { add(rad, 0.03 + i * 0.004, i % 2 ? 0xb8860b : 0xffd24a, i * 0.0005); }); add(0.17, 0.09, 0xfff3c4, 0.002); add(0.14, 0.1, 0xc0392b, 0.003); add(0.025, 0.11, 0x111111, 0.004); g.add(G); parts.forEach(q => { recs.push({ m: q, g: G, y0: p[1] }); }); }
-function hexs(c) { return '#' + ('000000' + c.toString(16)).slice(-6); }
-function lns(s) { return String(s).split('\n'); }
-function fitF(c, ls, W, f0) { let f = f0; c.font = 'bold ' + f + 'px sans-serif'; while (f > 14 && ls.some(l => c.measureText(l).width > W)) { f = f * 0.93; c.font = 'bold ' + f + 'px sans-serif'; } return f; }
-function drawL(c, ls, W, cy, f, col, glow) { c.textAlign = 'center'; c.textBaseline = 'middle'; ls.forEach((l, k) => { const y = cy + (k - (ls.length - 1) / 2) * f * 1.15; if (glow) { c.globalAlpha = 0.25; c.fillStyle = glow; [[-5, 0], [5, 0], [0, -5], [0, 5], [-3, -3], [3, 3]].forEach(o => { c.fillText(l, W / 2 + o[0], y + o[1]); }); c.globalAlpha = 1; } c.fillStyle = col; c.fillText(l, W / 2, y); }); }
-function frameR(c, x, y, w, h, t, col) { c.fillStyle = col; c.fillRect(x, y, w, t); c.fillRect(x, y + h - t, w, t); c.fillRect(x, y, t, h); c.fillRect(x + w - t, y, t, h); }
-function mkSign(g, w, h, x, y, z, ry, paint) { const cv = mkCanvas(HR, Math.max(64, Math.round(HR * h / w))); const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 8; const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex })); m.position.set(x, y, z); m.rotation.y = ry || 0; g.add(m); const c = ctx2d(cv); if (c) { paint(c, cv.width, cv.height); } tex.needsUpdate = true; return m; }
-function neonP(text, col, col2) { return (c, W, H) => { c.fillStyle = '#08080e'; c.fillRect(0, 0, W, H); frameR(c, 12, 12, W - 24, H - 24, 10, col); frameR(c, 32, 32, W - 64, H - 64, 4, col2); const ls = lns(text); const f = fitF(c, ls, W * 0.8, ls.length === 1 ? H * 0.5 : H * 0.32); drawL(c, ls, W, H / 2, f, col2, col); }; }
-function woodP(text, bg, fg) { return (c, W, H) => { c.fillStyle = bg; c.fillRect(0, 0, W, H); c.fillStyle = 'rgba(0,0,0,0.25)'; for (let i = 1; i < 5; i++) { c.fillRect(0, i * H / 5, W, 4); } c.fillStyle = '#2a1a0c'; [[24, 24], [W - 40, 24], [24, H - 40], [W - 40, H - 40]].forEach(p => { c.fillRect(p[0], p[1], 16, 16); }); frameR(c, 8, 8, W - 16, H - 16, 8, '#2a1a0c'); const ls = lns(text); const f = fitF(c, ls, W * 0.82, ls.length === 1 ? H * 0.5 : H * 0.34); drawL(c, ls, W, H / 2, f, fg, null); }; }
-function inkC(col) { const l = (0.299 * ((col >> 16) & 255) + 0.587 * ((col >> 8) & 255) + 0.114 * (col & 255)) / 255; return l > 0.55 ? '#14141c' : '#ffffff'; }
-function posterP(title, sub, lineup, pal) { return (c, W, H) => { c.fillStyle = hexs(pal[0]); c.fillRect(0, 0, W, H); c.fillStyle = hexs(pal[1]); c.fillRect(0, 0, W, H * 0.12); c.fillRect(0, H * 0.88, W, H * 0.12); c.fillStyle = hexs(pal[2]); c.fillRect(W * 0.07, H * 0.18, W * 0.86, H * 0.54); c.fillStyle = hexs(pal[1]); c.fillRect(W * 0.11, H * 0.22, W * 0.78, H * 0.46); const t = lns(title); const f = fitF(c, t, W * 0.7, Math.min(H * 0.3, H * 0.4 / t.length / 1.15)); drawL(c, t, W, H * 0.45, f, inkC(pal[1]), inkC(pal[1]) === '#ffffff' ? hexs(pal[2]) : null); const sb = lns(sub); const f2 = fitF(c, sb, W * 0.84, H * 0.06); drawL(c, sb, W, H * 0.8, f2, inkC(pal[0]), null); c.font = 'bold ' + (H * 0.05) + 'px sans-serif'; drawL(c, ['LIVE'], W, H * 0.06, H * 0.05, inkC(pal[1]), null); drawL(c, ['MUSIC WORLD'], W, H * 0.94, H * 0.05, inkC(pal[1]), null); }; }
-function wantedP(title, reward) { return (c, W, H) => { c.fillStyle = '#e6cf9a'; c.fillRect(0, 0, W, H); c.fillStyle = 'rgba(120,80,30,0.25)'; for (let i = 0; i < 40; i++) { c.fillRect((i * 211) % W, (i * 131) % H, 60, 6); } frameR(c, 16, 16, W - 32, H - 32, 12, '#4a2e14'); frameR(c, 40, 40, W - 80, H - 80, 4, '#4a2e14'); const a = ['WANTED']; const f = fitF(c, a, W * 0.78, H * 0.17); drawL(c, a, W, H * 0.16, f, '#3a2410', null); c.fillStyle = '#4a2e14'; c.fillRect(W * 0.15, H * 0.27, W * 0.7, H * 0.36); c.fillStyle = '#c9a36a'; c.fillRect(W * 0.18, H * 0.3, W * 0.64, H * 0.3); const t = lns(title); const f2 = fitF(c, t, W * 0.58, H * 0.1); drawL(c, t, W, H * 0.45, f2, '#3a2410', null); const b = ['DEAD OR ALIVE']; const f3 = fitF(c, b, W * 0.7, H * 0.06); drawL(c, b, W, H * 0.7, f3, '#3a2410', null); const rw = lns(reward); const f4 = fitF(c, rw, W * 0.7, H * 0.065); drawL(c, rw, W, H * 0.82, f4, '#7a1f1f', null); }; }
-function graffP(text, c1, c2) { return (c, W, H) => { const cols = ['#ff2fa6', '#2fffe0', '#ffd24a', '#b06bff', '#ff6a3a']; c.fillStyle = '#17121f'; c.fillRect(0, 0, W, H); for (let i = 0; i < 14; i++) { c.fillStyle = cols[i % 5]; c.globalAlpha = 0.35; c.fillRect((i * 173) % W, (i * 97) % H, W * 0.25, H * 0.3); } c.globalAlpha = 1; const ls = lns(text); const f = fitF(c, ls, W * 0.8, H * 0.6); drawL(c, ls, W, H / 2 + 10, f, '#000000', null); drawL(c, ls, W, H / 2, f, c1, c2); frameR(c, 10, 10, W - 20, H - 20, 8, c2); }; }
-function grp(g, x, y, z, ry) { const f = new THREE.Group(); f.position.set(x, y, z); f.rotation.y = ry || 0; g.add(f); return f; }
-function sofa(g, x, z, ry, w, body, cush) { const f = grp(g, x, 0.1, z, ry); box(f, w, 0.45, 1.0, body, 0, 0.42, 0); box(f, w, 0.8, 0.28, body, 0, 0.9, -0.43); const n = Math.max(1, Math.round(w / 0.95)); for (let i = 0; i < n; i++) { const px = (i - (n - 1) / 2) * (w - 0.6) / n; box(f, (w - 0.6) / n - 0.05, 0.2, 0.78, cush, px, 0.76, 0.1); box(f, (w - 0.6) / n - 0.05, 0.5, 0.2, cush, px, 1.0, -0.2); } box(f, 0.3, 0.72, 1.0, body, -w / 2 + 0.15, 0.78, 0); box(f, 0.3, 0.72, 1.0, body, w / 2 - 0.15, 0.78, 0); [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(p => { box(f, 0.1, 0.18, 0.1, 0x1a1a1a, p[0] * (w / 2 - 0.12), 0.09, p[1] * 0.4); }); return f; }
-function table(g, x, z, ry, w, d, h, top, leg) { const f = grp(g, x, 0.1, z, ry); box(f, w, 0.07, d, top, 0, h, 0); [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(p => { box(f, 0.07, h, 0.07, leg, p[0] * (w / 2 - 0.07), h / 2, p[1] * (d / 2 - 0.07)); }); return f; }
-function ottoman(g, x, z, ry, col) { const f = grp(g, x, 0.1, z, ry); box(f, 0.8, 0.38, 0.8, col, 0, 0.25, 0); box(f, 0.72, 0.1, 0.72, col, 0, 0.5, 0); return f; }
-function lampF(g, x, z, pole, shade) { cyl(g, 0.04, 0.04, 1.7, pole, x, 0.95, z); cyl(g, 0.12, 0.28, 0.42, shade, x, 1.95, z); cyl(g, 0.2, 0.2, 0.05, pole, x, 0.13, z); }
-function rugR(g, x, z, w, d, c1, c2, c3) { box(g, w, 0.04, d, c1, x, 0.12, z); box(g, w - 0.4, 0.045, d - 0.4, c2, x, 0.123, z); box(g, w - 0.9, 0.05, d - 0.9, c3, x, 0.126, z); box(g, w - 1.3, 0.055, d - 1.3, c1, x, 0.129, z); }
-function stool(g, x, z, seat, leg) { cyl(g, 0.04, 0.04, 0.7, leg, x, 0.45, z); cyl(g, 0.25, 0.25, 0.1, seat, x, 0.85, z); cyl(g, 0.22, 0.22, 0.04, leg, x, 0.12, z); }
-function barB(g, x0, x1, z, bodyc, topc, glowc, n, seatc, railc) { const L = x1 - x0; const cx = (x0 + x1) / 2; box(g, L, 1.0, 0.7, bodyc, cx, 0.6, z); box(g, L + 0.3, 0.1, 1.0, topc, cx, 1.15, z); if (glowc) { box(g, L, 0.08, 0.05, glowc, cx, 0.35, z - 0.37); } const rl = cyl(g, 0.05, 0.05, L, railc, cx, 0.3, z - 0.6); rl.rotation.z = Math.PI / 2; for (let i = 0; i < n; i++) { stool(g, x0 + 0.8 + i * ((L - 1.6) / (n - 1)), z - 1.1, seatc, railc); } }
-function shelf(g, x0, x1, z, y, woodc, bottles) { const L = x1 - x0; const cx = (x0 + x1) / 2; box(g, L, 0.08, 0.5, woodc, cx, y, z); const n = Math.floor(L / 0.45); for (let i = 0; i < n; i++) { const bx = x0 + 0.3 + i * (L - 0.6) / (n - 1); const col = bottles[i % bottles.length]; cyl(g, 0.09, 0.09, 0.45, col, bx, y + 0.27, z); cyl(g, 0.035, 0.035, 0.18, col, bx, y + 0.58, z); } }
-function jukebox(g, x, z, ry, body, glow, trim) { const f = grp(g, x, 0.1, z, ry); const main = box(f, 1.3, 1.7, 0.85, body, 0, 0.85, 0); const arch = cyl(f, 0.65, 0.65, 0.85, body, 0, 1.7, 0); arch.rotation.x = Math.PI / 2; const gl = box(f, 1.0, 1.0, 0.06, glow, 0, 1.15, 0.44); const ag = cyl(f, 0.5, 0.5, 0.06, glow, 0, 1.7, 0.44); ag.rotation.x = Math.PI / 2; box(f, 1.06, 0.34, 0.06, 0x1a1a1a, 0, 0.38, 0.44); box(f, 0.12, 1.6, 0.07, trim, -0.62, 0.9, 0.43); box(f, 0.12, 1.6, 0.07, trim, 0.62, 0.9, 0.43); box(f, 0.5, 0.06, 0.06, trim, 0, 0.62, 0.45); const lab = txt(f, 'JUKEBOX\nclick to change the song', 0.3, '#ffffff', 0, 2.95, 0.2, 0, 2.6, 0.8); jukes.push({ m: main, lab: lab }); jukes.push({ m: gl, lab: lab }); return f; }
-function boombox(g, x, y, z, ry, col, trim) { const f = grp(g, x, y, z, ry); box(f, 1.8, 0.9, 0.55, col, 0, 0.45, 0); [-0.55, 0.55].forEach(px => { const s1 = cyl(f, 0.32, 0.32, 0.08, 0x111111, px, 0.45, 0.3); s1.rotation.x = Math.PI / 2; const s2 = cyl(f, 0.2, 0.2, 0.1, trim, px, 0.45, 0.31); s2.rotation.x = Math.PI / 2; }); box(f, 0.5, 0.18, 0.1, 0x88ffcc, 0, 0.55, 0.3); box(f, 1.2, 0.08, 0.08, 0x333333, 0, 1.0, 0); return f; }
-function arcade(g, x, z, ry, col, scr) { const f = grp(g, x, 0.1, z, ry); box(f, 0.9, 1.9, 0.8, col, 0, 0.95, 0); box(f, 0.8, 0.6, 0.06, scr, 0, 1.35, 0.4); box(f, 0.9, 0.12, 0.5, 0x1a1a1a, 0, 0.82, 0.4); box(f, 0.05, 0.2, 0.05, 0xff3355, -0.15, 0.97, 0.45); box(f, 0.12, 0.06, 0.12, 0xffee00, 0.15, 0.9, 0.45); box(f, 0.92, 0.3, 0.1, col, 0, 1.85, 0.3); return f; }
-function juke(jk) { jukeIdx = (jukeIdx + 1) % 5; const ks = ['rock', 'hiphop', 'electronic', 'country', 'hub']; const nm = ['ROCK', 'HIP-HOP', 'ELECTRONIC', 'COUNTRY', 'LOUNGE JAZZ']; jukeOv = ks[jukeIdx]; jukes.forEach(j2 => { j2.lab.text = 'JUKEBOX\nNow playing: ' + nm[jukeIdx]; }); }
-function parse() { R.forEach(r => { ART[r.k] = D[r.k].split(';').map(s => { const p = s.split('|'); return { name: p[0], file: r.k + '_' + p[1] + '_portrait_v0' + (p[2] || '1') + '.jpg', key: r.k + ':' + p[1], n: 0, t: 0 }; }); }); }
-function hub() { const g = new THREE.Group(); tbox(g, 30, 0.2, 30, tmat('tiles', 0x1b1b26, 0x34344a, 7.5, 7.5), 0, 0, 0); box(g, 9, 1.2, 3, 0x2b2b3a, 0, 0.6, -4); box(g, 8, 0.12, 2.2, 0xff2fa6, 0, 1.26, -4); box(g, 1.2, 1.4, 1.2, 0x111111, -5.8, 0.7, -4); box(g, 1.2, 1.4, 1.2, 0x111111, 5.8, 0.7, -4); HR = 2048; txt(g, 'MUSIC WORLD', 2.0, '#ff2fa6', -9, 5.2, -14.94, 0, 10, 3.0); mkSign(g, 10, 4.4, 9, 4.8, -14.94, 0, neonP('HOW TO PLAY\nWASD to walk - drag to look\nClick artists to like them\nPress the red ENCORE button\nFind the golden records', '#2fffe0', '#ffffff')); txt(g, 'WELCOME\nFour music worlds to explore.\nLike your favorite artists.\nThe community picks the All-Time Four.', 0.5, '#ffffff', -14.94, 4.8, -9, Math.PI / 2, 10, 4.2); foundTxt = txt(g, 'GOLDEN RECORDS FOUND 0/4\n(1 hidden in each room)', 0.5, '#ffd24a', 9, 4.4, 14.94, Math.PI, 10, 3.0); commTxt = txt(g, 'COMMUNITY RIGHT NOW\nloading...', 0.5, '#ffd24a', -9, 4.6, 14.94, Math.PI, 10, 4.8); R.forEach(r => { const ns = r.p[0] !== 0; tbox(g, ns ? 12 : 6, 0.2, ns ? 6 : 12, tmat('tiles', 0x1a1a24, r.c, ns ? 3 : 1.5, ns ? 1.5 : 3), r.p[0] * 21 / 45, 0, r.p[2] * 21 / 45); const lx = r.p[0] === 0 ? 0 : (r.p[0] > 0 ? 14.94 : -14.94); const lz = r.p[0] === 0 ? (r.p[2] < 0 ? -14.94 : 14.94) : 0; txt(g, r.n, 1.4, '#' + r.c.toString(16).padStart(6, '0'), lx, 8.5, lz, r.r, 5.6, 2.0); }); HR = 1024; cyl(g, 4.2, 4.2, 0.04, 0x0c0c10, 0, 0.13, 3); cyl(g, 3.7, 3.7, 0.045, 0x2fffe0, 0, 0.135, 3); cyl(g, 3.5, 3.5, 0.05, 0x0c0c10, 0, 0.14, 3); cyl(g, 2.6, 2.6, 0.055, 0xb06bff, 0, 0.145, 3); cyl(g, 2.45, 2.45, 0.06, 0x0c0c10, 0, 0.15, 3); cyl(g, 1.5, 1.5, 0.065, 0xff2fa6, 0, 0.155, 3); cyl(g, 0.15, 0.15, 0.07, 0x0c0c10, 0, 0.16, 3); scene.add(g); }
-const SG = { rock: [['THE LOUNGE', -9.5, '#ff3b3b'], ['THE BAR', 10.5, '#ff3b3b']], hiphop: [['CHILL ZONE', -9.5, '#b06bff'], ['RECORD SHOP', 10.5, '#b06bff']], electronic: [['NEON BAR', -10.2, '#2fffe0'], ['CHILL POD', 9.5, '#2fffe0']], country: [['THE PARLOR', -9.5, '#ffd24a']] };
-function shell(r, g) { const st = ST[r.k]; const wm = (w, h) => tmat(st.wl[0], st.wl[1], st.wl[2], w / 4, h / 4); tbox(g, 36, 0.2, 36, tmat(st.fl[0], st.fl[1], st.fl[2], 9, 9), 0, 0, 0); tbox(g, 36, 10, 0.4, wm(36, 10), 0, 5, -18); tbox(g, 0.4, 10, 36, wm(36, 10), -18, 5, 0); tbox(g, 0.4, 10, 36, wm(36, 10), 18, 5, 0); tbox(g, 15, 10, 0.4, wm(15, 10), -10.5, 5, 18); tbox(g, 15, 10, 0.4, wm(15, 10), 10.5, 5, 18); tbox(g, 6, 3, 0.4, wm(6, 3), 0, 8.5, 18); tbox(g, 36, 0.4, 36, tmat(st.ce[0], st.ce[1], st.ce[2], 9, 9), 0, 10.2, 0); cyl(g, 3.6, 3.6, 0.04, 0x0c0c10, 0, 0.13, 7.5); cyl(g, 3.2, 3.2, 0.045, r.c, 0, 0.135, 7.5); cyl(g, 3.0, 3.0, 0.05, 0x0c0c10, 0, 0.14, 7.5); cyl(g, 1.3, 1.3, 0.055, r.c, 0, 0.145, 7.5); cyl(g, 0.12, 0.12, 0.06, 0x0c0c10, 0, 0.15, 7.5); box(g, 36, 0.5, 0.25, st.tr, 0, 0.35, -17.75); box(g, 0.25, 0.5, 36, st.tr, -17.75, 0.35, 0); box(g, 0.25, 0.5, 36, st.tr, 17.75, 0.35, 0); const strip = box(g, 36, 0.12, 0.12, r.c, 0, 0.72, -17.7); [-13, -4, 5, 14].forEach(zb => { box(g, 36, 0.35, 0.5, st.tr, 0, 9.8, zb); }); if (r.k === 'electronic') { tbox(g, 14, 0.6, 5, tmat('planks', 0x3a3a40, 0x202024, 3.5, 1.25), 0, 0.4, -9); } mkSign(g, 6, 1.8, 0, 8.5, 17.55, Math.PI, neonP('BACK TO THE STUDIO', '#ff2fa6', '#ffffff')); SG[r.k].forEach(sn => { mkSign(g, 6, 1.6, sn[1], 6.4, 17.55, Math.PI, neonP(sn[0], sn[2], '#ffffff')); }); txt(g, 'HUNT: FIND THE HIDDEN\nGOLDEN RECORD', 0.4, '#ffd24a', 0, 6.7, 17.55, Math.PI, 5, 1.1); return strip; }
-function rock(g) { box(g, 36, 0.3, 0.3, 0x222222, 0, 9, -6); [-10, -4, 4, 10].forEach(x => { cyl(g, 0.15, 0.6, 0.9, 0xffb347, x, 8.4, -6); }); const pal = [[0x1a0d0d, 0xb01e1e, 0x111111, 0xffe9c2], [0x0d0d14, 0xffb347, 0x7a1010, 0xfff4e0], [0x161010, 0xd9d9d9, 0xb01e1e, 0xffffff]]; [['SOLD OUT', 'WORLD TOUR 1977', -12], ['ROCK\nIS NOT\nDEAD', 'LEGENDS LIVE ON', -5], ['LIVE\nAND\nLOUD', 'ONE NIGHT ONLY', 2]].forEach((p, i) => { mkSign(g, 2.7, 3.8, 17.5, 5.4, p[2], -Math.PI / 2, posterP(p[0], p[1], '', pal[i])); }); mkSign(g, 4.4, 1.5, -15.3, 7.0, -17.5, 0, neonP('ROCK N ROLL', '#ff3b3b', '#ffffff')); mkSign(g, 4.4, 1.5, 15.3, 7.0, -17.5, 0, neonP('TURN IT UP', '#ffb347', '#ffffff')); [-1, 1].forEach(sd => { box(g, 2, 1.6, 1.2, 0x111111, sd * 11.8, 0.9, -16.9); box(g, 2, 1.6, 1.2, 0x111111, sd * 11.8, 2.55, -16.9); box(g, 1.6, 1.2, 0.08, 0x3a3a3a, sd * 11.8, 0.9, -16.25); box(g, 1.6, 1.2, 0.08, 0x3a3a3a, sd * 11.8, 2.55, -16.25); cyl(g, 0.12, 0.12, 0.05, 0xff3b1a, sd * 11.8 + 0.6, 3.15, -16.2); }); for (let i = 0; i < 7; i++) { box(g, 1.9, 1.1, 0.1, 0x6a6a72, -5.7 + i * 1.9, 0.65, -11.4); box(g, 0.1, 1.1, 0.1, 0x3a3a40, -6.65 + i * 1.9, 0.65, -11.4); } }
-function hiphop(g) { for (let i = 0; i < 9; i++) { box(g, 1, 0.3, 0.3, [0xff2fa6, 0x2fffe0, 0xffd24a][i % 3], -16 + i * 4, 9.6, 2); } [-1, 1].forEach(sd => { box(g, 2, 3.2, 1.2, 0x15101f, sd * 11.6, 1.7, -16.9); [0.8, 2.4].forEach(yy => { const w = cyl(g, 0.55, 0.55, 0.1, 0x2a2a2a, sd * 11.6, yy + 0.1, -16.25); w.rotation.x = Math.PI / 2; const w2 = cyl(g, 0.3, 0.3, 0.12, sd > 0 ? 0x2fffe0 : 0xff2fa6, sd * 11.6, yy + 0.1, -16.22); w2.rotation.x = Math.PI / 2; }); }); tbox(g, 7.2, 0.6, 6.0, tmat('planks', 0x3a2266, 0x1a1030, 1.8, 1.5), 0, 0.4, -4.8); box(g, 7.2, 0.08, 0.1, 0x2fffe0, 0, 0.72, -1.75); box(g, 0.1, 0.08, 6.0, 0xff2fa6, -3.6, 0.72, -4.8); box(g, 0.1, 0.08, 6.0, 0xff2fa6, 3.6, 0.72, -4.8); const pal = [[0x1a1030, 0xff2fa6, 0x2fffe0, 0xffffff], [0x101a30, 0xffd24a, 0xb06bff, 0xffffff], [0x1a1030, 0x2fffe0, 0xff6a3a, 0xffffff]]; [['BLOCK\nPARTY', 'ALL NIGHT LONG', -12], ['WORD', 'REAL RECOGNIZE REAL', -5], ['NO\nLIMITS', 'ONE MIC - ONE LIKE', 2]].forEach((p, i) => { mkSign(g, 2.7, 3.8, 17.5, 5.4, p[2], -Math.PI / 2, posterP(p[0], p[1], '', pal[i])); }); mkSign(g, 4.4, 3.4, -15.3, 6.4, -17.5, 0, graffP('WORD', '#ff2fa6', '#2fffe0')); mkSign(g, 4.4, 3.4, 15.3, 6.4, -17.5, 0, graffP('HIP\nHOP', '#ffd24a', '#b06bff')); }
-function electro(g) { for (let i = 0; i < 6; i++) { for (let j = 0; j < 3; j++) { box(g, 3, 0.05, 3, (i + j) % 2 ? 0x1fb5d6 : 0x8a3fd0, -7.5 + i * 3, 0.12, -4.5 + j * 3); } } box(g, 6, 1.2, 2, 0x111111, 0, 1.3, -9); cyl(g, 0.7, 0.7, 0.1, 0x1fb5d6, -1.3, 2, -9); cyl(g, 0.7, 0.7, 0.1, 0x8a3fd0, 1.3, 2, -9); [-12, -7, -2, 3, 8, 13].forEach((x, i) => { const lz = box(g, 0.08, 14, 0.08, i % 2 ? 0x00ffd0 : 0xff2fa6, x, 5, -3); lz.rotation.z = 0.5 - i * 0.2; }); for (let i = 0; i < 8; i++) { const cb = box(g, 0.8, 0.8, 0.8, i % 2 ? 0x00ffd0 : 0xb06bff, -14 + i * 4, 6.5, -1); cb.userData = { y: 6.5 + (i % 3) * 0.4, p: i }; spin.push(cb); } sph(g, 1.0, 0xdddddd, 0, 8.4, -1.5); const pal = [[0x08141c, 0x1fb5d6, 0xff2fa6, 0xffffff], [0x0c0a1c, 0xb06bff, 0x2fffe0, 0xffffff], [0x08141c, 0xff2fa6, 0x1fb5d6, 0xffffff]]; [['FEEL\nTHE\nSIGNAL', 'LIVE LASER SHOW', -12], ['DROP\nTHE\nBASS', 'ALL NIGHT', -5], ['BEAT\nCITY', 'ONE NIGHT ONLY', 2]].forEach((p, i) => { mkSign(g, 2.7, 3.8, 17.5, 5.4, p[2], -Math.PI / 2, posterP(p[0], p[1], '', pal[i])); }); mkSign(g, 4.4, 1.5, -15.3, 7.0, -17.5, 0, neonP('FEEL THE SIGNAL', '#2fffe0', '#ffffff')); mkSign(g, 4.4, 1.5, 15.3, 7.0, -17.5, 0, neonP('DROP THE BASS', '#ff2fa6', '#ffffff')); }
-function longhorn(g, x, y, z, ry, sc) { const h = new THREE.Group(); h.position.set(x, y, z); h.rotation.y = ry; h.scale.set(sc, sc, sc); const hm = (geo, col, px, py, pz) => { const q = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: col })); q.position.set(px, py, pz); h.add(q); return q; }; hm(new THREE.BoxGeometry(6.6, 2.9, 0.12), 0x4a2e14, 0, 0.5, 0.06); hm(new THREE.CylinderGeometry(0.42, 0.22, 1.25, 12), 0xefe3c2, 0, 0, 0.4); hm(new THREE.SphereGeometry(0.09, 8, 6), 0x222222, -0.2, 0.25, 0.75); hm(new THREE.SphereGeometry(0.09, 8, 6), 0x222222, 0.2, 0.25, 0.75); hm(new THREE.SphereGeometry(0.1, 8, 6), 0x6b4423, 0, -0.55, 0.55); const arc = Math.PI * 0.3; const hr = hm(new THREE.TorusGeometry(2.2, 0.15, 8, 24, arc), 0xefe3c2, 0.3, 2.55, 0.4); hr.rotation.z = -Math.PI / 2; const hl = hm(new THREE.TorusGeometry(2.2, 0.15, 8, 24, arc), 0xefe3c2, -0.3, 2.55, 0.4); hl.rotation.z = -Math.PI / 2 - arc; g.add(h); }
-function country(g) { tbox(g, 9.6, 0.6, 4.8, tmat('planks', 0x7a5230, 0x3a2410, 2.4, 1.2), 10.8, 0.4, -15.0); [[-12.2, -16.8], [-10.9, -16.8], [-11.55, -15.7]].forEach(p => { cyl(g, 0.6, 0.6, 1.2, 0x6b4423, p[0], 0.7, p[1]); cyl(g, 0.62, 0.62, 0.08, 0x2a1a0c, p[0], 0.95, p[1]); cyl(g, 0.62, 0.62, 0.08, 0x2a1a0c, p[0], 0.45, p[1]); }); [[-7.6, 0.6, -16.7], [-5.4, 0.6, -16.7], [-6.5, 1.55, -16.7]].forEach(p => { box(g, 2, 0.95, 1.8, 0xc9a43a, p[0], p[1], p[2]); }); for (let i = 0; i < 12; i++) { sph(g, 0.15, 0xffe08a, -16 + i * 3, 9.2, -6); sph(g, 0.15, 0xffe08a, -16 + i * 3, 9.2, 4); } mkSign(g, 2.7, 3.8, 17.5, 5.8, -11, -Math.PI / 2, wantedP('BEST HONKY\nTONK ANTHEM', 'REWARD: ONE LIKE')); mkSign(g, 2.7, 3.8, 17.5, 5.8, -7.5, -Math.PI / 2, posterP('RODEO\nNIGHT', 'BOOTS AND HATS', '', [0x3a2410, 0xc9a43a, 0x7a1f1f, 0xfff0cf])); mkSign(g, 2.7, 3.8, 17.5, 5.8, 9.5, -Math.PI / 2, wantedP('LINE DANCING\nLEGEND', 'REWARD: A TWO-STEP')); mkSign(g, 3.6, 1.5, 17.5, 4.7, 0, -Math.PI / 2, woodP('SALOON', '#7a4a22', '#ffe9b8')); mkSign(g, 4.4, 1.6, -15.3, 7.0, -17.5, 0, woodP('MUSIC WORLD\nSALOON', '#7a4a22', '#ffe9b8')); longhorn(g, 17.5, 7.0, 0.2, -Math.PI / 2, 1); }
-function frames(r, g) { txt(g, r.n + ' ALL-TIME FOUR', 0.6, '#ffffff', 0, 9.65, -17.5, 0, 14, 0.8); slots[r.k] = []; [-10.5, -3.5, 3.5, 10.5].forEach(x => { box(g, 3.6, 4.9, 0.2, r.c, x, 6.95, -17.85); box(g, 3.2, 4.5, 0.2, 0x0a0a0a, x, 6.95, -17.7); box(g, 3.2, 1.0, 0.1, 0x121018, x, 5.3, -17.43); const lab = txt(g, '', 0.3, '#ffffff', x, 5.3, -17.36, 0, 3.0, 0.9); slots[r.k].push({ lx: x, lab: lab }); }); }
-function wall(r, g) { txt(g, 'CLICK AN ARTIST TO LIKE  -  CLICK AGAIN TO UNLIKE', 0.8, '#ffffff', -17.5, 9.2, 0, Math.PI / 2, 14, 1.2); ART[r.k].forEach((a, i) => { const col = Math.floor(i / 5); const row = i % 5; const z = -13.5 + col * 9; const y = 7.6 - row * 1.5; const m = box(g, 0.2, 1.1, 8, new THREE.Color(r.c).multiplyScalar(0.55), -17.7, y, z); const t = txt(g, a.name, 0.5, '#ffffff', -17.55, y, z, Math.PI / 2); buttons.push({ m: m, t: t, a: a }); }); }
-const PADP = { rock: [0, 0.17, -1.5], hiphop: [0, 0.17, 0.2], electronic: [0, 0.17, -1.5], country: [0, 0.17, -1.5] };
-function extras(r, g, strip) { const pp = PADP[r.k]; const ring = cyl(g, 1.4, 1.4, 0.1, 0xffffff, pp[0], pp[1] - 0.05, pp[2]); const pad = cyl(g, 1.05, 1.05, 0.3, 0xff2a3a, pp[0], pp[1] + 0.1, pp[2]); cyl(g, 0.72, 0.72, 0.06, 0xff7a85, pp[0], pp[1] + 0.27, pp[2]); const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 3.0, 20, 1, true), new THREE.MeshBasicMaterial({ color: 0xff5566, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false })); beam.position.set(pp[0], pp[1] + 1.5, pp[2]); g.add(beam); const base = 'PRESS FOR\nENCORE!'; const lab = txt(g, base, 0.4, '#ffffff', pp[0], pp[1] + 2.4, pp[2], 0, 3.6, 1.1); const conf = []; for (let i = 0; i < 140; i++) { const c = box(g, 0.3, 0.05, 0.2, [0xff2fa6, 0x2fffe0, 0xffd24a, 0xffffff, 0xb06bff][i % 5], 0, -50, 0); c.visible = false; c.userData = { ph: i }; conf.push(c); } pads.push({ m: pad, r: r, strip: strip, lab: lab, conf: conf, until: 0, cx: pp[0], cz: pp[2], ring: ring, beam: beam, base: base }); const gp = { rock: [5.34, 1.9, -14.4], hiphop: [13.0, 0.9, -17.5], electronic: [17.4, 1.2, 4.2], country: [-9.45, 0.95, -16.7] }[r.k]; goldRecord(g, gp, r.k === 'country'); }
-const MB = 'https://persistence.mud.foundation/files/'; const MU = { sofa: '01a11413-1713-723c-b62b-0905bb7c9a5c.glb', corner: '01a11413-18e9-7537-893f-b8764070ab15.glb', chair: '01a11413-1b92-72e1-89b9-31db221e5b78.glb', ottoman: '01a11413-1b83-7739-9b16-ffc4f44b835b.glb', coffee: '01a11413-2004-723e-84b2-be65bf2c741a.glb', round: '01a11413-22e0-75f0-8d86-89eb86ff4b68.glb', side: '01a11413-22f1-770a-8ade-3d3e1193dda8.glb' };
-const IMGS = {}; const PU = {"country_alanjackson_portrait_v01jpg":"01a114a9-5a6a-7127-8e9f-95ef15365cbf","rock_queen_portrait_v01jpg":"01a113bc-99ce-754a-abef-22449776c6f3","rock_ledzeppelin_portrait_v01jpg":"01a113bc-9821-731b-b801-5f2abdb8399b","rock_u2_portrait_v01jpg":"01a113bc-410c-76c9-8245-19ae300fd0c4","rock_thewho_portrait_v01jpg":"01a113bc-3f6a-7600-8c1b-d4156f21ed6c","rock_therollingstones_portrait_v01jpg":"01a113bc-3cd4-77d1-be9c-9c01f51f26a5","rock_radiohead_portrait_v01jpg":"01a113bc-3a0f-7059-bbf6-94bca0948cad","rock_prince_portrait_v01jpg":"01a113bc-3875-708b-bd16-fe5536bbc7bc","rock_pinkfloyd_portrait_v01jpg":"01a113bc-35f0-7031-bf7a-de4c6a0f3df8","rock_nirvana_portrait_v01jpg":"01a113bc-3469-746a-a18f-5ab3028ced23","rock_metallica_portrait_v01jpg":"01a113bc-32c8-701a-b7b8-ccb587295d47","rock_jimihendrix_portrait_v01jpg":"01a113bc-2f60-72ef-9413-4303e440faf3","rock_gunsnroses_portrait_v01jpg":"01a113bc-2dd4-7429-ab89-87a483b5423b","rock_fleetwoodmac_portrait_v01jpg":"01a113bc-2ad9-77ed-b5a8-01b8db4a724a","rock_elvispresley_portrait_v01jpg":"01a113bc-2947-7149-97ee-a7c9564db435","rock_eagles_portrait_v01jpg":"01a113bc-27ac-758b-aa1a-2fcf2e70a8cf","rock_davidbowie_portrait_v01jpg":"01a113bc-24ca-738e-8dc8-d12333326fa5","rock_brucespringsteen_portrait_v01jpg":"01a113bc-2312-734d-b198-9a6b95d7c89f","rock_blacksabbath_portrait_v01jpg":"01a113bc-2190-74fa-a995-a7fcf3d18efa","rock_acdc_portrait_v02jpg":"01a113bc-1e7d-74fb-b446-3f0db76aa26a","hiphop_wutangclan_portrait_v02jpg":"01a113bb-6857-70be-9af8-e44c28c9ddf8","hiphop_tupacshakur_portrait_v01jpg":"01a113bb-66b4-725e-9b66-19a86dcc912f","hiphop_travisscott_portrait_v01jpg":"01a113bb-6410-70ac-8f13-78438764bdab","hiphop_thenotoriousbig_portrait_v01jpg":"01a113bb-6270-74f9-a6ff-d44877023c2f","hiphop_snoopdogg_portrait_v01jpg":"01a113bb-60f8-70af-9336-441119d90bde","hiphop_rundmc_portrait_v01jpg":"01a113bb-5f65-7493-9fad-92020a7ffb2b","hiphop_rakim_portrait_v01jpg":"01a113bb-5d1c-760e-8484-e66fdc140e03","hiphop_projectpat_portrait_v01jpg":"01a113bb-5ca8-71fc-bc15-49fb65f85abb","hiphop_outkast_portrait_v01jpg":"01a113bb-59c3-70c1-adc2-69cb4432324c","hiphop_nickiminaj_portrait_v01jpg":"01a113bb-5813-7464-8832-19aad1206f19","hiphop_nas_portrait_v01jpg":"01a113bb-5663-73fb-9d3f-91512de547b6","hiphop_nwa_portrait_v01jpg":"01a113bb-5487-75c8-b1c4-e256bafd6a00","hiphop_lilwayne_portrait_v01jpg":"01a113bb-52d6-76c8-9fe2-3df2acedb560","hiphop_kanyewest_portrait_v01jpg":"01a113bb-4f37-77db-b5a5-7510eab0628d","hiphop_kendricklamar_portrait_v01jpg":"01a113bb-4f1c-763c-aaa0-d6831efd5ff0","hiphop_jayz_portrait_v01jpg":"01a113bb-4c73-7019-9d46-3c0b311aae94","hiphop_jcole_portrait_v01jpg":"01a113bb-4abc-74eb-bd64-f95602fe156e","hiphop_eminem_portrait_v01jpg":"01a113bb-4909-7679-8970-cfc81a8fb796","hiphop_drake_portrait_v01jpg":"01a113bb-4532-77fd-9f4d-30d20ee74bd2","hiphop_50cent_portrait_v01jpg":"01a113bb-450b-742e-8d42-9fdfc064ad1d","electronic_zedd_portrait_v01jpg":"01a113ba-b287-70a9-a5cf-349d80064859","electronic_tiesto_portrait_v01jpg":"01a113ba-b0f4-7152-a899-7e7e7b9964c8","electronic_swedishhousemafia_portrait_v01jpg":"01a113ba-adbc-768a-bab5-6c6c25ec0b38","electronic_skrillex_portrait_v01jpg":"01a113ba-ac41-736a-a661-0995ccb234a1","electronic_maup_portrait_v01jpg":"01a113ba-a9e6-74b9-9dc3-ce70881d0c9a","electronic_martingarrix_portrait_v01jpg":"01a113ba-a852-70b9-ae4f-eb92dfbda2d0","electronic_marshmello_portrait_v01jpg":"01a113ba-a6c6-72d8-a962-1612fe1a9ba1","electronic_kygo_portrait_v01jpg":"01a113ba-a52e-747d-b9d7-a1a1aced44ac","electronic_johnsummit_portrait_v01jpg":"01a113ba-a39a-732b-b2d2-36251aad5d72","electronic_itsmurph_portrait_v01jpg":"01a113ba-a0ee-700c-8430-66e38075887d","electronic_fredagain_portrait_v01jpg":"01a113ba-9f3c-71d9-b4a3-1c3db82b7df7","electronic_domdolla_portrait_v01jpg":"01a113ba-9baa-7679-ad0f-aa2536def703","electronic_fisher_portrait_v01jpg":"01a113ba-9b9c-75a6-abaf-5974508057cb","electronic_diplo_portrait_v01jpg":"01a113ba-9a02-7308-b237-5e2d66384019","electronic_deadmau5_portrait_v01jpg":"01a113ba-9725-7060-9c5d-1f9be57f9066","electronic_davidguetta_portrait_v01jpg":"01a113ba-94cb-7031-8602-87229e0fc247","electronic_chrislake_portrait_v01jpg":"01a113ba-9221-725f-902f-5f6b0807f873","electronic_daftpunk_portrait_v01jpg":"01a1189a-b492-74fe-90ad-be7b24cec032","electronic_calvinharris_portrait_v01jpg":"01a113ba-9077-741d-9db7-ead043b6e2af","electronic_avicii_portrait_v01jpg":"01a113ba-8ee0-7298-a650-46a6c12d25a8","country_zachbryan_portrait_v01jpg":"01a113b9-fbb7-70cb-b871-6e40f1279eef","country_waylonjennings_portrait_v01jpg":"01a113b9-fba7-70cf-879a-3e54ff9b757d","country_willienelson_portrait_v01jpg":"01a113b9-fa35-75ac-8ffd-eae11b6a6d97","country_timmcgraw_portrait_v01jpg":"01a113b9-f7ca-74be-9ebe-d27ede5a7efd","country_shaniatwain_portrait_v01jpg":"01a113b9-f649-709c-a76f-7ee33a85fab9","country_rebamcentire_portrait_v02jpg":"01a113b9-f4ba-73db-96b4-de453de76ead","country_morganwallen_portrait_v01jpg":"01a113b9-f2db-7643-9935-22e14f8af124","country_mirandalambert_portrait_v01jpg":"01a11734-27e8-7278-b5b6-1d84808518d2","country_merlehaggard_portrait_v01jpg":"01a113b9-f023-7782-b5ed-c89075102683","country_lukecombs_portrait_v01jpg":"01a113b9-ed4b-7483-8b1a-d7b4c3237c95","country_kaceymusgraves_portrait_v01jpg":"01a113b9-ebb2-757c-a136-f0e0a503c820","country_johnnycash_portrait_v01jpg":"01a113b9-ea27-77f9-9f7f-b6e981befa2e","country_hankwilliams_portrait_v01jpg":"01a113b9-e6cc-769f-b88d-7bf5d3cc2156","country_georgestrait_portrait_v01jpg":"01a113b9-e68e-739e-adf2-a354486444f3","country_georgejones_portrait_v01jpg":"01a113b9-e43c-71d9-9265-86765f8322f5","country_garthbrooks_portrait_v01jpg":"01a113b9-e2ba-755e-8da5-e77161c830ee","country_chrisstapleton_portrait_v01jpg":"01a113b9-66ac-718e-91b6-a40e815e4171","country_dollyparton_portrait_v02jpg":"01a113b9-666d-755b-8925-68edccde91d2","country_brooksdunn_portrait_v01jpg":"01a113b9-6340-7743-aea1-fe72b01dfb55","rock_thebeatles_portrait_v01jpg":"01a113b9-137c-71dd-b9c7-e1b688fb55c8"};
-Object.assign(MU, { plant: '01a1174d-520b-77ce-ba13-6b8f92b418ab.glb', stage: '01a114ad-f89d-7185-8735-1456554f57cf.glb', lamp: '01a11413-2770-73ea-b78e-0dff7775cec0.glb', radio: '01a11413-278a-7336-843b-def9e650a5b8.glb', rug: '01a11413-2b2f-734a-be36-3971923bd219.glb', spk: '01a11414-b983-7763-90f9-e548bb235fdc.glb', spks: '01a11413-2b58-754a-acbb-a6d1bdd07b79.glb', book: '01a11413-2f3b-7645-9492-b3193f4648de.glb', tv: '01a11413-30c3-7589-9097-b13e8a984389.glb', stool: '01a11414-c699-71b1-8b7c-0026f8bb671d.glb', rugr: '01a11414-ab34-709e-9b6d-0fb31437497d.glb', dj: '01a11413-1456-7739-a853-6f0ab8840fd9.glb', gtr: '01a11413-1435-7169-8ae7-51c784872c16.glb' });
-const CEN = { sofa: [0.49, -0.205], corner: [0.49, -0.49], chair: [0.245, -0.205], ottoman: [0.69, 0.185], coffee: [-0.13, -0.1], side: [0.255, -0.1], lamp: [0.06, -0.06], radio: [0.16, -0.05], rug: [0.785, -0.46], spk: [0.075, -0.075], spks: [0.075, -0.065], book: [0.2, -0.125], tv: [0.205, -0.135], stool: [0.135, -0.115], dj: [0, 0], gtr: [0.05, 0.54] };
-function mdl(g, k, x, y, z, ry, s) { const r = curRoom; const sc = s || 1; const th = ry || 0; const c = CEN[k] || [0, 0]; const cx = c[0] * sc; const cz = c[1] * sc; const ox = x - (cx * Math.cos(th) + cz * Math.sin(th)); const oz = z - (-cx * Math.sin(th) + cz * Math.cos(th)); const m = new ModelElement(); m.src = MB + MU[k]; m.position.set(r.p[0] + ox * Math.cos(r.r) + oz * Math.sin(r.r), y, r.p[2] - ox * Math.sin(r.r) + oz * Math.cos(r.r)); m.rotation.y = th + r.r; m.scale.set(sc, sc, sc); scene.add(m); return m; }
-const LS = { rock: { body: 0x1a1a1a, cush: 0x8a1a1a, tab: 0x2a2018, leg: 0x111111, rug: [0x2a0f0f, 0x6a1414, 0x141414], lamp: [0x222222, 0xffb347] }, hiphop: { body: 0x3a2266, cush: 0x8a3fd0, tab: 0x9fd8ff, leg: 0x1a1a1a, rug: [0x120a22, 0x2fffe0, 0x8a3fd0], lamp: [0x222222, 0x2fffe0] }, electronic: { body: 0xdfeff3, cush: 0x1fb5d6, tab: 0x0a1a20, leg: 0x1fb5d6, rug: [0x07161c, 0x1fb5d6, 0x0d2a33], lamp: [0x1fb5d6, 0xff2fa6] }, country: { body: 0x6b3a1e, cush: 0xa8652f, tab: 0x8b5a2b, leg: 0x4a2e14, rug: [0x7a1f1f, 0xe8d3a1, 0x2e4a2e], lamp: [0x4a2e14, 0xffd24a] } };
-const BR = { rock: { body: 0x111111, top: 0x3a2a1c, glow: 0xff2a2a, seat: 0xb01e1e, rail: 0xb8b8b8, wood: 0x2a2a2a, bottles: [0x2e7d32, 0xb26a00, 0x8d1c1c, 0xd6d6d6] }, hiphop: { body: 0x2a1a44, top: 0x8a3fd0, glow: 0x2fffe0, seat: 0xffd24a, rail: 0xcccccc, wood: 0x241638, bottles: [0xff2fa6, 0x2fffe0, 0xffd24a, 0xb06bff] }, electronic: { body: 0x0d2a33, top: 0x1fb5d6, glow: 0xff2fa6, seat: 0xe8f4f8, rail: 0x1fb5d6, wood: 0x0a1a20, bottles: [0x2fffe0, 0xff2fa6, 0xb06bff, 0xffffff] }, country: { body: 0x5a3a20, top: 0x8b5a2b, glow: 0, seat: 0x6b4423, rail: 0xc9a43a, wood: 0x4a2e14, bottles: [0x2e7d32, 0xc77d1a, 0x8d1c1c, 0xeeeeee] } };
-function sofaSet(g, cx, cz, S) { rugR(g, cx, cz, 4.8, 3.4, S.rug[0], S.rug[1], S.rug[2]); table(g, cx, cz, 0, 1.5, 0.8, 0.42, S.tab, S.leg); sofa(g, cx, cz + 2.1, Math.PI, 2.8, S.body, S.cush); sofa(g, cx - 2.9, cz, Math.PI / 2, 1.3, S.body, S.cush); sofa(g, cx + 2.9, cz, -Math.PI / 2, 1.3, S.body, S.cush); ottoman(g, cx - 0.7, cz - 1.9, 0.2, S.cush); ottoman(g, cx + 0.7, cz - 1.9, -0.2, S.cush); lampF(g, cx + 2.6, cz + 2.5, S.lamp[0], S.lamp[1]); cyl(g, 0.3, 0.3, 0.55, S.tab, cx - 2.6, 0.4, cz + 2.5); }
-function barSet(g, k, x0, x1) { const B = BR[k]; barB(g, x0, x1, 13.6, B.body, B.top, B.glow || 0, 6, B.seat, B.rail); box(g, x1 - x0 + 0.4, 3.2, 0.1, B.wood, (x0 + x1) / 2, 2.7, 17.65); shelf(g, x0 + 0.2, x1 - 0.2, 17.4, 2.0, B.wood, B.bottles); shelf(g, x0 + 0.2, x1 - 0.2, 17.4, 3.0, B.wood, B.bottles); }
-function saloonR(g) { const B = BR.country; const f = grp(g, 14.6, 0, 0.1, Math.PI / 2); barB(f, -5.1, 5.1, 0, B.body, B.top, 0, 5, B.seat, B.rail); box(f, 10.8, 3.2, 0.1, B.wood, 0, 2.7, 3.05); shelf(f, -4.9, 4.9, 2.8, 2.0, B.wood, B.bottles); shelf(f, -4.9, 4.9, 2.8, 3.0, B.wood, B.bottles); box(f, 8, 0.12, 0.08, 0xc9a43a, 0, 3.9, 2.95); }
-function shopR(g) { const B = BR.hiphop; barB(g, 5.2, 16.4, 13.6, B.body, B.top, B.glow, 0, B.seat, B.rail); box(g, 11.6, 3.4, 0.1, B.wood, 10.8, 2.8, 17.65); for (let rr = 0; rr < 2; rr++) { box(g, 11, 0.08, 0.6, B.wood, 10.8, 1.9 + rr * 1.2, 17.35); for (let i = 0; i < 22; i++) { box(g, 0.06, 0.8, 0.8, [0xff2fa6, 0x2fffe0, 0xffd24a, 0xb06bff, 0xff6a3a][(i + rr) % 5], 5.5 + i * 0.5, 2.35 + rr * 1.2, 17.35); } } }
-function lounge(g) { const k = curRoom.k; mdl(g, 'plant', -3.9, 0.1, 16.9, 0, 3.2); mdl(g, 'plant', 3.9, 0.1, 16.9, 0, 3.2); if (k === 'rock') { sofaSet(g, -9.5, 11, LS.rock); barSet(g, 'rock', 5.2, 16.4); jukebox(g, 16.8, 8, -Math.PI / 2, 0x8a1a1a, 0xffd27a, 0xcfcfcf); mdl(g, 'plant', 16.3, 0.1, 16.9, 0, 3.2); } else if (k === 'hiphop') { sofaSet(g, -9.5, 11, LS.hiphop); shopR(g); box(g, 1.3, 0.8, 1.3, 0x6b4423, 16.2, 0.5, 6.8); box(g, 1.3, 0.8, 1.3, 0x7a4f2a, 16.2, 1.3, 6.8); boombox(g, 16.2, 1.7, 6.8, -Math.PI / 2, 0x2a2a2a, 0xff2fa6); box(g, 1.1, 0.6, 1.1, 0x6b4423, 16.3, 0.4, 9); } else if (k === 'electronic') { sofaSet(g, 9.5, 11, LS.electronic); barSet(g, 'electronic', -15.2, -5.2); arcade(g, 17.2, 5, -Math.PI / 2, 0x161a2a, 0x1fb5d6); arcade(g, 17.2, 6.4, -Math.PI / 2, 0x2a1630, 0xff2fa6); arcade(g, 17.2, 7.8, -Math.PI / 2, 0x161a2a, 0x2fffe0); mdl(g, 'plant', -16.3, 0.1, 16.9, 0, 3.2); } else { sofaSet(g, -9.5, 11, LS.country); saloonR(g); jukebox(g, 16.5, 15.5, -Math.PI / 2, 0x6b3a1e, 0xffd27a, 0xc9a43a); } }
-function stagefx(g, k) { if (k === 'rock') { mdl(g, 'stage', 0, 0.1, -14.0, -Math.PI / 2, 0.6); txt(g, 'MUSIC WORLD\nROCK', 0.4, '#ffffff', -5.34, 1.9, -13.95, 0, 2.0, 1.0); txt(g, 'LIVE\nTONIGHT', 0.4, '#ffd24a', 5.34, 1.9, -13.95, 0, 2.0, 1.0); return; } if (k === 'hiphop') { mdl(g, 'dj', 0, 0.8, -4.8, 0, 3.0); mdl(g, 'spk', -3.0, 0.7, -7.2, 0, 2.6); mdl(g, 'spk', 3.0, 0.7, -7.2, 0, 2.6); mdl(g, 'spk', -3.0, 0.7, -2.4, 0, 2.6); mdl(g, 'spk', 3.0, 0.7, -2.4, 0, 2.6); return; } if (k === 'country') { mdl(g, 'spk', 6.9, 0.7, -16.6, 0, 2.6); mdl(g, 'spk', 14.7, 0.7, -16.6, 0, 2.6); cyl(g, 0.03, 0.03, 1.5, 0x333333, 10.8, 1.45, -13.8); sph(g, 0.1, 0x222222, 10.8, 2.25, -13.8); return; } mdl(g, 'spk', -6.8, 0.7, -9.5, 0, 2.6); mdl(g, 'spk', 6.8, 0.7, -9.5, 0, 2.6); mdl(g, 'dj', 0, 1.9, -9, 0, 3.2); }
-const MUS = { hub: '01a1174d-4fe0-7511-8636-1e084804c16a', rock: '01a1174d-4b18-7079-b9f3-733f867d2a67', hiphop: '01a1174d-4b31-70c8-a5e4-9f7967373900', electronic: '01a1174d-4aff-755c-a37f-b3ff3c6f3ce8', country: '01a1174f-00de-7064-8fba-5943eb62c710' };
-function zoneAt(x, z) { for (let i = 0; i < R.length; i++) { if (Math.abs(x - R[i].p[0]) < 18 && Math.abs(z - R[i].p[2]) < 18) { return R[i].k; } } return 'hub'; }
-function setZone(k) { if (k === curZone) { return; } curZone = k; if (curAud) { scene.remove(curAud); curAud = null; } const e = new AudioElement(); e.src = MB + MUS[k] + '.mp3'; e.loop = true; e.autoPlay = true; e.controls = false; e.enableOnProximity = false; scene.add(e); curAud = e; }
+function tmat(kind, c1, c2, rx, ry) {
+  const key = kind + c1 + "_" + c2;
+  if (!TC[key]) {
+    const cv = mkCanvas(256, 256);
+    paintPat(cv, kind, c1, c2);
+    TC[key] = cv;
+  }
+  const t = new THREE.CanvasTexture(TC[key]);
+  t.anisotropy = 8;
+  t.wrapS = THREE.RepeatWrapping;
+  t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(rx, ry);
+  t.needsUpdate = true;
+  return new THREE.MeshBasicMaterial({ map: t });
+}
+function tbox(g, w, h, d, mat, x, y, z) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.position.set(x, y, z);
+  g.add(m);
+  return m;
+}
+const ST = {
+  rock: {
+    fl: ["planks", 0x3b2416, 0x1e120a],
+    wl: ["brick", 0x7a3322, 0x2a1410],
+    ce: ["ceiling", 0x2a1c16, 0x120c0a],
+    tr: 0x1a1a1a,
+  },
+  hiphop: {
+    fl: ["tiles", 0x2a1a44, 0x4a2a7a],
+    wl: ["brick", 0x4a3366, 0x1c1230],
+    ce: ["panel", 0x241638, 0x8a3fd0],
+    tr: 0x14101c,
+  },
+  electronic: {
+    fl: ["tiles", 0x0d2a33, 0x1fb5d6],
+    wl: ["panel", 0x123845, 0x1fb5d6],
+    ce: ["ceiling", 0x0c2229, 0x061418],
+    tr: 0x0a1a20,
+  },
+  country: {
+    fl: ["planks", 0x86593a, 0x4a2e14],
+    wl: ["barn", 0x7a5530, 0x3a2410],
+    ce: ["planks", 0x5a3a20, 0x2e1c0c],
+    tr: 0x3a2410,
+  },
+  hub: {
+    fl: ["tiles", 0x1b1b26, 0x34344a],
+    wl: ["panel", 0x1c1c28, 0xff2fa6],
+    ce: ["ceiling", 0x16161f, 0x0a0a10],
+    tr: 0x101018,
+  },
+};
+function goldRecord(g, p, fx) {
+  const G = new THREE.Group();
+  G.position.set(p[0], p[1], p[2]);
+  if (fx) {
+    G.rotation.z = Math.PI / 2;
+  } else {
+    G.rotation.x = Math.PI / 2;
+  }
+  const parts = [];
+  const add = (rt, h, col, y) => {
+    const q = new THREE.Mesh(
+      new THREE.CylinderGeometry(rt, rt, h, 28),
+      new THREE.MeshBasicMaterial({ color: col }),
+    );
+    q.position.y = y;
+    G.add(q);
+    parts.push(q);
+  };
+  [0.42, 0.39, 0.37, 0.34, 0.32, 0.29, 0.27, 0.24, 0.22].forEach((rad, i) => {
+    add(rad, 0.03 + i * 0.004, i % 2 ? 0xb8860b : 0xffd24a, i * 0.0005);
+  });
+  add(0.17, 0.09, 0xfff3c4, 0.002);
+  add(0.14, 0.1, 0xc0392b, 0.003);
+  add(0.025, 0.11, 0x111111, 0.004);
+  g.add(G);
+  parts.forEach((q) => {
+    recs.push({ m: q, g: G, y0: p[1] });
+  });
+}
+function hexs(c) {
+  return "#" + ("000000" + c.toString(16)).slice(-6);
+}
+function lns(s) {
+  return String(s).split("\n");
+}
+function fitF(c, ls, W, f0) {
+  let f = f0;
+  c.font = "bold " + f + "px sans-serif";
+  while (f > 14 && ls.some((l) => c.measureText(l).width > W)) {
+    f = f * 0.93;
+    c.font = "bold " + f + "px sans-serif";
+  }
+  return f;
+}
+function drawL(c, ls, W, cy, f, col, glow) {
+  c.textAlign = "center";
+  c.textBaseline = "middle";
+  ls.forEach((l, k) => {
+    const y = cy + (k - (ls.length - 1) / 2) * f * 1.15;
+    if (glow) {
+      c.globalAlpha = 0.25;
+      c.fillStyle = glow;
+      [
+        [-5, 0],
+        [5, 0],
+        [0, -5],
+        [0, 5],
+        [-3, -3],
+        [3, 3],
+      ].forEach((o) => {
+        c.fillText(l, W / 2 + o[0], y + o[1]);
+      });
+      c.globalAlpha = 1;
+    }
+    c.fillStyle = col;
+    c.fillText(l, W / 2, y);
+  });
+}
+function frameR(c, x, y, w, h, t, col) {
+  c.fillStyle = col;
+  c.fillRect(x, y, w, t);
+  c.fillRect(x, y + h - t, w, t);
+  c.fillRect(x, y, t, h);
+  c.fillRect(x + w - t, y, t, h);
+}
+function mkSign(g, w, h, x, y, z, ry, paint) {
+  const cv = mkCanvas(HR, Math.max(64, Math.round((HR * h) / w)));
+  const tex = new THREE.CanvasTexture(cv);
+  tex.anisotropy = 8;
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({ map: tex }),
+  );
+  m.position.set(x, y, z);
+  m.rotation.y = ry || 0;
+  g.add(m);
+  const c = ctx2d(cv);
+  if (c) {
+    paint(c, cv.width, cv.height);
+  }
+  tex.needsUpdate = true;
+  return m;
+}
+function neonP(text, col, col2) {
+  return (c, W, H) => {
+    c.fillStyle = "#08080e";
+    c.fillRect(0, 0, W, H);
+    frameR(c, 12, 12, W - 24, H - 24, 10, col);
+    frameR(c, 32, 32, W - 64, H - 64, 4, col2);
+    const ls = lns(text);
+    const f = fitF(c, ls, W * 0.8, ls.length === 1 ? H * 0.5 : H * 0.32);
+    drawL(c, ls, W, H / 2, f, col2, col);
+  };
+}
+function woodP(text, bg, fg) {
+  return (c, W, H) => {
+    c.fillStyle = bg;
+    c.fillRect(0, 0, W, H);
+    c.fillStyle = "rgba(0,0,0,0.25)";
+    for (let i = 1; i < 5; i++) {
+      c.fillRect(0, (i * H) / 5, W, 4);
+    }
+    c.fillStyle = "#2a1a0c";
+    [
+      [24, 24],
+      [W - 40, 24],
+      [24, H - 40],
+      [W - 40, H - 40],
+    ].forEach((p) => {
+      c.fillRect(p[0], p[1], 16, 16);
+    });
+    frameR(c, 8, 8, W - 16, H - 16, 8, "#2a1a0c");
+    const ls = lns(text);
+    const f = fitF(c, ls, W * 0.82, ls.length === 1 ? H * 0.5 : H * 0.34);
+    drawL(c, ls, W, H / 2, f, fg, null);
+  };
+}
+function inkC(col) {
+  const l = (0.299 * ((col >> 16) & 255) + 0.587 * ((col >> 8) & 255) + 0.114 * (col & 255)) / 255;
+  return l > 0.55 ? "#14141c" : "#ffffff";
+}
+function posterP(title, sub, lineup, pal) {
+  return (c, W, H) => {
+    c.fillStyle = hexs(pal[0]);
+    c.fillRect(0, 0, W, H);
+    c.fillStyle = hexs(pal[1]);
+    c.fillRect(0, 0, W, H * 0.12);
+    c.fillRect(0, H * 0.88, W, H * 0.12);
+    c.fillStyle = hexs(pal[2]);
+    c.fillRect(W * 0.07, H * 0.18, W * 0.86, H * 0.54);
+    c.fillStyle = hexs(pal[1]);
+    c.fillRect(W * 0.11, H * 0.22, W * 0.78, H * 0.46);
+    const t = lns(title);
+    const f = fitF(c, t, W * 0.7, Math.min(H * 0.3, (H * 0.4) / t.length / 1.15));
+    drawL(c, t, W, H * 0.45, f, inkC(pal[1]), inkC(pal[1]) === "#ffffff" ? hexs(pal[2]) : null);
+    const sb = lns(sub);
+    const f2 = fitF(c, sb, W * 0.84, H * 0.06);
+    drawL(c, sb, W, H * 0.8, f2, inkC(pal[0]), null);
+    c.font = "bold " + H * 0.05 + "px sans-serif";
+    drawL(c, ["LIVE"], W, H * 0.06, H * 0.05, inkC(pal[1]), null);
+    drawL(c, ["MUSIC WORLD"], W, H * 0.94, H * 0.05, inkC(pal[1]), null);
+  };
+}
+function wantedP(title, reward) {
+  return (c, W, H) => {
+    c.fillStyle = "#e6cf9a";
+    c.fillRect(0, 0, W, H);
+    c.fillStyle = "rgba(120,80,30,0.25)";
+    for (let i = 0; i < 40; i++) {
+      c.fillRect((i * 211) % W, (i * 131) % H, 60, 6);
+    }
+    frameR(c, 16, 16, W - 32, H - 32, 12, "#4a2e14");
+    frameR(c, 40, 40, W - 80, H - 80, 4, "#4a2e14");
+    const a = ["WANTED"];
+    const f = fitF(c, a, W * 0.78, H * 0.17);
+    drawL(c, a, W, H * 0.16, f, "#3a2410", null);
+    c.fillStyle = "#4a2e14";
+    c.fillRect(W * 0.15, H * 0.27, W * 0.7, H * 0.36);
+    c.fillStyle = "#c9a36a";
+    c.fillRect(W * 0.18, H * 0.3, W * 0.64, H * 0.3);
+    const t = lns(title);
+    const f2 = fitF(c, t, W * 0.58, H * 0.1);
+    drawL(c, t, W, H * 0.45, f2, "#3a2410", null);
+    const b = ["DEAD OR ALIVE"];
+    const f3 = fitF(c, b, W * 0.7, H * 0.06);
+    drawL(c, b, W, H * 0.7, f3, "#3a2410", null);
+    const rw = lns(reward);
+    const f4 = fitF(c, rw, W * 0.7, H * 0.065);
+    drawL(c, rw, W, H * 0.82, f4, "#7a1f1f", null);
+  };
+}
+function graffP(text, c1, c2) {
+  return (c, W, H) => {
+    const cols = ["#ff2fa6", "#2fffe0", "#ffd24a", "#b06bff", "#ff6a3a"];
+    c.fillStyle = "#17121f";
+    c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 14; i++) {
+      c.fillStyle = cols[i % 5];
+      c.globalAlpha = 0.35;
+      c.fillRect((i * 173) % W, (i * 97) % H, W * 0.25, H * 0.3);
+    }
+    c.globalAlpha = 1;
+    const ls = lns(text);
+    const f = fitF(c, ls, W * 0.8, H * 0.6);
+    drawL(c, ls, W, H / 2 + 10, f, "#000000", null);
+    drawL(c, ls, W, H / 2, f, c1, c2);
+    frameR(c, 10, 10, W - 20, H - 20, 8, c2);
+  };
+}
+function grp(g, x, y, z, ry) {
+  const f = new THREE.Group();
+  f.position.set(x, y, z);
+  f.rotation.y = ry || 0;
+  g.add(f);
+  return f;
+}
+function sofa(g, x, z, ry, w, body, cush) {
+  const f = grp(g, x, 0.1, z, ry);
+  box(f, w, 0.45, 1.0, body, 0, 0.42, 0);
+  box(f, w, 0.8, 0.28, body, 0, 0.9, -0.43);
+  const n = Math.max(1, Math.round(w / 0.95));
+  for (let i = 0; i < n; i++) {
+    const px = ((i - (n - 1) / 2) * (w - 0.6)) / n;
+    box(f, (w - 0.6) / n - 0.05, 0.2, 0.78, cush, px, 0.76, 0.1);
+    box(f, (w - 0.6) / n - 0.05, 0.5, 0.2, cush, px, 1.0, -0.2);
+  }
+  box(f, 0.3, 0.72, 1.0, body, -w / 2 + 0.15, 0.78, 0);
+  box(f, 0.3, 0.72, 1.0, body, w / 2 - 0.15, 0.78, 0);
+  [
+    [-1, -1],
+    [1, -1],
+    [-1, 1],
+    [1, 1],
+  ].forEach((p) => {
+    box(f, 0.1, 0.18, 0.1, 0x1a1a1a, p[0] * (w / 2 - 0.12), 0.09, p[1] * 0.4);
+  });
+  return f;
+}
+function table(g, x, z, ry, w, d, h, top, leg) {
+  const f = grp(g, x, 0.1, z, ry);
+  box(f, w, 0.07, d, top, 0, h, 0);
+  [
+    [-1, -1],
+    [1, -1],
+    [-1, 1],
+    [1, 1],
+  ].forEach((p) => {
+    box(f, 0.07, h, 0.07, leg, p[0] * (w / 2 - 0.07), h / 2, p[1] * (d / 2 - 0.07));
+  });
+  return f;
+}
+function ottoman(g, x, z, ry, col) {
+  const f = grp(g, x, 0.1, z, ry);
+  box(f, 0.8, 0.38, 0.8, col, 0, 0.25, 0);
+  box(f, 0.72, 0.1, 0.72, col, 0, 0.5, 0);
+  return f;
+}
+function lampF(g, x, z, pole, shade) {
+  cyl(g, 0.04, 0.04, 1.7, pole, x, 0.95, z);
+  cyl(g, 0.12, 0.28, 0.42, shade, x, 1.95, z);
+  cyl(g, 0.2, 0.2, 0.05, pole, x, 0.13, z);
+}
+function rugR(g, x, z, w, d, c1, c2, c3) {
+  box(g, w, 0.04, d, c1, x, 0.12, z);
+  box(g, w - 0.4, 0.045, d - 0.4, c2, x, 0.123, z);
+  box(g, w - 0.9, 0.05, d - 0.9, c3, x, 0.126, z);
+  box(g, w - 1.3, 0.055, d - 1.3, c1, x, 0.129, z);
+}
+function stool(g, x, z, seat, leg) {
+  cyl(g, 0.04, 0.04, 0.7, leg, x, 0.45, z);
+  cyl(g, 0.25, 0.25, 0.1, seat, x, 0.85, z);
+  cyl(g, 0.22, 0.22, 0.04, leg, x, 0.12, z);
+}
+function barB(g, x0, x1, z, bodyc, topc, glowc, n, seatc, railc) {
+  const L = x1 - x0;
+  const cx = (x0 + x1) / 2;
+  box(g, L, 1.0, 0.7, bodyc, cx, 0.6, z);
+  box(g, L + 0.3, 0.1, 1.0, topc, cx, 1.15, z);
+  if (glowc) {
+    box(g, L, 0.08, 0.05, glowc, cx, 0.35, z - 0.37);
+  }
+  const rl = cyl(g, 0.05, 0.05, L, railc, cx, 0.3, z - 0.6);
+  rl.rotation.z = Math.PI / 2;
+  for (let i = 0; i < n; i++) {
+    stool(g, x0 + 0.8 + i * ((L - 1.6) / (n - 1)), z - 1.1, seatc, railc);
+  }
+}
+function shelf(g, x0, x1, z, y, woodc, bottles) {
+  const L = x1 - x0;
+  const cx = (x0 + x1) / 2;
+  box(g, L, 0.08, 0.5, woodc, cx, y, z);
+  const n = Math.floor(L / 0.45);
+  for (let i = 0; i < n; i++) {
+    const bx = x0 + 0.3 + (i * (L - 0.6)) / (n - 1);
+    const col = bottles[i % bottles.length];
+    cyl(g, 0.09, 0.09, 0.45, col, bx, y + 0.27, z);
+    cyl(g, 0.035, 0.035, 0.18, col, bx, y + 0.58, z);
+  }
+}
+function jukebox(g, x, z, ry, body, glow, trim) {
+  const f = grp(g, x, 0.1, z, ry);
+  const main = box(f, 1.3, 1.7, 0.85, body, 0, 0.85, 0);
+  const arch = cyl(f, 0.65, 0.65, 0.85, body, 0, 1.7, 0);
+  arch.rotation.x = Math.PI / 2;
+  const gl = box(f, 1.0, 1.0, 0.06, glow, 0, 1.15, 0.44);
+  const ag = cyl(f, 0.5, 0.5, 0.06, glow, 0, 1.7, 0.44);
+  ag.rotation.x = Math.PI / 2;
+  box(f, 1.06, 0.34, 0.06, 0x1a1a1a, 0, 0.38, 0.44);
+  box(f, 0.12, 1.6, 0.07, trim, -0.62, 0.9, 0.43);
+  box(f, 0.12, 1.6, 0.07, trim, 0.62, 0.9, 0.43);
+  box(f, 0.5, 0.06, 0.06, trim, 0, 0.62, 0.45);
+  const lab = txt(
+    f,
+    "JUKEBOX\nclick to change the song",
+    0.3,
+    "#ffffff",
+    0,
+    2.95,
+    0.2,
+    0,
+    2.6,
+    0.8,
+  );
+  jukes.push({ m: main, lab: lab });
+  jukes.push({ m: gl, lab: lab });
+  return f;
+}
+function boombox(g, x, y, z, ry, col, trim) {
+  const f = grp(g, x, y, z, ry);
+  box(f, 1.8, 0.9, 0.55, col, 0, 0.45, 0);
+  [-0.55, 0.55].forEach((px) => {
+    const s1 = cyl(f, 0.32, 0.32, 0.08, 0x111111, px, 0.45, 0.3);
+    s1.rotation.x = Math.PI / 2;
+    const s2 = cyl(f, 0.2, 0.2, 0.1, trim, px, 0.45, 0.31);
+    s2.rotation.x = Math.PI / 2;
+  });
+  box(f, 0.5, 0.18, 0.1, 0x88ffcc, 0, 0.55, 0.3);
+  box(f, 1.2, 0.08, 0.08, 0x333333, 0, 1.0, 0);
+  return f;
+}
+function arcade(g, x, z, ry, col, scr) {
+  const f = grp(g, x, 0.1, z, ry);
+  box(f, 0.9, 1.9, 0.8, col, 0, 0.95, 0);
+  box(f, 0.8, 0.6, 0.06, scr, 0, 1.35, 0.4);
+  box(f, 0.9, 0.12, 0.5, 0x1a1a1a, 0, 0.82, 0.4);
+  box(f, 0.05, 0.2, 0.05, 0xff3355, -0.15, 0.97, 0.45);
+  box(f, 0.12, 0.06, 0.12, 0xffee00, 0.15, 0.9, 0.45);
+  box(f, 0.92, 0.3, 0.1, col, 0, 1.85, 0.3);
+  return f;
+}
+function juke(jk) {
+  jukeIdx = (jukeIdx + 1) % 5;
+  const ks = ["rock", "hiphop", "electronic", "country", "hub"];
+  const nm = ["ROCK", "HIP-HOP", "ELECTRONIC", "COUNTRY", "LOUNGE JAZZ"];
+  jukeOv = ks[jukeIdx];
+  jukes.forEach((j2) => {
+    j2.lab.text = "JUKEBOX\nNow playing: " + nm[jukeIdx];
+  });
+}
+function parse() {
+  R.forEach((r) => {
+    ART[r.k] = D[r.k].split(";").map((s) => {
+      const p = s.split("|");
+      return {
+        name: p[0],
+        file: r.k + "_" + p[1] + "_portrait_v0" + (p[2] || "1") + ".jpg",
+        key: r.k + ":" + p[1],
+        n: 0,
+        t: 0,
+      };
+    });
+  });
+}
+function hub() {
+  const g = new THREE.Group();
+  tbox(g, 30, 0.2, 30, tmat("tiles", 0x1b1b26, 0x34344a, 7.5, 7.5), 0, 0, 0);
+  box(g, 9, 1.2, 3, 0x2b2b3a, 0, 0.6, -4);
+  box(g, 8, 0.12, 2.2, 0xff2fa6, 0, 1.26, -4);
+  box(g, 1.2, 1.4, 1.2, 0x111111, -5.8, 0.7, -4);
+  box(g, 1.2, 1.4, 1.2, 0x111111, 5.8, 0.7, -4);
+  HR = 2048;
+  txt(g, "MUSIC WORLD", 2.0, "#ff2fa6", -9, 5.2, -14.94, 0, 10, 3.0);
+  mkSign(
+    g,
+    10,
+    4.4,
+    9,
+    4.8,
+    -14.94,
+    0,
+    neonP(
+      "HOW TO PLAY\nWASD to walk - drag to look\nClick artists to like them\nPress the red ENCORE button\nFind the golden records",
+      "#2fffe0",
+      "#ffffff",
+    ),
+  );
+  txt(
+    g,
+    "WELCOME\nFour music worlds to explore.\nLike your favorite artists.\nThe community picks the All-Time Four.",
+    0.5,
+    "#ffffff",
+    -14.94,
+    4.8,
+    -9,
+    Math.PI / 2,
+    10,
+    4.2,
+  );
+  foundTxt = txt(
+    g,
+    "GOLDEN RECORDS FOUND 0/4\n(1 hidden in each room)",
+    0.5,
+    "#ffd24a",
+    9,
+    4.4,
+    14.94,
+    Math.PI,
+    10,
+    3.0,
+  );
+  commTxt = txt(
+    g,
+    "COMMUNITY RIGHT NOW\nloading...",
+    0.5,
+    "#ffd24a",
+    -9,
+    4.6,
+    14.94,
+    Math.PI,
+    10,
+    4.8,
+  );
+  R.forEach((r) => {
+    const ns = r.p[0] !== 0;
+    tbox(
+      g,
+      ns ? 12 : 6,
+      0.2,
+      ns ? 6 : 12,
+      tmat("tiles", 0x1a1a24, r.c, ns ? 3 : 1.5, ns ? 1.5 : 3),
+      (r.p[0] * 21) / 45,
+      0,
+      (r.p[2] * 21) / 45,
+    );
+    const lx = r.p[0] === 0 ? 0 : r.p[0] > 0 ? 14.94 : -14.94;
+    const lz = r.p[0] === 0 ? (r.p[2] < 0 ? -14.94 : 14.94) : 0;
+    txt(g, r.n, 1.4, "#" + r.c.toString(16).padStart(6, "0"), lx, 8.5, lz, r.r, 5.6, 2.0);
+  });
+  HR = 1024;
+  cyl(g, 4.2, 4.2, 0.04, 0x0c0c10, 0, 0.13, 3);
+  cyl(g, 3.7, 3.7, 0.045, 0x2fffe0, 0, 0.135, 3);
+  cyl(g, 3.5, 3.5, 0.05, 0x0c0c10, 0, 0.14, 3);
+  cyl(g, 2.6, 2.6, 0.055, 0xb06bff, 0, 0.145, 3);
+  cyl(g, 2.45, 2.45, 0.06, 0x0c0c10, 0, 0.15, 3);
+  cyl(g, 1.5, 1.5, 0.065, 0xff2fa6, 0, 0.155, 3);
+  cyl(g, 0.15, 0.15, 0.07, 0x0c0c10, 0, 0.16, 3);
+  scene.add(g);
+}
+const SG = {
+  rock: [
+    ["THE LOUNGE", -9.5, "#ff3b3b"],
+    ["THE BAR", 10.5, "#ff3b3b"],
+  ],
+  hiphop: [
+    ["CHILL ZONE", -9.5, "#b06bff"],
+    ["RECORD SHOP", 10.5, "#b06bff"],
+  ],
+  electronic: [
+    ["NEON BAR", -10.2, "#2fffe0"],
+    ["CHILL POD", 9.5, "#2fffe0"],
+  ],
+  country: [["THE PARLOR", -9.5, "#ffd24a"]],
+};
+function shell(r, g) {
+  const st = ST[r.k];
+  const wm = (w, h) => tmat(st.wl[0], st.wl[1], st.wl[2], w / 4, h / 4);
+  tbox(g, 36, 0.2, 36, tmat(st.fl[0], st.fl[1], st.fl[2], 9, 9), 0, 0, 0);
+  tbox(g, 36, 10, 0.4, wm(36, 10), 0, 5, -18);
+  tbox(g, 0.4, 10, 36, wm(36, 10), -18, 5, 0);
+  tbox(g, 0.4, 10, 36, wm(36, 10), 18, 5, 0);
+  tbox(g, 15, 10, 0.4, wm(15, 10), -10.5, 5, 18);
+  tbox(g, 15, 10, 0.4, wm(15, 10), 10.5, 5, 18);
+  tbox(g, 6, 3, 0.4, wm(6, 3), 0, 8.5, 18);
+  tbox(g, 36, 0.4, 36, tmat(st.ce[0], st.ce[1], st.ce[2], 9, 9), 0, 10.2, 0);
+  cyl(g, 3.6, 3.6, 0.04, 0x0c0c10, 0, 0.13, 7.5);
+  cyl(g, 3.2, 3.2, 0.045, r.c, 0, 0.135, 7.5);
+  cyl(g, 3.0, 3.0, 0.05, 0x0c0c10, 0, 0.14, 7.5);
+  cyl(g, 1.3, 1.3, 0.055, r.c, 0, 0.145, 7.5);
+  cyl(g, 0.12, 0.12, 0.06, 0x0c0c10, 0, 0.15, 7.5);
+  box(g, 36, 0.5, 0.25, st.tr, 0, 0.35, -17.75);
+  box(g, 0.25, 0.5, 36, st.tr, -17.75, 0.35, 0);
+  box(g, 0.25, 0.5, 36, st.tr, 17.75, 0.35, 0);
+  const strip = box(g, 36, 0.12, 0.12, r.c, 0, 0.72, -17.7);
+  [-13, -4, 5, 14].forEach((zb) => {
+    box(g, 36, 0.35, 0.5, st.tr, 0, 9.8, zb);
+  });
+  if (r.k === "electronic") {
+    tbox(g, 14, 0.6, 5, tmat("planks", 0x3a3a40, 0x202024, 3.5, 1.25), 0, 0.4, -9);
+  }
+  mkSign(g, 6, 1.8, 0, 8.5, 17.55, Math.PI, neonP("BACK TO THE STUDIO", "#ff2fa6", "#ffffff"));
+  SG[r.k].forEach((sn) => {
+    mkSign(g, 6, 1.6, sn[1], 6.4, 17.55, Math.PI, neonP(sn[0], sn[2], "#ffffff"));
+  });
+  txt(g, "HUNT: FIND THE HIDDEN\nGOLDEN RECORD", 0.4, "#ffd24a", 0, 6.7, 17.55, Math.PI, 5, 1.1);
+  return strip;
+}
+function rock(g) {
+  box(g, 36, 0.3, 0.3, 0x222222, 0, 9, -6);
+  [-10, -4, 4, 10].forEach((x) => {
+    cyl(g, 0.15, 0.6, 0.9, 0xffb347, x, 8.4, -6);
+  });
+  const pal = [
+    [0x1a0d0d, 0xb01e1e, 0x111111, 0xffe9c2],
+    [0x0d0d14, 0xffb347, 0x7a1010, 0xfff4e0],
+    [0x161010, 0xd9d9d9, 0xb01e1e, 0xffffff],
+  ];
+  [
+    ["SOLD OUT", "WORLD TOUR 1977", -12],
+    ["ROCK\nIS NOT\nDEAD", "LEGENDS LIVE ON", -5],
+    ["LIVE\nAND\nLOUD", "ONE NIGHT ONLY", 2],
+  ].forEach((p, i) => {
+    mkSign(g, 2.7, 3.8, 17.5, 5.4, p[2], -Math.PI / 2, posterP(p[0], p[1], "", pal[i]));
+  });
+  mkSign(g, 4.4, 1.5, -15.3, 7.0, -17.5, 0, neonP("ROCK N ROLL", "#ff3b3b", "#ffffff"));
+  mkSign(g, 4.4, 1.5, 15.3, 7.0, -17.5, 0, neonP("TURN IT UP", "#ffb347", "#ffffff"));
+  [-1, 1].forEach((sd) => {
+    box(g, 2, 1.6, 1.2, 0x111111, sd * 11.8, 0.9, -16.9);
+    box(g, 2, 1.6, 1.2, 0x111111, sd * 11.8, 2.55, -16.9);
+    box(g, 1.6, 1.2, 0.08, 0x3a3a3a, sd * 11.8, 0.9, -16.25);
+    box(g, 1.6, 1.2, 0.08, 0x3a3a3a, sd * 11.8, 2.55, -16.25);
+    cyl(g, 0.12, 0.12, 0.05, 0xff3b1a, sd * 11.8 + 0.6, 3.15, -16.2);
+  });
+  for (let i = 0; i < 7; i++) {
+    box(g, 1.9, 1.1, 0.1, 0x6a6a72, -5.7 + i * 1.9, 0.65, -11.4);
+    box(g, 0.1, 1.1, 0.1, 0x3a3a40, -6.65 + i * 1.9, 0.65, -11.4);
+  }
+}
+function hiphop(g) {
+  for (let i = 0; i < 9; i++) {
+    box(g, 1, 0.3, 0.3, [0xff2fa6, 0x2fffe0, 0xffd24a][i % 3], -16 + i * 4, 9.6, 2);
+  }
+  [-1, 1].forEach((sd) => {
+    box(g, 2, 3.2, 1.2, 0x15101f, sd * 11.6, 1.7, -16.9);
+    [0.8, 2.4].forEach((yy) => {
+      const w = cyl(g, 0.55, 0.55, 0.1, 0x2a2a2a, sd * 11.6, yy + 0.1, -16.25);
+      w.rotation.x = Math.PI / 2;
+      const w2 = cyl(g, 0.3, 0.3, 0.12, sd > 0 ? 0x2fffe0 : 0xff2fa6, sd * 11.6, yy + 0.1, -16.22);
+      w2.rotation.x = Math.PI / 2;
+    });
+  });
+  tbox(g, 7.2, 0.6, 6.0, tmat("planks", 0x3a2266, 0x1a1030, 1.8, 1.5), 0, 0.4, -4.8);
+  box(g, 7.2, 0.08, 0.1, 0x2fffe0, 0, 0.72, -1.75);
+  box(g, 0.1, 0.08, 6.0, 0xff2fa6, -3.6, 0.72, -4.8);
+  box(g, 0.1, 0.08, 6.0, 0xff2fa6, 3.6, 0.72, -4.8);
+  const pal = [
+    [0x1a1030, 0xff2fa6, 0x2fffe0, 0xffffff],
+    [0x101a30, 0xffd24a, 0xb06bff, 0xffffff],
+    [0x1a1030, 0x2fffe0, 0xff6a3a, 0xffffff],
+  ];
+  [
+    ["BLOCK\nPARTY", "ALL NIGHT LONG", -12],
+    ["WORD", "REAL RECOGNIZE REAL", -5],
+    ["NO\nLIMITS", "ONE MIC - ONE LIKE", 2],
+  ].forEach((p, i) => {
+    mkSign(g, 2.7, 3.8, 17.5, 5.4, p[2], -Math.PI / 2, posterP(p[0], p[1], "", pal[i]));
+  });
+  mkSign(g, 4.4, 3.4, -15.3, 6.4, -17.5, 0, graffP("WORD", "#ff2fa6", "#2fffe0"));
+  mkSign(g, 4.4, 3.4, 15.3, 6.4, -17.5, 0, graffP("HIP\nHOP", "#ffd24a", "#b06bff"));
+}
+function electro(g) {
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 3; j++) {
+      box(g, 3, 0.05, 3, (i + j) % 2 ? 0x1fb5d6 : 0x8a3fd0, -7.5 + i * 3, 0.12, -4.5 + j * 3);
+    }
+  }
+  box(g, 6, 1.2, 2, 0x111111, 0, 1.3, -9);
+  cyl(g, 0.7, 0.7, 0.1, 0x1fb5d6, -1.3, 2, -9);
+  cyl(g, 0.7, 0.7, 0.1, 0x8a3fd0, 1.3, 2, -9);
+  [-12, -7, -2, 3, 8, 13].forEach((x, i) => {
+    const lz = box(g, 0.08, 14, 0.08, i % 2 ? 0x00ffd0 : 0xff2fa6, x, 5, -3);
+    lz.rotation.z = 0.5 - i * 0.2;
+  });
+  for (let i = 0; i < 8; i++) {
+    const cb = box(g, 0.8, 0.8, 0.8, i % 2 ? 0x00ffd0 : 0xb06bff, -14 + i * 4, 6.5, -1);
+    cb.userData = { y: 6.5 + (i % 3) * 0.4, p: i };
+    spin.push(cb);
+  }
+  sph(g, 1.0, 0xdddddd, 0, 8.4, -1.5);
+  const pal = [
+    [0x08141c, 0x1fb5d6, 0xff2fa6, 0xffffff],
+    [0x0c0a1c, 0xb06bff, 0x2fffe0, 0xffffff],
+    [0x08141c, 0xff2fa6, 0x1fb5d6, 0xffffff],
+  ];
+  [
+    ["FEEL\nTHE\nSIGNAL", "LIVE LASER SHOW", -12],
+    ["DROP\nTHE\nBASS", "ALL NIGHT", -5],
+    ["BEAT\nCITY", "ONE NIGHT ONLY", 2],
+  ].forEach((p, i) => {
+    mkSign(g, 2.7, 3.8, 17.5, 5.4, p[2], -Math.PI / 2, posterP(p[0], p[1], "", pal[i]));
+  });
+  mkSign(g, 4.4, 1.5, -15.3, 7.0, -17.5, 0, neonP("FEEL THE SIGNAL", "#2fffe0", "#ffffff"));
+  mkSign(g, 4.4, 1.5, 15.3, 7.0, -17.5, 0, neonP("DROP THE BASS", "#ff2fa6", "#ffffff"));
+}
+function longhorn(g, x, y, z, ry, sc) {
+  const h = new THREE.Group();
+  h.position.set(x, y, z);
+  h.rotation.y = ry;
+  h.scale.set(sc, sc, sc);
+  const hm = (geo, col, px, py, pz) => {
+    const q = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: col }));
+    q.position.set(px, py, pz);
+    h.add(q);
+    return q;
+  };
+  hm(new THREE.BoxGeometry(6.6, 2.9, 0.12), 0x4a2e14, 0, 0.5, 0.06);
+  hm(new THREE.CylinderGeometry(0.42, 0.22, 1.25, 12), 0xefe3c2, 0, 0, 0.4);
+  hm(new THREE.SphereGeometry(0.09, 8, 6), 0x222222, -0.2, 0.25, 0.75);
+  hm(new THREE.SphereGeometry(0.09, 8, 6), 0x222222, 0.2, 0.25, 0.75);
+  hm(new THREE.SphereGeometry(0.1, 8, 6), 0x6b4423, 0, -0.55, 0.55);
+  const arc = Math.PI * 0.3;
+  const hr = hm(new THREE.TorusGeometry(2.2, 0.15, 8, 24, arc), 0xefe3c2, 0.3, 2.55, 0.4);
+  hr.rotation.z = -Math.PI / 2;
+  const hl = hm(new THREE.TorusGeometry(2.2, 0.15, 8, 24, arc), 0xefe3c2, -0.3, 2.55, 0.4);
+  hl.rotation.z = -Math.PI / 2 - arc;
+  g.add(h);
+}
+function country(g) {
+  tbox(g, 9.6, 0.6, 4.8, tmat("planks", 0x7a5230, 0x3a2410, 2.4, 1.2), 10.8, 0.4, -15.0);
+  [
+    [-12.2, -16.8],
+    [-10.9, -16.8],
+    [-11.55, -15.7],
+  ].forEach((p) => {
+    cyl(g, 0.6, 0.6, 1.2, 0x6b4423, p[0], 0.7, p[1]);
+    cyl(g, 0.62, 0.62, 0.08, 0x2a1a0c, p[0], 0.95, p[1]);
+    cyl(g, 0.62, 0.62, 0.08, 0x2a1a0c, p[0], 0.45, p[1]);
+  });
+  [
+    [-7.6, 0.6, -16.7],
+    [-5.4, 0.6, -16.7],
+    [-6.5, 1.55, -16.7],
+  ].forEach((p) => {
+    box(g, 2, 0.95, 1.8, 0xc9a43a, p[0], p[1], p[2]);
+  });
+  for (let i = 0; i < 12; i++) {
+    sph(g, 0.15, 0xffe08a, -16 + i * 3, 9.2, -6);
+    sph(g, 0.15, 0xffe08a, -16 + i * 3, 9.2, 4);
+  }
+  mkSign(
+    g,
+    2.7,
+    3.8,
+    17.5,
+    5.8,
+    -11,
+    -Math.PI / 2,
+    wantedP("BEST HONKY\nTONK ANTHEM", "REWARD: ONE LIKE"),
+  );
+  mkSign(
+    g,
+    2.7,
+    3.8,
+    17.5,
+    5.8,
+    -7.5,
+    -Math.PI / 2,
+    posterP("RODEO\nNIGHT", "BOOTS AND HATS", "", [0x3a2410, 0xc9a43a, 0x7a1f1f, 0xfff0cf]),
+  );
+  mkSign(
+    g,
+    2.7,
+    3.8,
+    17.5,
+    5.8,
+    9.5,
+    -Math.PI / 2,
+    wantedP("LINE DANCING\nLEGEND", "REWARD: A TWO-STEP"),
+  );
+  mkSign(g, 3.6, 1.5, 17.5, 4.7, 0, -Math.PI / 2, woodP("SALOON", "#7a4a22", "#ffe9b8"));
+  mkSign(g, 4.4, 1.6, -15.3, 7.0, -17.5, 0, woodP("MUSIC WORLD\nSALOON", "#7a4a22", "#ffe9b8"));
+  longhorn(g, 17.5, 7.0, 0.2, -Math.PI / 2, 1);
+}
+function frames(r, g) {
+  txt(g, r.n + " ALL-TIME FOUR", 0.6, "#ffffff", 0, 9.65, -17.5, 0, 14, 0.8);
+  slots[r.k] = [];
+  [-10.5, -3.5, 3.5, 10.5].forEach((x) => {
+    box(g, 3.6, 4.9, 0.2, r.c, x, 6.95, -17.85);
+    box(g, 3.2, 4.5, 0.2, 0x0a0a0a, x, 6.95, -17.7);
+    box(g, 3.2, 1.0, 0.1, 0x121018, x, 5.3, -17.43);
+    const lab = txt(g, "", 0.3, "#ffffff", x, 5.3, -17.36, 0, 3.0, 0.9);
+    slots[r.k].push({ lx: x, lab: lab });
+  });
+}
+function wall(r, g) {
+  txt(
+    g,
+    "CLICK AN ARTIST TO LIKE  -  CLICK AGAIN TO UNLIKE",
+    0.8,
+    "#ffffff",
+    -17.5,
+    9.2,
+    0,
+    Math.PI / 2,
+    14,
+    1.2,
+  );
+  ART[r.k].forEach((a, i) => {
+    const col = Math.floor(i / 5);
+    const row = i % 5;
+    const z = -13.5 + col * 9;
+    const y = 7.6 - row * 1.5;
+    const m = box(g, 0.2, 1.1, 8, new THREE.Color(r.c).multiplyScalar(0.55), -17.7, y, z);
+    const t = txt(g, a.name, 0.5, "#ffffff", -17.55, y, z, Math.PI / 2);
+    buttons.push({ m: m, t: t, a: a });
+  });
+}
+const PADP = {
+  rock: [0, 0.17, -1.5],
+  hiphop: [0, 0.17, 0.2],
+  electronic: [0, 0.17, -1.5],
+  country: [0, 0.17, -1.5],
+};
+function extras(r, g, strip) {
+  const pp = PADP[r.k];
+  const ring = cyl(g, 1.4, 1.4, 0.1, 0xffffff, pp[0], pp[1] - 0.05, pp[2]);
+  const pad = cyl(g, 1.05, 1.05, 0.3, 0xff2a3a, pp[0], pp[1] + 0.1, pp[2]);
+  cyl(g, 0.72, 0.72, 0.06, 0xff7a85, pp[0], pp[1] + 0.27, pp[2]);
+  const beam = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.9, 0.9, 3.0, 20, 1, true),
+    new THREE.MeshBasicMaterial({
+      color: 0xff5566,
+      transparent: true,
+      opacity: 0.18,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    }),
+  );
+  beam.position.set(pp[0], pp[1] + 1.5, pp[2]);
+  g.add(beam);
+  const base = "PRESS FOR\nENCORE!";
+  const lab = txt(g, base, 0.4, "#ffffff", pp[0], pp[1] + 2.4, pp[2], 0, 3.6, 1.1);
+  const conf = [];
+  for (let i = 0; i < 140; i++) {
+    const c = box(
+      g,
+      0.3,
+      0.05,
+      0.2,
+      [0xff2fa6, 0x2fffe0, 0xffd24a, 0xffffff, 0xb06bff][i % 5],
+      0,
+      -50,
+      0,
+    );
+    c.visible = false;
+    c.userData = { ph: i };
+    conf.push(c);
+  }
+  pads.push({
+    m: pad,
+    r: r,
+    strip: strip,
+    lab: lab,
+    conf: conf,
+    until: 0,
+    cx: pp[0],
+    cz: pp[2],
+    ring: ring,
+    beam: beam,
+    base: base,
+  });
+  const gp = {
+    rock: [5.34, 1.9, -14.4],
+    hiphop: [13.0, 0.9, -17.5],
+    electronic: [17.4, 1.2, 4.2],
+    country: [-9.45, 0.95, -16.7],
+  }[r.k];
+  goldRecord(g, gp, r.k === "country");
+}
+const MB = "https://persistence.mud.foundation/files/";
+const MU = {
+  sofa: "01a11413-1713-723c-b62b-0905bb7c9a5c.glb",
+  corner: "01a11413-18e9-7537-893f-b8764070ab15.glb",
+  chair: "01a11413-1b92-72e1-89b9-31db221e5b78.glb",
+  ottoman: "01a11413-1b83-7739-9b16-ffc4f44b835b.glb",
+  coffee: "01a11413-2004-723e-84b2-be65bf2c741a.glb",
+  round: "01a11413-22e0-75f0-8d86-89eb86ff4b68.glb",
+  side: "01a11413-22f1-770a-8ade-3d3e1193dda8.glb",
+};
+const IMGS = {};
+const PU = {
+  country_alanjackson_portrait_v01jpg: "01a114a9-5a6a-7127-8e9f-95ef15365cbf",
+  rock_queen_portrait_v01jpg: "01a113bc-99ce-754a-abef-22449776c6f3",
+  rock_ledzeppelin_portrait_v01jpg: "01a113bc-9821-731b-b801-5f2abdb8399b",
+  rock_u2_portrait_v01jpg: "01a113bc-410c-76c9-8245-19ae300fd0c4",
+  rock_thewho_portrait_v01jpg: "01a113bc-3f6a-7600-8c1b-d4156f21ed6c",
+  rock_therollingstones_portrait_v01jpg: "01a113bc-3cd4-77d1-be9c-9c01f51f26a5",
+  rock_radiohead_portrait_v01jpg: "01a113bc-3a0f-7059-bbf6-94bca0948cad",
+  rock_prince_portrait_v01jpg: "01a113bc-3875-708b-bd16-fe5536bbc7bc",
+  rock_pinkfloyd_portrait_v01jpg: "01a113bc-35f0-7031-bf7a-de4c6a0f3df8",
+  rock_nirvana_portrait_v01jpg: "01a113bc-3469-746a-a18f-5ab3028ced23",
+  rock_metallica_portrait_v01jpg: "01a113bc-32c8-701a-b7b8-ccb587295d47",
+  rock_jimihendrix_portrait_v01jpg: "01a113bc-2f60-72ef-9413-4303e440faf3",
+  rock_gunsnroses_portrait_v01jpg: "01a113bc-2dd4-7429-ab89-87a483b5423b",
+  rock_fleetwoodmac_portrait_v01jpg: "01a113bc-2ad9-77ed-b5a8-01b8db4a724a",
+  rock_elvispresley_portrait_v01jpg: "01a113bc-2947-7149-97ee-a7c9564db435",
+  rock_eagles_portrait_v01jpg: "01a113bc-27ac-758b-aa1a-2fcf2e70a8cf",
+  rock_davidbowie_portrait_v01jpg: "01a113bc-24ca-738e-8dc8-d12333326fa5",
+  rock_brucespringsteen_portrait_v01jpg: "01a113bc-2312-734d-b198-9a6b95d7c89f",
+  rock_blacksabbath_portrait_v01jpg: "01a113bc-2190-74fa-a995-a7fcf3d18efa",
+  rock_acdc_portrait_v02jpg: "01a113bc-1e7d-74fb-b446-3f0db76aa26a",
+  hiphop_wutangclan_portrait_v02jpg: "01a113bb-6857-70be-9af8-e44c28c9ddf8",
+  hiphop_tupacshakur_portrait_v01jpg: "01a113bb-66b4-725e-9b66-19a86dcc912f",
+  hiphop_travisscott_portrait_v01jpg: "01a113bb-6410-70ac-8f13-78438764bdab",
+  hiphop_thenotoriousbig_portrait_v01jpg: "01a113bb-6270-74f9-a6ff-d44877023c2f",
+  hiphop_snoopdogg_portrait_v01jpg: "01a113bb-60f8-70af-9336-441119d90bde",
+  hiphop_rundmc_portrait_v01jpg: "01a113bb-5f65-7493-9fad-92020a7ffb2b",
+  hiphop_rakim_portrait_v01jpg: "01a113bb-5d1c-760e-8484-e66fdc140e03",
+  hiphop_projectpat_portrait_v01jpg: "01a113bb-5ca8-71fc-bc15-49fb65f85abb",
+  hiphop_outkast_portrait_v01jpg: "01a113bb-59c3-70c1-adc2-69cb4432324c",
+  hiphop_nickiminaj_portrait_v01jpg: "01a113bb-5813-7464-8832-19aad1206f19",
+  hiphop_nas_portrait_v01jpg: "01a113bb-5663-73fb-9d3f-91512de547b6",
+  hiphop_nwa_portrait_v01jpg: "01a113bb-5487-75c8-b1c4-e256bafd6a00",
+  hiphop_lilwayne_portrait_v01jpg: "01a113bb-52d6-76c8-9fe2-3df2acedb560",
+  hiphop_kanyewest_portrait_v01jpg: "01a113bb-4f37-77db-b5a5-7510eab0628d",
+  hiphop_kendricklamar_portrait_v01jpg: "01a113bb-4f1c-763c-aaa0-d6831efd5ff0",
+  hiphop_jayz_portrait_v01jpg: "01a113bb-4c73-7019-9d46-3c0b311aae94",
+  hiphop_jcole_portrait_v01jpg: "01a113bb-4abc-74eb-bd64-f95602fe156e",
+  hiphop_eminem_portrait_v01jpg: "01a113bb-4909-7679-8970-cfc81a8fb796",
+  hiphop_drake_portrait_v01jpg: "01a113bb-4532-77fd-9f4d-30d20ee74bd2",
+  hiphop_50cent_portrait_v01jpg: "01a113bb-450b-742e-8d42-9fdfc064ad1d",
+  electronic_zedd_portrait_v01jpg: "01a113ba-b287-70a9-a5cf-349d80064859",
+  electronic_tiesto_portrait_v01jpg: "01a113ba-b0f4-7152-a899-7e7e7b9964c8",
+  electronic_swedishhousemafia_portrait_v01jpg: "01a113ba-adbc-768a-bab5-6c6c25ec0b38",
+  electronic_skrillex_portrait_v01jpg: "01a113ba-ac41-736a-a661-0995ccb234a1",
+  electronic_maup_portrait_v01jpg: "01a113ba-a9e6-74b9-9dc3-ce70881d0c9a",
+  electronic_martingarrix_portrait_v01jpg: "01a113ba-a852-70b9-ae4f-eb92dfbda2d0",
+  electronic_marshmello_portrait_v01jpg: "01a113ba-a6c6-72d8-a962-1612fe1a9ba1",
+  electronic_kygo_portrait_v01jpg: "01a113ba-a52e-747d-b9d7-a1a1aced44ac",
+  electronic_johnsummit_portrait_v01jpg: "01a113ba-a39a-732b-b2d2-36251aad5d72",
+  electronic_itsmurph_portrait_v01jpg: "01a113ba-a0ee-700c-8430-66e38075887d",
+  electronic_fredagain_portrait_v01jpg: "01a113ba-9f3c-71d9-b4a3-1c3db82b7df7",
+  electronic_domdolla_portrait_v01jpg: "01a113ba-9baa-7679-ad0f-aa2536def703",
+  electronic_fisher_portrait_v01jpg: "01a113ba-9b9c-75a6-abaf-5974508057cb",
+  electronic_diplo_portrait_v01jpg: "01a113ba-9a02-7308-b237-5e2d66384019",
+  electronic_deadmau5_portrait_v01jpg: "01a113ba-9725-7060-9c5d-1f9be57f9066",
+  electronic_davidguetta_portrait_v01jpg: "01a113ba-94cb-7031-8602-87229e0fc247",
+  electronic_chrislake_portrait_v01jpg: "01a113ba-9221-725f-902f-5f6b0807f873",
+  electronic_daftpunk_portrait_v01jpg: "01a1189a-b492-74fe-90ad-be7b24cec032",
+  electronic_calvinharris_portrait_v01jpg: "01a113ba-9077-741d-9db7-ead043b6e2af",
+  electronic_avicii_portrait_v01jpg: "01a113ba-8ee0-7298-a650-46a6c12d25a8",
+  country_zachbryan_portrait_v01jpg: "01a113b9-fbb7-70cb-b871-6e40f1279eef",
+  country_waylonjennings_portrait_v01jpg: "01a113b9-fba7-70cf-879a-3e54ff9b757d",
+  country_willienelson_portrait_v01jpg: "01a113b9-fa35-75ac-8ffd-eae11b6a6d97",
+  country_timmcgraw_portrait_v01jpg: "01a113b9-f7ca-74be-9ebe-d27ede5a7efd",
+  country_shaniatwain_portrait_v01jpg: "01a113b9-f649-709c-a76f-7ee33a85fab9",
+  country_rebamcentire_portrait_v02jpg: "01a113b9-f4ba-73db-96b4-de453de76ead",
+  country_morganwallen_portrait_v01jpg: "01a113b9-f2db-7643-9935-22e14f8af124",
+  country_mirandalambert_portrait_v01jpg: "01a11734-27e8-7278-b5b6-1d84808518d2",
+  country_merlehaggard_portrait_v01jpg: "01a113b9-f023-7782-b5ed-c89075102683",
+  country_lukecombs_portrait_v01jpg: "01a113b9-ed4b-7483-8b1a-d7b4c3237c95",
+  country_kaceymusgraves_portrait_v01jpg: "01a113b9-ebb2-757c-a136-f0e0a503c820",
+  country_johnnycash_portrait_v01jpg: "01a113b9-ea27-77f9-9f7f-b6e981befa2e",
+  country_hankwilliams_portrait_v01jpg: "01a113b9-e6cc-769f-b88d-7bf5d3cc2156",
+  country_georgestrait_portrait_v01jpg: "01a113b9-e68e-739e-adf2-a354486444f3",
+  country_georgejones_portrait_v01jpg: "01a113b9-e43c-71d9-9265-86765f8322f5",
+  country_garthbrooks_portrait_v01jpg: "01a113b9-e2ba-755e-8da5-e77161c830ee",
+  country_chrisstapleton_portrait_v01jpg: "01a113b9-66ac-718e-91b6-a40e815e4171",
+  country_dollyparton_portrait_v02jpg: "01a113b9-666d-755b-8925-68edccde91d2",
+  country_brooksdunn_portrait_v01jpg: "01a113b9-6340-7743-aea1-fe72b01dfb55",
+  rock_thebeatles_portrait_v01jpg: "01a113b9-137c-71dd-b9c7-e1b688fb55c8",
+};
+Object.assign(MU, {
+  plant: "01a1174d-520b-77ce-ba13-6b8f92b418ab.glb",
+  stage: "01a114ad-f89d-7185-8735-1456554f57cf.glb",
+  lamp: "01a11413-2770-73ea-b78e-0dff7775cec0.glb",
+  radio: "01a11413-278a-7336-843b-def9e650a5b8.glb",
+  rug: "01a11413-2b2f-734a-be36-3971923bd219.glb",
+  spk: "01a11414-b983-7763-90f9-e548bb235fdc.glb",
+  spks: "01a11413-2b58-754a-acbb-a6d1bdd07b79.glb",
+  book: "01a11413-2f3b-7645-9492-b3193f4648de.glb",
+  tv: "01a11413-30c3-7589-9097-b13e8a984389.glb",
+  stool: "01a11414-c699-71b1-8b7c-0026f8bb671d.glb",
+  rugr: "01a11414-ab34-709e-9b6d-0fb31437497d.glb",
+  dj: "01a11413-1456-7739-a853-6f0ab8840fd9.glb",
+  gtr: "01a11413-1435-7169-8ae7-51c784872c16.glb",
+});
+const CEN = {
+  sofa: [0.49, -0.205],
+  corner: [0.49, -0.49],
+  chair: [0.245, -0.205],
+  ottoman: [0.69, 0.185],
+  coffee: [-0.13, -0.1],
+  side: [0.255, -0.1],
+  lamp: [0.06, -0.06],
+  radio: [0.16, -0.05],
+  rug: [0.785, -0.46],
+  spk: [0.075, -0.075],
+  spks: [0.075, -0.065],
+  book: [0.2, -0.125],
+  tv: [0.205, -0.135],
+  stool: [0.135, -0.115],
+  dj: [0, 0],
+  gtr: [0.05, 0.54],
+};
+function mdl(g, k, x, y, z, ry, s) {
+  const r = curRoom;
+  const sc = s || 1;
+  const th = ry || 0;
+  const c = CEN[k] || [0, 0];
+  const cx = c[0] * sc;
+  const cz = c[1] * sc;
+  const ox = x - (cx * Math.cos(th) + cz * Math.sin(th));
+  const oz = z - (-cx * Math.sin(th) + cz * Math.cos(th));
+  const m = new ModelElement();
+  m.src = MB + MU[k];
+  m.position.set(
+    r.p[0] + ox * Math.cos(r.r) + oz * Math.sin(r.r),
+    y,
+    r.p[2] - ox * Math.sin(r.r) + oz * Math.cos(r.r),
+  );
+  m.rotation.y = th + r.r;
+  m.scale.set(sc, sc, sc);
+  scene.add(m);
+  return m;
+}
+const LS = {
+  rock: {
+    body: 0x1a1a1a,
+    cush: 0x8a1a1a,
+    tab: 0x2a2018,
+    leg: 0x111111,
+    rug: [0x2a0f0f, 0x6a1414, 0x141414],
+    lamp: [0x222222, 0xffb347],
+  },
+  hiphop: {
+    body: 0x3a2266,
+    cush: 0x8a3fd0,
+    tab: 0x9fd8ff,
+    leg: 0x1a1a1a,
+    rug: [0x120a22, 0x2fffe0, 0x8a3fd0],
+    lamp: [0x222222, 0x2fffe0],
+  },
+  electronic: {
+    body: 0xdfeff3,
+    cush: 0x1fb5d6,
+    tab: 0x0a1a20,
+    leg: 0x1fb5d6,
+    rug: [0x07161c, 0x1fb5d6, 0x0d2a33],
+    lamp: [0x1fb5d6, 0xff2fa6],
+  },
+  country: {
+    body: 0x6b3a1e,
+    cush: 0xa8652f,
+    tab: 0x8b5a2b,
+    leg: 0x4a2e14,
+    rug: [0x7a1f1f, 0xe8d3a1, 0x2e4a2e],
+    lamp: [0x4a2e14, 0xffd24a],
+  },
+};
+const BR = {
+  rock: {
+    body: 0x111111,
+    top: 0x3a2a1c,
+    glow: 0xff2a2a,
+    seat: 0xb01e1e,
+    rail: 0xb8b8b8,
+    wood: 0x2a2a2a,
+    bottles: [0x2e7d32, 0xb26a00, 0x8d1c1c, 0xd6d6d6],
+  },
+  hiphop: {
+    body: 0x2a1a44,
+    top: 0x8a3fd0,
+    glow: 0x2fffe0,
+    seat: 0xffd24a,
+    rail: 0xcccccc,
+    wood: 0x241638,
+    bottles: [0xff2fa6, 0x2fffe0, 0xffd24a, 0xb06bff],
+  },
+  electronic: {
+    body: 0x0d2a33,
+    top: 0x1fb5d6,
+    glow: 0xff2fa6,
+    seat: 0xe8f4f8,
+    rail: 0x1fb5d6,
+    wood: 0x0a1a20,
+    bottles: [0x2fffe0, 0xff2fa6, 0xb06bff, 0xffffff],
+  },
+  country: {
+    body: 0x5a3a20,
+    top: 0x8b5a2b,
+    glow: 0,
+    seat: 0x6b4423,
+    rail: 0xc9a43a,
+    wood: 0x4a2e14,
+    bottles: [0x2e7d32, 0xc77d1a, 0x8d1c1c, 0xeeeeee],
+  },
+};
+function sofaSet(g, cx, cz, S) {
+  rugR(g, cx, cz, 4.8, 3.4, S.rug[0], S.rug[1], S.rug[2]);
+  table(g, cx, cz, 0, 1.5, 0.8, 0.42, S.tab, S.leg);
+  sofa(g, cx, cz + 2.1, Math.PI, 2.8, S.body, S.cush);
+  sofa(g, cx - 2.9, cz, Math.PI / 2, 1.3, S.body, S.cush);
+  sofa(g, cx + 2.9, cz, -Math.PI / 2, 1.3, S.body, S.cush);
+  ottoman(g, cx - 0.7, cz - 1.9, 0.2, S.cush);
+  ottoman(g, cx + 0.7, cz - 1.9, -0.2, S.cush);
+  lampF(g, cx + 2.6, cz + 2.5, S.lamp[0], S.lamp[1]);
+  cyl(g, 0.3, 0.3, 0.55, S.tab, cx - 2.6, 0.4, cz + 2.5);
+}
+function barSet(g, k, x0, x1) {
+  const B = BR[k];
+  barB(g, x0, x1, 13.6, B.body, B.top, B.glow || 0, 6, B.seat, B.rail);
+  box(g, x1 - x0 + 0.4, 3.2, 0.1, B.wood, (x0 + x1) / 2, 2.7, 17.65);
+  shelf(g, x0 + 0.2, x1 - 0.2, 17.4, 2.0, B.wood, B.bottles);
+  shelf(g, x0 + 0.2, x1 - 0.2, 17.4, 3.0, B.wood, B.bottles);
+}
+function saloonR(g) {
+  const B = BR.country;
+  const f = grp(g, 14.6, 0, 0.1, Math.PI / 2);
+  barB(f, -5.1, 5.1, 0, B.body, B.top, 0, 5, B.seat, B.rail);
+  box(f, 10.8, 3.2, 0.1, B.wood, 0, 2.7, 3.05);
+  shelf(f, -4.9, 4.9, 2.8, 2.0, B.wood, B.bottles);
+  shelf(f, -4.9, 4.9, 2.8, 3.0, B.wood, B.bottles);
+  box(f, 8, 0.12, 0.08, 0xc9a43a, 0, 3.9, 2.95);
+}
+function shopR(g) {
+  const B = BR.hiphop;
+  barB(g, 5.2, 16.4, 13.6, B.body, B.top, B.glow, 0, B.seat, B.rail);
+  box(g, 11.6, 3.4, 0.1, B.wood, 10.8, 2.8, 17.65);
+  for (let rr = 0; rr < 2; rr++) {
+    box(g, 11, 0.08, 0.6, B.wood, 10.8, 1.9 + rr * 1.2, 17.35);
+    for (let i = 0; i < 22; i++) {
+      box(
+        g,
+        0.06,
+        0.8,
+        0.8,
+        [0xff2fa6, 0x2fffe0, 0xffd24a, 0xb06bff, 0xff6a3a][(i + rr) % 5],
+        5.5 + i * 0.5,
+        2.35 + rr * 1.2,
+        17.35,
+      );
+    }
+  }
+}
+function lounge(g) {
+  const k = curRoom.k;
+  mdl(g, "plant", -3.9, 0.1, 16.9, 0, 3.2);
+  mdl(g, "plant", 3.9, 0.1, 16.9, 0, 3.2);
+  if (k === "rock") {
+    sofaSet(g, -9.5, 11, LS.rock);
+    barSet(g, "rock", 5.2, 16.4);
+    jukebox(g, 16.8, 8, -Math.PI / 2, 0x8a1a1a, 0xffd27a, 0xcfcfcf);
+    mdl(g, "plant", 16.3, 0.1, 16.9, 0, 3.2);
+  } else if (k === "hiphop") {
+    sofaSet(g, -9.5, 11, LS.hiphop);
+    shopR(g);
+    box(g, 1.3, 0.8, 1.3, 0x6b4423, 16.2, 0.5, 6.8);
+    box(g, 1.3, 0.8, 1.3, 0x7a4f2a, 16.2, 1.3, 6.8);
+    boombox(g, 16.2, 1.7, 6.8, -Math.PI / 2, 0x2a2a2a, 0xff2fa6);
+    box(g, 1.1, 0.6, 1.1, 0x6b4423, 16.3, 0.4, 9);
+  } else if (k === "electronic") {
+    sofaSet(g, 9.5, 11, LS.electronic);
+    barSet(g, "electronic", -15.2, -5.2);
+    arcade(g, 17.2, 5, -Math.PI / 2, 0x161a2a, 0x1fb5d6);
+    arcade(g, 17.2, 6.4, -Math.PI / 2, 0x2a1630, 0xff2fa6);
+    arcade(g, 17.2, 7.8, -Math.PI / 2, 0x161a2a, 0x2fffe0);
+    mdl(g, "plant", -16.3, 0.1, 16.9, 0, 3.2);
+  } else {
+    sofaSet(g, -9.5, 11, LS.country);
+    saloonR(g);
+    jukebox(g, 16.5, 15.5, -Math.PI / 2, 0x6b3a1e, 0xffd27a, 0xc9a43a);
+  }
+}
+function stagefx(g, k) {
+  if (k === "rock") {
+    mdl(g, "stage", 0, 0.1, -14.0, -Math.PI / 2, 0.6);
+    txt(g, "MUSIC WORLD\nROCK", 0.4, "#ffffff", -5.34, 1.9, -13.95, 0, 2.0, 1.0);
+    txt(g, "LIVE\nTONIGHT", 0.4, "#ffd24a", 5.34, 1.9, -13.95, 0, 2.0, 1.0);
+    return;
+  }
+  if (k === "hiphop") {
+    mdl(g, "dj", 0, 0.8, -4.8, 0, 3.0);
+    mdl(g, "spk", -3.0, 0.7, -7.2, 0, 2.6);
+    mdl(g, "spk", 3.0, 0.7, -7.2, 0, 2.6);
+    mdl(g, "spk", -3.0, 0.7, -2.4, 0, 2.6);
+    mdl(g, "spk", 3.0, 0.7, -2.4, 0, 2.6);
+    return;
+  }
+  if (k === "country") {
+    mdl(g, "spk", 6.9, 0.7, -16.6, 0, 2.6);
+    mdl(g, "spk", 14.7, 0.7, -16.6, 0, 2.6);
+    cyl(g, 0.03, 0.03, 1.5, 0x333333, 10.8, 1.45, -13.8);
+    sph(g, 0.1, 0x222222, 10.8, 2.25, -13.8);
+    return;
+  }
+  mdl(g, "spk", -6.8, 0.7, -9.5, 0, 2.6);
+  mdl(g, "spk", 6.8, 0.7, -9.5, 0, 2.6);
+  mdl(g, "dj", 0, 1.9, -9, 0, 3.2);
+}
+const MUS = {
+  hub: "01a1174d-4fe0-7511-8636-1e084804c16a",
+  rock: "01a1174d-4b18-7079-b9f3-733f867d2a67",
+  hiphop: "01a1174d-4b31-70c8-a5e4-9f7967373900",
+  electronic: "01a1174d-4aff-755c-a37f-b3ff3c6f3ce8",
+  country: "01a1174f-00de-7064-8fba-5943eb62c710",
+};
+function zoneAt(x, z) {
+  for (let i = 0; i < R.length; i++) {
+    if (Math.abs(x - R[i].p[0]) < 18 && Math.abs(z - R[i].p[2]) < 18) {
+      return R[i].k;
+    }
+  }
+  return "hub";
+}
+function setZone(k) {
+  if (k === curZone) {
+    return;
+  }
+  curZone = k;
+  if (curAud) {
+    scene.remove(curAud);
+    curAud = null;
+  }
+  const e = new AudioElement();
+  e.src = MB + MUS[k] + ".mp3";
+  e.loop = true;
+  e.autoPlay = true;
+  e.controls = false;
+  e.enableOnProximity = false;
+  scene.add(e);
+  curAud = e;
+}
 const SOLID = false;
-function solid(x, y, z, w, h, d) { if (!SOLID) { return; } const c = new BoxColliderElement(); c.walkable = false; c.position.set(x, y, z); c.scale.set(w, h, d); scene.add(c); }
-function wallw(g, w, h, d, col, x, y, z) { tbox(g, w, h, d, tmat(ST.hub.wl[0], ST.hub.wl[1], ST.hub.wl[2], Math.max(w, d) / 4, h / 4), x, y, z); solid(x, y, z, w, h, d); }
-function enclose() { const g = new THREE.Group(); const wc = 0x1c1c28; const rm = () => tmat(ST.hub.ce[0], ST.hub.ce[1], ST.hub.ce[2], 4, 4); [-1, 1].forEach(sg => { wallw(g, 12, 10, 0.4, wc, -9, 5, sg * 15.2); wallw(g, 12, 10, 0.4, wc, 9, 5, sg * 15.2); wallw(g, 0.4, 10, 12, wc, sg * 15.2, 5, -9); wallw(g, 0.4, 10, 12, wc, sg * 15.2, 5, 9); box(g, 6, 3, 0.4, wc, 0, 8.5, sg * 15.2); box(g, 0.4, 3, 6, wc, sg * 15.2, 8.5, 0); wallw(g, 0.4, 10, 11.4, wc, -3.2, 5, sg * 21.1); wallw(g, 0.4, 10, 11.4, wc, 3.2, 5, sg * 21.1); tbox(g, 6.8, 0.4, 11.4, rm(), 0, 10.2, sg * 21.1); wallw(g, 11.4, 10, 0.4, wc, sg * 21.1, 5, -3.2); wallw(g, 11.4, 10, 0.4, wc, sg * 21.1, 5, 3.2); tbox(g, 11.4, 0.4, 6.8, rm(), sg * 21.1, 10.2, 0); }); tbox(g, 31, 0.4, 31, tmat(ST.hub.ce[0], ST.hub.ce[1], ST.hub.ce[2], 8, 8), 0, 10.2, 0); R.forEach(r => { const ns = r.p[0] === 0; box(g, ns ? 0.3 : 11.4, 0.1, ns ? 11.4 : 0.3, r.c, r.p[0] * 21.1 / 45, 9.9, r.p[2] * 21.1 / 45); }); scene.add(g); }
-function roomSolids(r) { const sw = Math.abs(Math.sin(r.r)) > 0.5; [[36, 10, 0.4, 0, 5, -18], [0.4, 10, 36, -18, 5, 0], [0.4, 10, 36, 18, 5, 0], [15, 10, 0.4, -10.5, 5, 18], [15, 10, 0.4, 10.5, 5, 18]].forEach(q => { const x = r.p[0] + q[3] * Math.cos(r.r) + q[5] * Math.sin(r.r); const z = r.p[2] - q[3] * Math.sin(r.r) + q[5] * Math.cos(r.r); solid(x, q[4], z, sw ? q[2] : q[0], q[1], sw ? q[0] : q[2]); }); }
-function room(r) { curRoom = r; const g = new THREE.Group(); g.position.set(r.p[0], 0, r.p[2]); g.rotation.y = r.r; const strip = shell(r, g); frames(r, g); wall(r, g); if (r.k === 'rock') { rock(g); } else if (r.k === 'hiphop') { hiphop(g); } else if (r.k === 'electronic') { electro(g); } else { country(g); } roomSolids(r); extras(r, g, strip); lounge(g); stagefx(g, r.k); scene.add(g); }
-function paint() { buttons.forEach(b => { b.t.text = b.a.name + '   ' + b.a.n; b.t.color = LIKED[b.a.key] ? '#6dff9a' : '#ffffff'; }); }
-function pname(f) { return f.split('.').join('').split('-').join(''); } function hideAll() { Object.keys(IMGS).forEach(k => { IMGS[k].visible = false; IMGS[k].position.set(0, -200, 0); }); } function getImg(a) { const k = pname(a.file); if (!PU[k]) { return null; } if (!IMGS[k]) { const e = new ImageElement(); e.src = MB + PU[k] + '.jpg'; e.visible = false; scene.add(e); IMGS[k] = e; } return IMGS[k]; }
-function show(r, s, a, i) { if (!a) { s.lab.text = '#' + (i + 1) + '\nVOTE TO FILL THIS SPOT'; return; } const e = getImg(a); if (e) { e.position.set(r.p[0] + s.lx * Math.cos(r.r) - 17.5 * Math.sin(r.r), 7.0, r.p[2] - s.lx * Math.sin(r.r) - 17.5 * Math.cos(r.r)); e.rotation.y = r.r; e.scale.set(4.2, 4.2, 4.2); e.visible = true; } s.lab.text = '#' + (i + 1) + '  ' + a.name + '\n' + a.n + (a.n === 1 ? ' like' : ' likes'); }
-function rank(r, d) { ART[r.k].forEach(a => { a.n = d[a.key] || 0; a.t = d['t:' + a.key] || 0; }); const top = ART[r.k].filter(a => a.n > 0).sort((a, b) => b.n - a.n || a.t - b.t || (a.name < b.name ? -1 : 1)).slice(0, 4); slots[r.k].forEach((s, i) => { show(r, s, top[i], i); }); }
-async function refresh() { const d = (await store.inspect()) || {}; hideAll(); R.forEach(r => { rank(r, d); }); paint(); if (commTxt) { let sm = 0, nk = 0; Object.keys(d).forEach(k => { if (k.indexOf('t:') !== 0 && k.indexOf('enc:') !== 0 && typeof d[k] === 'number') { sm += d[k]; nk++; } }); let tot = 0; const ls = R.map(r => { const best = ART[r.k].slice().sort((a, b) => b.n - a.n || a.t - b.t || (a.name < b.name ? -1 : 1))[0]; ART[r.k].forEach(a => { tot += a.n; }); return r.n + ': ' + ((best && best.n > 0) ? best.name + ' (' + best.n + ')' : '-'); }); commTxt.text = 'COMMUNITY RIGHT NOW\n' + ls.join('\n') + '\nTOTAL LIKES: ' + tot; if (sig !== tot + ':' + sm + ':' + nk) { sig = tot + ':' + sm + ':' + nk; console.log('MW TALLY board', tot, 'store', sm, 'keys', nk); const kn = {}; R.forEach(r => { ART[r.k].forEach(a => { kn[a.key] = 1; }); }); console.log('MW EXTRA', Object.keys(d).filter(k => k.indexOf('t:') !== 0 && k.indexOf('enc:') !== 0 && !kn[k]).map(k => k + '~' + d[k]).join(',')); } } }
-function showToast(msg, secs) { if (!toastG) { toastG = new THREE.Group(); toastT = txt(toastG, msg, 0.3, '#ffd24a', 0, 0, 0, 0, 3.4, 1.0); const tm = toastG.children[0]; tm.material.depthTest = false; tm.renderOrder = 999; scene.add(toastG); } toastT.text = msg; toastG.visible = true; toastUntil = el + secs; }
-function startFinale() { if (!trophy) { trophy = new THREE.Group(); trophy.position.set(0, 6.5, 3); [[1.6, 0.12, 0xffd24a], [1.25, 0.14, 0xb8860b], [0.95, 0.16, 0xffd24a], [0.35, 0.2, 0xff2fa6]].forEach(s => { const m = new THREE.Mesh(new THREE.CylinderGeometry(s[0], s[0], s[1], 40), new THREE.MeshBasicMaterial({ color: s[2] })); m.rotation.x = Math.PI / 2; trophy.add(m); }); scene.add(trophy); const cg = new THREE.BoxGeometry(0.22, 0.22, 0.03); const cms = [0xffd24a, 0xff2fa6, 0x2fffe0, 0xb06bff, 0xffffff].map(c => new THREE.MeshBasicMaterial({ color: c })); for (let i = 0; i < 160; i++) { const c = new THREE.Mesh(cg, cms[i % 5]); c.position.set((Math.random() - 0.5) * 26, 1 + Math.random() * 10, (Math.random() - 0.5) * 26); c.userData.ph = Math.random() * 10; scene.add(c); fconf.push(c); } } trophy.visible = true; fconf.forEach(c => { c.visible = true; }); finale = 18; }
-async function like(b) { const a = b.a; if (pend[a.key]) { return; } pend[a.key] = true; let v = 0; if (LIKED[a.key]) { LIKED[a.key] = 0; try { v = await store.inc(a.key, -1); } catch (e) { v = (await store.get(a.key, 0)) - 1; await store.set(a.key, v); } console.log('UNLIKE', a.key, v); showToast('UNLIKED: ' + a.name, 2); } else { LIKED[a.key] = 1; try { v = await store.inc(a.key, 1); } catch (e) { v = (await store.get(a.key, 0)) + 1; await store.set(a.key, v); } await store.set('t:' + a.key, Date.now()); console.log('LIKE', a.key, v); showToast('LIKED: ' + a.name, 2); } let cur = await store.get(a.key, 0); if (typeof cur !== 'number' || cur < 0 || isNaN(cur)) { cur = LIKED[a.key] ? 1 : 0; await store.set(a.key, cur); } pend[a.key] = false; await refresh(); }
+function solid(x, y, z, w, h, d) {
+  if (!SOLID) {
+    return;
+  }
+  const c = new BoxColliderElement();
+  c.walkable = false;
+  c.position.set(x, y, z);
+  c.scale.set(w, h, d);
+  scene.add(c);
+}
+function wallw(g, w, h, d, col, x, y, z) {
+  tbox(
+    g,
+    w,
+    h,
+    d,
+    tmat(ST.hub.wl[0], ST.hub.wl[1], ST.hub.wl[2], Math.max(w, d) / 4, h / 4),
+    x,
+    y,
+    z,
+  );
+  solid(x, y, z, w, h, d);
+}
+function enclose() {
+  const g = new THREE.Group();
+  const wc = 0x1c1c28;
+  const rm = () => tmat(ST.hub.ce[0], ST.hub.ce[1], ST.hub.ce[2], 4, 4);
+  [-1, 1].forEach((sg) => {
+    wallw(g, 12, 10, 0.4, wc, -9, 5, sg * 15.2);
+    wallw(g, 12, 10, 0.4, wc, 9, 5, sg * 15.2);
+    wallw(g, 0.4, 10, 12, wc, sg * 15.2, 5, -9);
+    wallw(g, 0.4, 10, 12, wc, sg * 15.2, 5, 9);
+    box(g, 6, 3, 0.4, wc, 0, 8.5, sg * 15.2);
+    box(g, 0.4, 3, 6, wc, sg * 15.2, 8.5, 0);
+    wallw(g, 0.4, 10, 11.4, wc, -3.2, 5, sg * 21.1);
+    wallw(g, 0.4, 10, 11.4, wc, 3.2, 5, sg * 21.1);
+    tbox(g, 6.8, 0.4, 11.4, rm(), 0, 10.2, sg * 21.1);
+    wallw(g, 11.4, 10, 0.4, wc, sg * 21.1, 5, -3.2);
+    wallw(g, 11.4, 10, 0.4, wc, sg * 21.1, 5, 3.2);
+    tbox(g, 11.4, 0.4, 6.8, rm(), sg * 21.1, 10.2, 0);
+  });
+  tbox(g, 31, 0.4, 31, tmat(ST.hub.ce[0], ST.hub.ce[1], ST.hub.ce[2], 8, 8), 0, 10.2, 0);
+  R.forEach((r) => {
+    const ns = r.p[0] === 0;
+    box(
+      g,
+      ns ? 0.3 : 11.4,
+      0.1,
+      ns ? 11.4 : 0.3,
+      r.c,
+      (r.p[0] * 21.1) / 45,
+      9.9,
+      (r.p[2] * 21.1) / 45,
+    );
+  });
+  scene.add(g);
+}
+function roomSolids(r) {
+  const sw = Math.abs(Math.sin(r.r)) > 0.5;
+  [
+    [36, 10, 0.4, 0, 5, -18],
+    [0.4, 10, 36, -18, 5, 0],
+    [0.4, 10, 36, 18, 5, 0],
+    [15, 10, 0.4, -10.5, 5, 18],
+    [15, 10, 0.4, 10.5, 5, 18],
+  ].forEach((q) => {
+    const x = r.p[0] + q[3] * Math.cos(r.r) + q[5] * Math.sin(r.r);
+    const z = r.p[2] - q[3] * Math.sin(r.r) + q[5] * Math.cos(r.r);
+    solid(x, q[4], z, sw ? q[2] : q[0], q[1], sw ? q[0] : q[2]);
+  });
+}
+function room(r) {
+  curRoom = r;
+  const g = new THREE.Group();
+  g.position.set(r.p[0], 0, r.p[2]);
+  g.rotation.y = r.r;
+  const strip = shell(r, g);
+  frames(r, g);
+  wall(r, g);
+  if (r.k === "rock") {
+    rock(g);
+  } else if (r.k === "hiphop") {
+    hiphop(g);
+  } else if (r.k === "electronic") {
+    electro(g);
+  } else {
+    country(g);
+  }
+  roomSolids(r);
+  extras(r, g, strip);
+  lounge(g);
+  stagefx(g, r.k);
+  scene.add(g);
+}
+function paint() {
+  buttons.forEach((b) => {
+    b.t.text = b.a.name + "   " + b.a.n;
+    b.t.color = LIKED[b.a.key] ? "#6dff9a" : "#ffffff";
+  });
+}
+function pname(f) {
+  return f.split(".").join("").split("-").join("");
+}
+function hideAll() {
+  Object.keys(IMGS).forEach((k) => {
+    IMGS[k].visible = false;
+    IMGS[k].position.set(0, -200, 0);
+  });
+}
+function getImg(a) {
+  const k = pname(a.file);
+  if (!PU[k]) {
+    return null;
+  }
+  if (!IMGS[k]) {
+    const e = new ImageElement();
+    e.src = MB + PU[k] + ".jpg";
+    e.visible = false;
+    scene.add(e);
+    IMGS[k] = e;
+  }
+  return IMGS[k];
+}
+function show(r, s, a, i) {
+  if (!a) {
+    s.lab.text = "#" + (i + 1) + "\nVOTE TO FILL THIS SPOT";
+    return;
+  }
+  const e = getImg(a);
+  if (e) {
+    e.position.set(
+      r.p[0] + s.lx * Math.cos(r.r) - 17.5 * Math.sin(r.r),
+      7.0,
+      r.p[2] - s.lx * Math.sin(r.r) - 17.5 * Math.cos(r.r),
+    );
+    e.rotation.y = r.r;
+    e.scale.set(4.2, 4.2, 4.2);
+    e.visible = true;
+  }
+  s.lab.text = "#" + (i + 1) + "  " + a.name + "\n" + a.n + (a.n === 1 ? " like" : " likes");
+}
+function rank(r, d) {
+  ART[r.k].forEach((a) => {
+    a.n = d[a.key] || 0;
+    a.t = d["t:" + a.key] || 0;
+  });
+  const top = ART[r.k]
+    .filter((a) => a.n > 0)
+    .sort((a, b) => b.n - a.n || a.t - b.t || (a.name < b.name ? -1 : 1))
+    .slice(0, 4);
+  slots[r.k].forEach((s, i) => {
+    show(r, s, top[i], i);
+  });
+}
+async function refresh() {
+  const d = (await store.inspect()) || {};
+  hideAll();
+  R.forEach((r) => {
+    rank(r, d);
+  });
+  paint();
+  if (commTxt) {
+    let sm = 0,
+      nk = 0;
+    Object.keys(d).forEach((k) => {
+      if (k.indexOf("t:") !== 0 && k.indexOf("enc:") !== 0 && typeof d[k] === "number") {
+        sm += d[k];
+        nk++;
+      }
+    });
+    let tot = 0;
+    const ls = R.map((r) => {
+      const best = ART[r.k]
+        .slice()
+        .sort((a, b) => b.n - a.n || a.t - b.t || (a.name < b.name ? -1 : 1))[0];
+      ART[r.k].forEach((a) => {
+        tot += a.n;
+      });
+      return r.n + ": " + (best && best.n > 0 ? best.name + " (" + best.n + ")" : "-");
+    });
+    commTxt.text = "COMMUNITY RIGHT NOW\n" + ls.join("\n") + "\nTOTAL LIKES: " + tot;
+    if (sig !== tot + ":" + sm + ":" + nk) {
+      sig = tot + ":" + sm + ":" + nk;
+      console.log("MW TALLY board", tot, "store", sm, "keys", nk);
+      const kn = {};
+      R.forEach((r) => {
+        ART[r.k].forEach((a) => {
+          kn[a.key] = 1;
+        });
+      });
+      console.log(
+        "MW EXTRA",
+        Object.keys(d)
+          .filter((k) => k.indexOf("t:") !== 0 && k.indexOf("enc:") !== 0 && !kn[k])
+          .map((k) => k + "~" + d[k])
+          .join(","),
+      );
+    }
+  }
+}
+function showToast(msg, secs) {
+  if (!toastG) {
+    toastG = new THREE.Group();
+    toastT = txt(toastG, msg, 0.3, "#ffd24a", 0, 0, 0, 0, 3.4, 1.0);
+    const tm = toastG.children[0];
+    tm.material.depthTest = false;
+    tm.renderOrder = 999;
+    scene.add(toastG);
+  }
+  toastT.text = msg;
+  toastG.visible = true;
+  toastUntil = el + secs;
+}
+function startFinale() {
+  if (!trophy) {
+    trophy = new THREE.Group();
+    trophy.position.set(0, 6.5, 3);
+    [
+      [1.6, 0.12, 0xffd24a],
+      [1.25, 0.14, 0xb8860b],
+      [0.95, 0.16, 0xffd24a],
+      [0.35, 0.2, 0xff2fa6],
+    ].forEach((s) => {
+      const m = new THREE.Mesh(
+        new THREE.CylinderGeometry(s[0], s[0], s[1], 40),
+        new THREE.MeshBasicMaterial({ color: s[2] }),
+      );
+      m.rotation.x = Math.PI / 2;
+      trophy.add(m);
+    });
+    scene.add(trophy);
+    const cg = new THREE.BoxGeometry(0.22, 0.22, 0.03);
+    const cms = [0xffd24a, 0xff2fa6, 0x2fffe0, 0xb06bff, 0xffffff].map(
+      (c) => new THREE.MeshBasicMaterial({ color: c }),
+    );
+    for (let i = 0; i < 160; i++) {
+      const c = new THREE.Mesh(cg, cms[i % 5]);
+      c.position.set(
+        (Math.random() - 0.5) * 26,
+        1 + Math.random() * 10,
+        (Math.random() - 0.5) * 26,
+      );
+      c.userData.ph = Math.random() * 10;
+      scene.add(c);
+      fconf.push(c);
+    }
+  }
+  trophy.visible = true;
+  fconf.forEach((c) => {
+    c.visible = true;
+  });
+  finale = 18;
+}
+async function like(b) {
+  const a = b.a;
+  if (pend[a.key]) {
+    return;
+  }
+  pend[a.key] = true;
+  let v = 0;
+  if (LIKED[a.key]) {
+    LIKED[a.key] = 0;
+    try {
+      v = await store.inc(a.key, -1);
+    } catch (e) {
+      v = (await store.get(a.key, 0)) - 1;
+      await store.set(a.key, v);
+    }
+    console.log("UNLIKE", a.key, v);
+    showToast("UNLIKED: " + a.name, 2);
+  } else {
+    LIKED[a.key] = 1;
+    try {
+      v = await store.inc(a.key, 1);
+    } catch (e) {
+      v = (await store.get(a.key, 0)) + 1;
+      await store.set(a.key, v);
+    }
+    await store.set("t:" + a.key, Date.now());
+    console.log("LIKE", a.key, v);
+    showToast("LIKED: " + a.name, 2);
+  }
+  let cur = await store.get(a.key, 0);
+  if (typeof cur !== "number" || cur < 0 || isNaN(cur)) {
+    cur = LIKED[a.key] ? 1 : 0;
+    await store.set(a.key, cur);
+  }
+  pend[a.key] = false;
+  await refresh();
+}
 const MERGE = true;
-function mergeGroup(g, keep) { g.updateMatrixWorld(true); const inv = g.matrixWorld.clone().invert(); const pos = []; const col = []; const idx = []; const kill = []; g.traverse(m => { if (!m.isMesh || keep.has(m) || !m.visible) { return; } const mt = m.material; if (!mt || !mt.isMeshBasicMaterial || mt.map || mt.transparent || !m.geometry || !m.geometry.index) { return; } const rel = inv.clone().multiply(m.matrixWorld); const p = m.geometry.attributes.position; const base = pos.length / 3; const v = new THREE.Vector3(); for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(rel); pos.push(v.x, v.y, v.z); col.push(mt.color.r, mt.color.g, mt.color.b); } const ix = m.geometry.index; for (let i = 0; i < ix.count; i++) { idx.push(base + ix.getX(i)); } kill.push(m); }); if (kill.length < 2) { return 0; } const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); geo.setIndex(new THREE.Uint32BufferAttribute(idx, 1)); const mm = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ vertexColors: true })); g.add(mm); kill.forEach(m => { if (m.parent) { m.parent.remove(m); } m.geometry.dispose(); m.material.dispose(); }); return kill.length; }
-function mergeAll() { const keep = new Set(); buttons.forEach(b => keep.add(b.m)); pads.forEach(p => { keep.add(p.m); keep.add(p.ring); keep.add(p.beam); keep.add(p.strip); p.conf.forEach(c => keep.add(c)); }); recs.forEach(q => keep.add(q.m)); jukes.forEach(j => keep.add(j.m)); spin.forEach(c => keep.add(c)); let n = 0; scene.updateMatrixWorld(true); scene.children.forEach(ch => { if (ch.isGroup) { n += mergeGroup(ch, keep); } }); return n; }
-async function startup() { Input.mouse.start(); store = Persistable.use('mw_votes'); const gp = new GroundPlaneElement(); gp.walkable = true; gp.color = '#08080c'; scene.add(gp); const hl = new HemisphereLightElement(); hl.intensity = 2.2; scene.add(hl); const dl = new DirectionalLightElement(); dl.intensity = 1.6; dl.position.set(10, 30, 20); scene.add(dl); await store.set('init', 1); parse(); hub(); enclose(); R.forEach(room); if (MERGE) { try { console.log('MW MERGED', mergeAll()); } catch (e) { console.log('MERGE ERR ' + String(e)); } } const miss = []; R.forEach(r => { ART[r.k].forEach(a => { if (!PU[pname(a.file)]) { miss.push(a.key); } }); }); console.log('MW BUILT', buttons.length, 'MISSING', miss.length, miss.join(',')); await refresh(); console.log('MW READY'); }
-function playEncore(p) { const top = ART[p.r.k].slice().sort((a, b) => b.n - a.n || a.t - b.t || (a.name < b.name ? -1 : 1))[0]; p.lab.text = (top && top.n > 0) ? ('ENCORE!\n' + top.name + ' LEADS') : 'ENCORE!\nBE THE FIRST TO VOTE'; p.until = el + 9; p.conf.forEach((c, i) => { c.visible = true; c.position.set((i % 14 - 6.5) * 1.15 + p.cx, 9 + (i % 6) * 0.7, p.cz + ((i * 7) % 13 - 6) * 0.8); }); }
-async function encore(p) { if (el < p.until) { return; } playEncore(p); try { const ev = await store.inc('enc:' + p.r.k, 1); encSeen[p.r.k] = ev; } catch (e) { const ec = (await store.get('enc:' + p.r.k, 0)) + 1; await store.set('enc:' + p.r.k, ec); encSeen[p.r.k] = ec; } }
-function click(o) { camera.getWorldPosition(cpos); const zc = zoneAt(cpos.x, cpos.z); const near = (mm) => { mm.getWorldPosition(wp); return zoneAt(wp.x, wp.z) === zc; }; const b = buttons.find(x => x.m === o); if (b) { if (near(b.m)) { like(b); } return; } const p = pads.find(x => x.m === o); if (p) { if (near(p.m)) { encore(p); } return; } const jk = jukes.find(x => x.m === o); if (jk) { if (near(jk.m)) { juke(jk); } return; } const q = recs.find(x => x.m === o); if (q) { if (near(q.g || q.m) === false || (q.g || q.m).visible === false) { return; } (q.g || q.m).visible = false; found++; foundTxt.text = found >= 4 ? 'ALL 4 FOUND!\nGOLDEN EAR UNLOCKED' : 'GOLDEN RECORDS FOUND ' + found + '/4\n(1 hidden in each room)'; if (found >= 4) { startFinale(); showToast('ALL 4 FOUND!\nGOLDEN EAR UNLOCKED - see the hub!', 7); } else { showToast('GOLDEN RECORD ' + found + '/4 FOUND!', 3); } } }
-function update(delta, time) { el += delta; tick += delta; if (tick > 5 && !busy) { tick = 0; busy = true; refresh().then(() => { busy = false; }); } pads.forEach(p => { p.ring.scale.set(1 + 0.07 * Math.sin(el * 4), 1, 1 + 0.07 * Math.sin(el * 4)); p.beam.material.opacity = 0.14 + 0.08 * Math.sin(el * 3); if (el < p.until) { p.strip.material.color.setHSL((el * 0.9) % 1, 1, 0.5); p.conf.forEach(c => { c.position.y -= delta * (1.5 + (c.userData.ph % 3) * 0.4); c.position.x += Math.sin(el * 3 + c.userData.ph) * delta * 0.8; c.rotation.x += delta * 4; c.rotation.z += delta * 3; if (c.position.y < 0.2) { c.position.y = 10; } }); } else if (p.until > 0) { p.until = 0; p.lab.text = p.base; p.strip.material.color.setHex(p.r.c); p.conf.forEach(c => { c.visible = false; }); } }); recs.forEach(q => { if (q.g && q.g.visible) { q.g.position.y = q.y0 + Math.sin(el * 2 + q.g.position.x) * 0.06; } }); spin.forEach(m => { m.rotation.y += delta; m.position.y = m.userData.y + Math.sin(el + m.userData.p) * 0.4; }); if (trophy && trophy.visible) { trophy.rotation.y += delta * 1.5; trophy.position.y = 6.5 + Math.sin(el * 2) * 0.25; } if (finale > 0) { finale -= delta; fconf.forEach(c => { c.position.y -= delta * (1.6 + (c.userData.ph % 3) * 0.5); c.rotation.x += delta * 4; c.rotation.z += delta * 3; if (c.position.y < 0.3) { c.position.y = 11; } }); if (finale <= 0) { fconf.forEach(c => { c.visible = false; }); } } camera.getWorldPosition(cpos); encT += delta; if (encT > 1.5 && !encBusy) { encT = 0; const ek = zoneAt(cpos.x, cpos.z); const pd = pads.find(x => x.r.k === ek); if (pd) { encBusy = true; store.get('enc:' + ek, 0).then(ev => { encBusy = false; if (typeof ev !== 'number') { return; } if (encSeen[ek] === undefined) { encSeen[ek] = ev; } else { if (ev > encSeen[ek] && el >= pd.until) { playEncore(pd); } encSeen[ek] = ev; } }).catch(e => { encBusy = false; }); } } if (toastG && toastG.visible) { if (el > toastUntil) { toastG.visible = false; } else { camera.getWorldQuaternion(cq); toastG.quaternion.copy(cq); dirv.set(0, -0.35, -2.6).applyQuaternion(cq); toastG.position.set(cpos.x + dirv.x, cpos.y + dirv.y, cpos.z + dirv.z); } } const zk = zoneAt(cpos.x, cpos.z); if (zk !== lastZone) { lastZone = zk; jukeOv = null; encSeen = {}; } setZone(jukeOv || zk); if (curAud) { curAud.position.set(cpos.x, cpos.y - 6, cpos.z); } if (Input.mouse.isButtonPressed(MouseButton.Left)) { if (!down) { down = true; const rc = Input.mouse.raycast(camera); const all = buttons.map(b => b.m).concat(pads.map(p => p.m)).concat(recs.filter(q => (q.g || q.m).visible).map(q => q.m)).concat(jukes.map(j => j.m)); const zc2 = zoneAt(cpos.x, cpos.z); const here = all.filter(mm => { mm.getWorldPosition(wp); return zoneAt(wp.x, wp.z) === zc2; }); const hits = rc.raycaster.intersectObjects(here); if (hits.length > 0) { click(hits[0].object); } } } else { down = false; } }
-function dispose() { Input.mouse.stop(); }
+function mergeGroup(g, keep) {
+  g.updateMatrixWorld(true);
+  const inv = g.matrixWorld.clone().invert();
+  const pos = [];
+  const col = [];
+  const idx = [];
+  const kill = [];
+  g.traverse((m) => {
+    if (!m.isMesh || keep.has(m) || !m.visible) {
+      return;
+    }
+    const mt = m.material;
+    if (
+      !mt ||
+      !mt.isMeshBasicMaterial ||
+      mt.map ||
+      mt.transparent ||
+      !m.geometry ||
+      !m.geometry.index
+    ) {
+      return;
+    }
+    const rel = inv.clone().multiply(m.matrixWorld);
+    const p = m.geometry.attributes.position;
+    const base = pos.length / 3;
+    const v = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) {
+      v.fromBufferAttribute(p, i).applyMatrix4(rel);
+      pos.push(v.x, v.y, v.z);
+      col.push(mt.color.r, mt.color.g, mt.color.b);
+    }
+    const ix = m.geometry.index;
+    for (let i = 0; i < ix.count; i++) {
+      idx.push(base + ix.getX(i));
+    }
+    kill.push(m);
+  });
+  if (kill.length < 2) {
+    return 0;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  geo.setIndex(new THREE.Uint32BufferAttribute(idx, 1));
+  const mm = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ vertexColors: true }));
+  g.add(mm);
+  kill.forEach((m) => {
+    if (m.parent) {
+      m.parent.remove(m);
+    }
+    m.geometry.dispose();
+    m.material.dispose();
+  });
+  return kill.length;
+}
+function mergeAll() {
+  const keep = new Set();
+  buttons.forEach((b) => keep.add(b.m));
+  pads.forEach((p) => {
+    keep.add(p.m);
+    keep.add(p.ring);
+    keep.add(p.beam);
+    keep.add(p.strip);
+    p.conf.forEach((c) => keep.add(c));
+  });
+  recs.forEach((q) => keep.add(q.m));
+  jukes.forEach((j) => keep.add(j.m));
+  spin.forEach((c) => keep.add(c));
+  let n = 0;
+  scene.updateMatrixWorld(true);
+  scene.children.forEach((ch) => {
+    if (ch.isGroup) {
+      n += mergeGroup(ch, keep);
+    }
+  });
+  return n;
+}
+async function startup() {
+  Input.mouse.start();
+  store = Persistable.use("mw_votes");
+  const gp = new GroundPlaneElement();
+  gp.walkable = true;
+  gp.color = "#08080c";
+  scene.add(gp);
+  const hl = new HemisphereLightElement();
+  hl.intensity = 2.2;
+  scene.add(hl);
+  const dl = new DirectionalLightElement();
+  dl.intensity = 1.6;
+  dl.position.set(10, 30, 20);
+  scene.add(dl);
+  await store.set("init", 1);
+  parse();
+  hub();
+  enclose();
+  R.forEach(room);
+  if (MERGE) {
+    try {
+      console.log("MW MERGED", mergeAll());
+    } catch (e) {
+      console.log("MERGE ERR " + String(e));
+    }
+  }
+  const miss = [];
+  R.forEach((r) => {
+    ART[r.k].forEach((a) => {
+      if (!PU[pname(a.file)]) {
+        miss.push(a.key);
+      }
+    });
+  });
+  console.log("MW BUILT", buttons.length, "MISSING", miss.length, miss.join(","));
+  await refresh();
+  console.log("MW READY");
+}
+function playEncore(p) {
+  const top = ART[p.r.k]
+    .slice()
+    .sort((a, b) => b.n - a.n || a.t - b.t || (a.name < b.name ? -1 : 1))[0];
+  p.lab.text =
+    top && top.n > 0 ? "ENCORE!\n" + top.name + " LEADS" : "ENCORE!\nBE THE FIRST TO VOTE";
+  p.until = el + 9;
+  p.conf.forEach((c, i) => {
+    c.visible = true;
+    c.position.set(
+      ((i % 14) - 6.5) * 1.15 + p.cx,
+      9 + (i % 6) * 0.7,
+      p.cz + (((i * 7) % 13) - 6) * 0.8,
+    );
+  });
+}
+async function encore(p) {
+  if (el < p.until) {
+    return;
+  }
+  playEncore(p);
+  try {
+    const ev = await store.inc("enc:" + p.r.k, 1);
+    encSeen[p.r.k] = ev;
+  } catch (e) {
+    const ec = (await store.get("enc:" + p.r.k, 0)) + 1;
+    await store.set("enc:" + p.r.k, ec);
+    encSeen[p.r.k] = ec;
+  }
+}
+function click(o) {
+  camera.getWorldPosition(cpos);
+  const zc = zoneAt(cpos.x, cpos.z);
+  const near = (mm) => {
+    mm.getWorldPosition(wp);
+    return zoneAt(wp.x, wp.z) === zc;
+  };
+  const b = buttons.find((x) => x.m === o);
+  if (b) {
+    if (near(b.m)) {
+      like(b);
+    }
+    return;
+  }
+  const p = pads.find((x) => x.m === o);
+  if (p) {
+    if (near(p.m)) {
+      encore(p);
+    }
+    return;
+  }
+  const jk = jukes.find((x) => x.m === o);
+  if (jk) {
+    if (near(jk.m)) {
+      juke(jk);
+    }
+    return;
+  }
+  const q = recs.find((x) => x.m === o);
+  if (q) {
+    if (near(q.g || q.m) === false || (q.g || q.m).visible === false) {
+      return;
+    }
+    (q.g || q.m).visible = false;
+    found++;
+    foundTxt.text =
+      found >= 4
+        ? "ALL 4 FOUND!\nGOLDEN EAR UNLOCKED"
+        : "GOLDEN RECORDS FOUND " + found + "/4\n(1 hidden in each room)";
+    if (found >= 4) {
+      startFinale();
+      showToast("ALL 4 FOUND!\nGOLDEN EAR UNLOCKED - see the hub!", 7);
+    } else {
+      showToast("GOLDEN RECORD " + found + "/4 FOUND!", 3);
+    }
+  }
+}
+function update(delta, time) {
+  el += delta;
+  tick += delta;
+  if (tick > 5 && !busy) {
+    tick = 0;
+    busy = true;
+    refresh().then(() => {
+      busy = false;
+    });
+  }
+  pads.forEach((p) => {
+    p.ring.scale.set(1 + 0.07 * Math.sin(el * 4), 1, 1 + 0.07 * Math.sin(el * 4));
+    p.beam.material.opacity = 0.14 + 0.08 * Math.sin(el * 3);
+    if (el < p.until) {
+      p.strip.material.color.setHSL((el * 0.9) % 1, 1, 0.5);
+      p.conf.forEach((c) => {
+        c.position.y -= delta * (1.5 + (c.userData.ph % 3) * 0.4);
+        c.position.x += Math.sin(el * 3 + c.userData.ph) * delta * 0.8;
+        c.rotation.x += delta * 4;
+        c.rotation.z += delta * 3;
+        if (c.position.y < 0.2) {
+          c.position.y = 10;
+        }
+      });
+    } else if (p.until > 0) {
+      p.until = 0;
+      p.lab.text = p.base;
+      p.strip.material.color.setHex(p.r.c);
+      p.conf.forEach((c) => {
+        c.visible = false;
+      });
+    }
+  });
+  recs.forEach((q) => {
+    if (q.g && q.g.visible) {
+      q.g.position.y = q.y0 + Math.sin(el * 2 + q.g.position.x) * 0.06;
+    }
+  });
+  spin.forEach((m) => {
+    m.rotation.y += delta;
+    m.position.y = m.userData.y + Math.sin(el + m.userData.p) * 0.4;
+  });
+  if (trophy && trophy.visible) {
+    trophy.rotation.y += delta * 1.5;
+    trophy.position.y = 6.5 + Math.sin(el * 2) * 0.25;
+  }
+  if (finale > 0) {
+    finale -= delta;
+    fconf.forEach((c) => {
+      c.position.y -= delta * (1.6 + (c.userData.ph % 3) * 0.5);
+      c.rotation.x += delta * 4;
+      c.rotation.z += delta * 3;
+      if (c.position.y < 0.3) {
+        c.position.y = 11;
+      }
+    });
+    if (finale <= 0) {
+      fconf.forEach((c) => {
+        c.visible = false;
+      });
+    }
+  }
+  camera.getWorldPosition(cpos);
+  encT += delta;
+  if (encT > 1.5 && !encBusy) {
+    encT = 0;
+    const ek = zoneAt(cpos.x, cpos.z);
+    const pd = pads.find((x) => x.r.k === ek);
+    if (pd) {
+      encBusy = true;
+      store
+        .get("enc:" + ek, 0)
+        .then((ev) => {
+          encBusy = false;
+          if (typeof ev !== "number") {
+            return;
+          }
+          if (encSeen[ek] === undefined) {
+            encSeen[ek] = ev;
+          } else {
+            if (ev > encSeen[ek] && el >= pd.until) {
+              playEncore(pd);
+            }
+            encSeen[ek] = ev;
+          }
+        })
+        .catch((e) => {
+          encBusy = false;
+        });
+    }
+  }
+  if (toastG && toastG.visible) {
+    if (el > toastUntil) {
+      toastG.visible = false;
+    } else {
+      camera.getWorldQuaternion(cq);
+      toastG.quaternion.copy(cq);
+      dirv.set(0, -0.35, -2.6).applyQuaternion(cq);
+      toastG.position.set(cpos.x + dirv.x, cpos.y + dirv.y, cpos.z + dirv.z);
+    }
+  }
+  const zk = zoneAt(cpos.x, cpos.z);
+  if (zk !== lastZone) {
+    lastZone = zk;
+    jukeOv = null;
+    encSeen = {};
+  }
+  setZone(jukeOv || zk);
+  if (curAud) {
+    curAud.position.set(cpos.x, cpos.y - 6, cpos.z);
+  }
+  if (Input.mouse.isButtonPressed(MouseButton.Left)) {
+    if (!down) {
+      down = true;
+      const rc = Input.mouse.raycast(camera);
+      const all = buttons
+        .map((b) => b.m)
+        .concat(pads.map((p) => p.m))
+        .concat(recs.filter((q) => (q.g || q.m).visible).map((q) => q.m))
+        .concat(jukes.map((j) => j.m));
+      const zc2 = zoneAt(cpos.x, cpos.z);
+      const here = all.filter((mm) => {
+        mm.getWorldPosition(wp);
+        return zoneAt(wp.x, wp.z) === zc2;
+      });
+      const hits = rc.raycaster.intersectObjects(here);
+      if (hits.length > 0) {
+        click(hits[0].object);
+      }
+    }
+  } else {
+    down = false;
+  }
+}
+function dispose() {
+  Input.mouse.stop();
+}

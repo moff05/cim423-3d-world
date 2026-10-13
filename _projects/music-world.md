@@ -31,7 +31,7 @@ scripts:
 
 <h2 id="summary" class="reveal">Summary</h2>
 
-<p class="lead reveal"><b>Music World</b> is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. Hit the Encore button for a group light show, or hunt for the hidden Golden Records. <a href="https://verse.mud.foundation/qx7dtAx">Enter the space</a> or <a href="/assets/code/music-world-script.js">read the script</a>.</p>
+<p class="lead reveal"><b>Music World</b> is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. Hit the Encore button for a group light show, or hunt for the hidden Golden Records. <a href="https://verse.mud.foundation/qx7dtAx">Enter the space</a> or <a href="#code">see the code</a>.</p>
 
 <h2 id="idea" class="reveal">The Idea</h2>
 
@@ -67,14 +67,6 @@ scripts:
   <div><span class="ic">Collection</span><h3>All-Time Four frames</h3><p><b>Community-generated collection.</b> Like artists on the wall of 20 buttons and the top four portraits move into the frames. The room reflects everyone who has visited.</p></div>
   <div><span class="ic">Display</span><h3>Live boards</h3><p><b>Information display.</b> Read the like counts for all 20 artists in a room, or the hub board showing each room's top artist. Great for arguing about rankings.</p></div>
   <div><span class="ic">Social</span><h3>Lounges</h3><p><b>Group interaction area.</b> Sit near the furniture and chat by voice or text. It turns a voting page into a place to hang out.</p></div>
-</div>
-
-<h3 class="reveal">Try it: fill the All-Time Four</h3>
-
-<div class="demo reveal" id="likeDemo">
-  <p class="demo-note">Same idea as the real room, with some of the actual portraits. Like artists and the top four move into the frames (resets on refresh).</p>
-  <div class="frames"></div>
-  <ol class="demo-list"></ol>
 </div>
 
 <h2 id="play" class="reveal">Things To Do</h2>
@@ -115,7 +107,7 @@ scripts:
 
 <h2 id="code" class="reveal">Code</h2>
 
-<p class="reveal">The whole world runs from one script inside the MUD XR Creator (about 97 dense lines of JavaScript). It builds the rooms and furniture, loads the 80 portraits, handles likes through the shared store, ranks the All-Time Four, and drives the Encore button, jukebox, Golden Records and zone-based music. <a href="/assets/code/music-world-script.js">Download music-world-script.js</a>.</p>
+<p class="reveal">The whole world runs from one script inside the MUD XR Creator (about 2,000 lines of JavaScript once formatted). It builds the rooms and furniture, loads the 80 portraits, handles likes through the shared store, ranks the All-Time Four, and drives the Encore button, jukebox, Golden Records and zone-based music. <a href="/assets/code/music-world-script.js" target="_blank" rel="noopener">Open the script</a>.</p>
 
 <h2 id="credits" class="reveal">Credits</h2>
 
