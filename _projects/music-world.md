@@ -107,7 +107,54 @@ scripts:
 
 <h2 id="code" class="reveal">Code</h2>
 
-<p class="reveal">The whole world runs from one script inside the MUD XR Creator (about 2,000 lines of JavaScript once formatted). It builds the rooms and furniture, loads the 80 portraits, handles likes through the shared store, ranks the All-Time Four, and drives the Encore button, jukebox, Golden Records and zone-based music. <a href="/assets/code/music-world-script.js" target="_blank" rel="noopener">Open the script</a>.</p>
+<p class="reveal">The whole world is one JavaScript file running inside the MUD XR Creator. These three pieces are the heart of it (trimmed for readability). The shared MUD <code>store</code> is what makes it multiplayer: every visitor reads and writes the same counters.</p>
+
+<div class="snip reveal"><h3>1. Like and unlike</h3><p>Every like is one shared counter in the MUD store. Clicking again undoes it, and the Liked time is saved so ties are broken fairly.</p><pre><code>async function like(b) {
+  const a = b.a;
+  if (pend[a.key]) return;            // ignore double-clicks while saving
+  pend[a.key] = true;
+
+  if (LIKED[a.key]) {                 // already liked -&gt; unlike
+    LIKED[a.key] = 0;
+    await store.inc(a.key, -1);
+    showToast(&quot;UNLIKED: &quot; + a.name, 2);
+  } else {                            // like
+    LIKED[a.key] = 1;
+    await store.inc(a.key, 1);
+    await store.set(&quot;t:&quot; + a.key, Date.now());   // timestamp for tie-breaks
+    showToast(&quot;LIKED: &quot; + a.name, 2);
+  }
+
+  pend[a.key] = false;
+  await refresh();                    // re-read the store and re-rank the room
+}</code></pre></div>
+
+<div class="snip reveal"><h3>2. The All-Time Four</h3><p>Reads everyone's likes from the store, sorts each room's 20 artists, and puts the top four into the portrait frames.</p><pre><code>function rank(r, d) {               // d = the whole shared store
+  ART[r.k].forEach((a) =&gt; {
+    a.n = d[a.key] || 0;              // like count
+    a.t = d[&quot;t:&quot; + a.key] || 0;       // time of latest like
+  });
+
+  const top = ART[r.k]
+    .filter((a) =&gt; a.n &gt; 0)
+    .sort((a, b) =&gt; b.n - a.n || a.t - b.t || (a.name &lt; b.name ? -1 : 1))
+    .slice(0, 4);                     // most likes first, earliest like wins ties
+
+  slots[r.k].forEach((slot, i) =&gt; show(r, slot, top[i], i));  // fill the 4 frames
+}</code></pre></div>
+
+<div class="snip reveal"><h3>3. Shared Encore button</h3><p>Pressing the pad bumps a counter in the store. Everyone in the room checks that counter every 1.5 seconds, and when it goes up they all see the confetti.</p><pre><code>async function encore(pad) {
+  playEncore(pad);                              // my own confetti right away
+  encSeen[pad.r.k] = await store.inc(&quot;enc:&quot; + pad.r.k, 1);
+}
+
+// in the update loop, every 1.5 seconds:
+const room = zoneAt(cpos.x, cpos.z);            // which room am I standing in?
+const count = await store.get(&quot;enc:&quot; + room, 0);
+if (count &gt; encSeen[room]) playEncore(pad);     // someone else pressed it
+encSeen[room] = count;</code></pre></div>
+
+<p class="reveal snip-full"><a href="/assets/code/music-world-script.js" target="_blank" rel="noopener">Full script (about 2,000 lines, plain text)</a></p>
 
 <h2 id="credits" class="reveal">Credits</h2>
 

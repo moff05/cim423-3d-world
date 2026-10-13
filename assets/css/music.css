@@ -142,3 +142,11 @@ details[open] summary { margin-bottom:.6rem; }
 .th { width:44px; height:44px; border-radius:50%; object-fit:cover; object-position:top; flex:none; }
 .demo-list { grid-template-columns:1fr 1fr; }
 @media (max-width:640px) { .demo-list { grid-template-columns:1fr; } .frames { gap:.4rem; } }
+
+/* code snippets */
+.snip { margin:1.6rem 0; }
+.snip h3 { margin:0 0 .3rem; }
+.snip p { margin:0 0 .6rem; color:var(--muted); }
+.snip pre { margin:0; padding:1rem 1.1rem; overflow-x:auto; background:#0b0912; border:1px solid var(--rule); border-radius:10px; font-size:.82rem; line-height:1.55; }
+.snip code { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; color:#e8e3f7; white-space:pre; }
+.snip-full { font-size:.85rem; }
