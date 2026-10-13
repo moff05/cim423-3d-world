@@ -36,11 +36,8 @@ scripts:
 <h2 id="idea" class="reveal">The Idea</h2>
 
 <div class="lead reveal">
-
-Music World is a shared virtual recording studio in MUD Foundation where music fans settle the question of who belongs at the top. A central studio hub leads to four genre rooms, each with 20 artists, a lounge, and its own music. Every visitor can like or unlike artists, and the four most-liked in each room are displayed in that room's **All-Time Four** frames, so the space is shaped by everyone who has visited.
-
-Visitors do more than vote. A shared Encore button sets off confetti and a lighting show for everyone in the room, a hidden Golden Record in each room rewards exploring, and the lounges give people a place to talk over voice chat. The whole space was scripted in JavaScript inside the MUD XR Creator, using its shared store to keep votes between visits.
-
+<p>Music World is a shared virtual recording studio in MUD Foundation where music fans settle the question of who belongs at the top. A central studio hub leads to four genre rooms, each with 20 artists, a lounge, and its own music. Every visitor can like or unlike artists, and the four most-liked in each room are displayed in that room's <b>All-Time Four</b> frames, so the space is shaped by everyone who has visited.</p>
+<p>Visitors do more than vote. A shared Encore button sets off confetti and a lighting show for everyone in the room, a hidden Golden Record in each room rewards exploring, and the lounges give people a place to talk over voice chat. The whole space was scripted in JavaScript inside the MUD XR Creator, using its shared store to keep votes between visits.</p>
 </div>
 
 <div class="callout reveal"><b>Who it's for</b> Casual music fans and classmates who already have strong opinions. The space is never finished: the frames show whatever the community has picked so far, so the room looks different after every visit.</div>
@@ -95,12 +92,12 @@ Visitors do more than vote. A shared Encore button sets off confetti and a light
 <p class="reveal lead">Votes are stored permanently, so the All-Time Four can change between visits, and the Golden Record hunt gives a reason to explore all four rooms. The lounges are where visitors meet and trade opinions.</p>
 
 <details class="reveal"><summary>Honest limitations</summary>
-
-- A visitor can like each artist once per visit. I could not find a per-person identity in the platform, so someone who comes back later can like again.
-- Five of the 80 portraits are placeholder cards because those images could not be generated.
-- I verified the build in a live session: all 80 portraits load, the scripts start without errors, and the likes reset cleanly. My automated browser could not register mouse clicks, so the like buttons, encore buttons, jukebox and Golden Records were tested by hand, not by script.
-- Players cannot get custom avatars from the script, so visitors use MUD's own avatar menu.
-
+<ul>
+<li>A visitor can like each artist once per visit. I could not find a per-person identity in the platform, so someone who comes back later can like again.</li>
+<li>Five of the 80 portraits are placeholder cards because those images could not be generated.</li>
+<li>I verified the build in a live session: all 80 portraits load, the scripts start without errors, and the likes reset cleanly. My automated browser could not register mouse clicks, so the like buttons, encore buttons, jukebox and Golden Records were tested by hand, not by script.</li>
+<li>Players cannot get custom avatars from the script, so visitors use MUD's own avatar menu.</li>
+</ul>
 </details>
 
 <h2 id="media" class="reveal">Media</h2>
