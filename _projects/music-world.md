@@ -109,7 +109,16 @@ Visitors do more than vote. A shared Encore button sets off confetti and a light
 
 <h2 id="media" class="reveal">Media</h2>
 
-<figure class="reveal"><img src="/assets/images/music-world/hub.jpg" alt="The Music World hub with the Rock corridor, the How To Play sign and the Hip-Hop entrance" style="width:100%;border-radius:8px"><figcaption>The studio hub: Rock corridor ahead, Hip-Hop on the right, and the How To Play sign.</figcaption></figure>
+<div class="gallery reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+<figure style="margin:0"><img src="/assets/images/music-world/hub.jpg" alt="The studio hub: four corridors, one per genre, and the How To Play sign." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">The studio hub: four corridors, one per genre, and the How To Play sign.</figcaption></figure>
+<figure style="margin:0"><img src="/assets/images/music-world/rock.jpg" alt="Rock room: the All-Time Four frames above the concert stage." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">Rock room: the All-Time Four frames above the concert stage.</figcaption></figure>
+<figure style="margin:0"><img src="/assets/images/music-world/hiphop.jpg" alt="Hip-Hop room: walkable DJ riser, record shop and the red Encore button." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">Hip-Hop room: walkable DJ riser, record shop and the red Encore button.</figcaption></figure>
+<figure style="margin:0"><img src="/assets/images/music-world/electronic.jpg" alt="Electronic room: checkered dance floor, lasers and arcade cabinets." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">Electronic room: checkered dance floor, lasers and arcade cabinets.</figcaption></figure>
+<figure style="margin:0"><img src="/assets/images/music-world/country.jpg" alt="Country room: the saloon, with a bar, longhorn and lounge." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">Country room: the saloon, with a bar, longhorn and lounge.</figcaption></figure>
+<figure style="margin:0"><img src="/assets/images/music-world/country-boards.jpg" alt="The live like boards: every artist in the room, ranked by votes." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">The live like boards: every artist in the room, ranked by votes.</figcaption></figure>
+<figure style="margin:0"><img src="/assets/images/music-world/like.jpg" alt="Click an artist and a toast confirms your like." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">Click an artist and a toast confirms your like.</figcaption></figure>
+<figure style="margin:0"><img src="/assets/images/music-world/encore.jpg" alt="The Encore button fires confetti for everyone in the room." loading="lazy" style="width:100%;border-radius:8px;display:block"><figcaption style="font-size:.85em;opacity:.8;margin-top:6px">The Encore button fires confetti for everyone in the room.</figcaption></figure>
+</div>
 
 <h2 id="code" class="reveal">Code</h2>
 
