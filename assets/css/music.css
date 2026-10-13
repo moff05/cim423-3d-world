@@ -136,6 +136,8 @@ details[open] summary { margin-bottom:.6rem; }
 .lightbox.open { display:flex; }
 .lightbox img { max-width:100%; max-height:calc(100vh - 6rem); border-radius:10px; }
 .lightbox p { margin:0; color:var(--text); }
+.video-card { margin:1.5rem 0; }
+.video-card figcaption { font-size:.95rem; color:var(--muted); margin-top:.45rem; }
 .video-card video { width:100%; border-radius:14px; border:1px solid var(--rule); display:block; }
 .design-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
 .design-grid > div { background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:1rem 1.2rem; }
