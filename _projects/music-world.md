@@ -2,6 +2,8 @@
 layout: project
 theme: music
 order: 2
+video: /assets/videos/music-world-walkthrough.mp4
+poster: /assets/images/music-world/walkthrough-poster.jpg
 title: Music World
 slug_label: Project 2
 eyebrow: MUD Foundation · CIM 423 · University of Miami
