@@ -40,7 +40,7 @@ The Chillhop Crate is a stationary VR task simulation for Meta Quest, controlled
 [PASTE VIDEO LINK OR FILE NAME]
 
 ## APK Build Instructions for Meta Quest
-1. File > Build Profiles: switch to Android. Scripting Backend IL2CPP, Target Architecture ARM64, Minimum API Level 29, Texture Compression ASTC.
+1. File > Build Profiles: switch to Android. Scripting Backend IL2CPP, Target Architecture ARM64, Minimum API Level 32, Texture Compression ASTC.
 2. Project Settings > XR Plug-in Management > Android: enable OpenXR. Features: Meta Quest Support, Hand Tracking Subsystem, Meta Hand Tracking Aim.
 3. Player Settings: Package Name com.nmoffett.chillhopcrate.
 4. Quest: enable Developer Mode (Meta Horizon phone app), connect via USB, accept "Allow USB debugging". Turn on Settings > Movement tracking > Hand tracking.

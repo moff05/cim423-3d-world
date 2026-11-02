@@ -13,6 +13,7 @@ links:
     url: https://github.com/moff05/cim423-3d-world/tree/main/assets/code/chillhop
     primary: true
 sections:
+  - {id: play, label: Play it}
   - {id: summary, label: Summary}
   - {id: session, label: The Session}
   - {id: hands, label: Hand Tracking}
@@ -22,8 +23,16 @@ sections:
   - {id: apk, label: APK}
   - {id: credits, label: Credits}
 scripts:
+  - /assets/js/chillhop-demo.js
   - /assets/js/chillhop.js
 ---
+
+<h2 id="play" class="reveal">Play the session</h2>
+
+<p class="lead reveal">This is the real flow from the headset, rebuilt for the browser so you can try it right now. Same five steps, same order, same audio files as the Quest build. Drag with a mouse or finger where the sim uses a pinch, and tap the pads where it uses a poke.</p>
+
+<div class="demo-wrap" id="demo-mount"><noscript><p>The playable desk needs JavaScript. The screenshots and code below show the same session.</p></noscript></div>
+<p class="demo-note">Headphones help. On a phone, turn it sideways for a bigger desk. The browser version is a demo of the design; the graded build is the Quest app below.</p>
 
 <h2 id="summary" class="reveal">Summary</h2>
 
@@ -85,15 +94,15 @@ scripts:
 <figcaption>Walkthrough: the full session from START SESSION to RESTART SESSION, recorded on a Quest 3 with hand tracking.</figcaption>
 </figure>
 
-<p class="reveal">Click an image to enlarge it once the screenshots are in.</p>
+<p class="reveal">Rendered from the actual Unity scene with a scripted test hand. Click an image to enlarge it, and use the arrow keys to flip through.</p>
 
 <div class="gallery reveal">
-<figure><div class="todo"><b>Screenshot 1</b><span>Intro panel and START SESSION button</span></div><figcaption>The welcome panel, checklist and START SESSION poke button.</figcaption></figure>
-<figure><div class="todo"><b>Screenshot 2</b><span>Vinyl on the platter</span></div><figcaption>Step 1: the record seated on the spinning platter.</figcaption></figure>
-<figure><div class="todo"><b>Screenshot 3</b><span>Tonearm over the groove</span></div><figcaption>Step 2: the tonearm swung over the record.</figcaption></figure>
-<figure><div class="todo"><b>Screenshot 4</b><span>MPC pad flashing amber</span></div><figcaption>Step 3: a fingertip on the pad as it flashes.</figcaption></figure>
-<figure><div class="todo"><b>Screenshot 5</b><span>Filter dial and fader</span></div><figcaption>Steps 4 and 5: the filter dial and master fader.</figcaption></figure>
-<figure><div class="todo"><b>Screenshot 6</b><span>SESSION MASTERED slate</span></div><figcaption>The conclusion: neon pulse and the completion slate.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/01-start.jpg" alt="The welcome panel, checklist and START SESSION poke button, seen from where the player stands." loading="lazy" width="1600" height="900"><figcaption>The welcome panel, checklist and START SESSION poke button, seen from where the player stands.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/02-vinyl.jpg" alt="Step 1: the record seated on the spinning platter." loading="lazy" width="1600" height="900"><figcaption>Step 1: the record seated on the spinning platter.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/03-tonearm.jpg" alt="Step 2: the tonearm swung over the record, needle in the groove." loading="lazy" width="1600" height="900"><figcaption>Step 2: the tonearm swung over the record, needle in the groove.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/04-pad.jpg" alt="Step 3: a fingertip pressing the glowing sample pad." loading="lazy" width="1600" height="900"><figcaption>Step 3: a fingertip pressing the glowing sample pad.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/05-filter.jpg" alt="Steps 4 and 5: the filter dial and the master fader." loading="lazy" width="1600" height="900"><figcaption>Steps 4 and 5: the filter dial and the master fader.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/06-complete.jpg" alt="The finale: dimmed lamp, neon accents, and the SESSION MASTERED slate with a RESTART button." loading="lazy" width="1600" height="900"><figcaption>The finale: dimmed lamp, neon accents, and the SESSION MASTERED slate with a RESTART button.</figcaption></figure>
 </div>
 
 <h2 id="code" class="reveal">Code</h2>
@@ -240,7 +249,7 @@ void ApplyCutoff()
 
 <details class="reveal" open><summary>Build and install on a Quest</summary>
 <ol>
-<li>Switch the project to Android (File > Build Profiles). Scripting Backend <b>IL2CPP</b>, Target Architecture <b>ARM64</b> only, Minimum API Level <b>29</b>, Texture Compression <b>ASTC</b>.</li>
+<li>Switch the project to Android (File > Build Profiles). Scripting Backend <b>IL2CPP</b>, Target Architecture <b>ARM64</b> only, Minimum API Level <b>32</b>, Texture Compression <b>ASTC</b>.</li>
 <li>Project Settings > XR Plug-in Management > Android: tick <b>OpenXR</b>. Features: <b>Meta Quest Support</b>, <b>Hand Tracking Subsystem</b>, <b>Meta Hand Tracking Aim</b>.</li>
 <li>Player Settings: set the Package Name to <code>com.nmoffett.chillhopcrate</code>.</li>
 <li>On the headset: turn on Developer Mode in the Meta Horizon phone app, plug in over USB and accept "Allow USB debugging". Also turn on <b>Settings > Movement tracking > Hand tracking</b>.</li>
