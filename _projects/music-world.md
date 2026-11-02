@@ -5,6 +5,7 @@ order: 2
 title: Music World
 slug_label: Project 2
 eyebrow: MUD Foundation · CIM 423 · University of Miami
+thumb: /assets/images/music-world/hub.jpg
 tagline: A shared recording studio where the crowd decides who belongs at the top.
 meta: MUD Foundation · JavaScript
 font_url: https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap

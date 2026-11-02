@@ -22,14 +22,6 @@ header p { color:var(--muted); max-width:520px; font-size:1.1rem; margin:0; }
 .card.theme-space h2 { color:#A2574F; letter-spacing:-.02em; font-weight:800; }
 .card.theme-music h2 { font-family:"Bebas Neue",Impact,sans-serif; font-weight:400; letter-spacing:.02em; font-size:clamp(3rem,7.5vw,5rem);
   background:linear-gradient(90deg,#ff2e93,#ffc83d 55%,#22e1ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
-.card.theme-music .card-art { background:
-  radial-gradient(circle at 20% 30%,#ff2e93cc,transparent 45%),
-  radial-gradient(circle at 80% 20%,#22e1ffcc,transparent 40%),
-  radial-gradient(circle at 60% 90%,#ffc83dcc,transparent 45%), #17101f; }
 footer { padding-bottom:3rem; color:var(--muted); font-size:.85rem; }
 @media (max-width:720px) { .card { grid-template-columns:1fr; gap:1rem; } .card-art { order:0; } }
 .card.theme-chillhop h2 { font-family:"Fraunces",Georgia,serif; font-style:italic; font-weight:800; letter-spacing:-.02em; color:#c2661a; font-size:clamp(2.4rem,6vw,4rem); }
-.card.theme-chillhop .card-art { background:
-  radial-gradient(circle at 50% 50%,#ec7461 0 7%,#150e09 7.5% 9%,transparent 9.5%),
-  repeating-radial-gradient(circle at 50% 50%,#0e0906 0 2px,#241810 2px 4px),
-  radial-gradient(circle at 80% 15%,#ffb347aa,transparent 45%), #150e09; background-size:auto 130%,auto 130%,auto,auto; background-repeat:no-repeat; background-position:center; }

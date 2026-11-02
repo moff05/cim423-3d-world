@@ -5,6 +5,7 @@ order: 3
 title: The Chillhop Crate
 slug_label: Project 3
 eyebrow: Unity · Meta Quest · CIM 423 · University of Miami
+thumb: /assets/images/chillhop/01-start.jpg
 tagline: A lo-fi vinyl lounge you run with nothing but your bare hands.
 meta: Unity · Hand Tracking
 font_url: https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,wght@1,800&display=swap
