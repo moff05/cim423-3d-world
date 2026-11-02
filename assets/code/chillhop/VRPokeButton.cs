@@ -67,6 +67,7 @@ public class VRPokeButton : MonoBehaviour, ISimResettable
     Vector3 dir;
     float depth;
     bool latched;                  // true from press until the finger lifts past releasePoint
+    float armedAt;
     float lastFire = -10f;
     float flashClock = 99f;
     Material flashMaterial;
@@ -83,6 +84,14 @@ public class VRPokeButton : MonoBehaviour, ISimResettable
             flashMaterial.EnableKeyword("_EMISSION");
             flashMaterial.SetColor(EmissionColor, idleGlow);
         }
+    }
+
+    void OnEnable()
+    {
+        // Appear "already pressed": a finger that is still down from the previous button (RESTART sits where START does)
+        // must lift before this one can fire.
+        latched = true;
+        armedAt = Time.time + 0.3f;       // physics re-reports a resting finger a frame or two late
     }
 
     void OnDisable()
@@ -121,7 +130,7 @@ public class VRPokeButton : MonoBehaviour, ISimResettable
             latched = true;                                   // latch even when gated so a held finger can't fire later
             if (CanFire()) Fire();
         }
-        else if (latched && depth <= travel * releasePoint)
+        else if (latched && depth <= travel * releasePoint && Time.time >= armedAt)
         {
             latched = false;
             onReleased.Invoke();
@@ -174,7 +183,6 @@ public class VRPokeButton : MonoBehaviour, ISimResettable
 
     public void ResetForSimulation()
     {
-        latched = false;
         depth = 0f;
         flashClock = 99f;
         lastFire = -10f;
