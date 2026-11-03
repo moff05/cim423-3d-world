@@ -25,7 +25,7 @@
     'Drag the record from the crate onto the platter.',
     'Grab the amber tonearm handle and swing the needle over the record. Hold it there.',
     'Tap the glowing pad.',
-    'Turn the dial a quarter turn clockwise: drag in a circle around it.',
+    'Turn the dial up: twist it clockwise, or just drag it right or up.',
     'Push the master fader all the way up.',
     'Session mastered. Hit restart to run it again.'
   ];
@@ -85,7 +85,7 @@
     '<rect x="640" y="228" width="336" height="352" rx="22" fill="url(#dPlinth)" stroke="#000" stroke-opacity=".5" stroke-width="3"/>' +
     '<text class="lbl" x="668" y="290">SAMPLE PADS</text>' + padSvg +
     '<text class="lbl" x="' + KNOB.x + '" y="254" text-anchor="middle">LOW-PASS</text>' + tickSvg +
-    '<g id="knob" transform="translate(' + KNOB.x + ',' + KNOB.y + ')"><circle r="44" fill="#1b1613" stroke="#0a0705" stroke-width="3"/><g id="knobRot" transform="rotate(-45)"><circle r="40" fill="#2a221c"/><rect x="-3" y="-38" width="6" height="22" rx="3" fill="#f7ecda"/></g><circle class="hit" r="62" fill="transparent"/></g>' +
+    '<g id="knob" transform="translate(' + KNOB.x + ',' + KNOB.y + ')"><circle r="44" fill="#1b1613" stroke="#0a0705" stroke-width="3"/><g id="knobRot" transform="rotate(-45)"><circle r="40" fill="#2a221c"/><rect x="-3" y="-38" width="6" height="22" rx="3" fill="#f7ecda"/></g><circle class="hit" r="80" fill="transparent"/></g>' +
     '<text class="lbl" x="' + FADER.x + '" y="404" text-anchor="middle">MASTER</text>' +
     '<rect x="' + (FADER.x - 5) + '" y="' + FADER.yTop + '" width="10" height="' + (FADER.yBot - FADER.yTop) + '" rx="5" fill="#0a0705"/>' + faderTicks +
     '<g id="fader" transform="translate(' + FADER.x + ',' + FADER.yBot + ')"><rect x="-26" y="-15" width="52" height="30" rx="7" fill="#e8c28a" stroke="#6b4a2b" stroke-width="3"/><rect x="-20" y="-2" width="40" height="4" rx="2" fill="#6b4a2b"/><rect class="hit" x="-44" y="-34" width="88" height="68" fill="transparent"/></g>' +
@@ -319,13 +319,16 @@
   });
 
   // knob
-  var knobPrev = 0;
+  var knobPrev = 0, knobLast = { x: 0, y: 0 };
   drag(mount.querySelector('#knob .hit'), function (pt) {
     if (S.step < 4) { tooSoon(); return false; }
-    knobPrev = ang(KNOB, pt);
+    knobPrev = ang(KNOB, pt); knobLast = pt;
   }, function (pt) {
+    // Accept a circular twist OR a straight drag (right / up opens it): fingers rarely trace a clean arc.
     var a = ang(KNOB, pt), d = wrap(a - knobPrev); knobPrev = a;
-    S.knobV = Math.max(0, Math.min(1, S.knobV + d / 90));
+    var lin = ((pt.x - knobLast.x) - (pt.y - knobLast.y)) * 0.45; knobLast = pt;
+    if (Math.abs(lin) > Math.abs(d)) d = lin;
+    S.knobV = Math.max(0, Math.min(1, S.knobV + d / 60));
     setCut(S.knobV);
     if (S.step === 4 && S.knobV >= 0.98) { S.knobV = 1; setCut(1); goStep(5); }
   });
