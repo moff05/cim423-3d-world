@@ -1,4 +1,4 @@
-# The Chillhop Crate: Inspector Setup Guide
+# Night Shift Vinyl: Inspector Setup Guide
 
 Tested target: Unity 6 (6000.5), XR Interaction Toolkit 3.6, OpenXR, Meta Quest 3 with hand tracking.
 The scripts compile against that stack. Everything in this guide is wiring, no code changes.
@@ -180,7 +180,7 @@ For each of `IntroPanel`, `ChecklistPanel`, `CompletePanel`:
 1. Create a UI > Canvas. **Render Mode = World Space**. Rect Transform width/height `800 x 450`, Scale `0.001`. Position about `0.8 m` in front of and slightly above the desk, facing the player.
 2. Remove the `GraphicRaycaster` (the buttons are 3D, not UGUI).
 3. Add a panel `Image` (wood/acrylic look) and TextMeshPro text children.
-4. `IntroPanel` text: *Welcome to Chillhop Lounge. Step behind the deck and complete your audio session.*
+4. `IntroPanel` text: *Welcome to Night Shift Vinyl. Step behind the deck and complete your audio session.*
 5. `StartButton` and `RestartButton` are **3D objects** (a flat box with a `VRPokeButton`, a trigger collider and a cap) sitting in front of the panel.
    `RestartButton`: Required Step = `Complete`, On Pressed = `VinylSimulationManager.ResetSimulation()`.
    `StartButton`: Required Step = `MenuStart`, On Pressed = `VinylSimulationManager.StartSession()`.

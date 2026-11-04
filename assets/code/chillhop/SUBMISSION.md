@@ -1,10 +1,10 @@
-# The Chillhop Crate: Lo-Fi Vinyl Lounge (project report text)
+# Night Shift Vinyl: Lo-Fi Vinyl Lounge (project report text)
 
 ## Project Title
-The Chillhop Crate: Lo-Fi Vinyl Lounge
+Night Shift Vinyl: Lo-Fi Vinyl Lounge
 
 ## Brief Description of the Project
-The Chillhop Crate is a stationary VR task simulation for Meta Quest, controlled entirely with optical hand tracking (no controllers). The player stands or sits behind a warm, mood-lit vinyl DJ desk and builds a lo-fi track through five tactile steps: load a record onto the platter, drop the tonearm needle, tap an MPC drum pad, turn an analog low-pass filter dial, and push the master output fader. A floating World-Space panel introduces the task and shows a live checklist, a START SESSION poke button begins the session, and a final "SESSION MASTERED - 100% GROOVE" slate shows the completion time with a RESTART SESSION poke button. Built in Unity 6 with the XR Interaction Toolkit, OpenXR and XR Hands.
+Night Shift Vinyl is a stationary VR task simulation for Meta Quest, controlled entirely with optical hand tracking (no controllers). The player stands or sits behind a warm, mood-lit vinyl DJ desk and builds a lo-fi track through five tactile steps: load a record onto the platter, drop the tonearm needle, tap an MPC drum pad, turn an analog low-pass filter dial, and push the master output fader. A floating World-Space panel introduces the task and shows a live checklist, a START SESSION poke button begins the session, and a final "SESSION MASTERED - 100% GROOVE" slate shows the completion time with a RESTART SESSION poke button. Built in Unity 6 with the XR Interaction Toolkit, OpenXR and XR Hands.
 
 ## Link to Code and AI-Generated Chats
 - Code: https://github.com/moff05/cim423-3d-world/tree/main/assets/code/chillhop
@@ -42,9 +42,9 @@ The Chillhop Crate is a stationary VR task simulation for Meta Quest, controlled
 ## APK Build Instructions for Meta Quest
 1. File > Build Profiles: switch to Android. Scripting Backend IL2CPP, Target Architecture ARM64, Minimum API Level 32, Texture Compression ASTC.
 2. Project Settings > XR Plug-in Management > Android: enable OpenXR. Features: Meta Quest Support, Hand Tracking Subsystem, Meta Hand Tracking Aim.
-3. Player Settings: Package Name com.nmoffett.chillhopcrate.
+3. Player Settings: Package Name com.nmoffett.nightshiftvinyl.
 4. Quest: enable Developer Mode (Meta Horizon phone app), connect via USB, accept "Allow USB debugging". Turn on Settings > Movement tracking > Hand tracking.
-5. Build the APK, then: `adb install -r chillhopcrate.apk`
-6. Launch from Library > Unknown Sources, or `adb shell monkey -p com.nmoffett.chillhopcrate -c android.intent.category.LAUNCHER 1`.
+5. Build the APK, then: `adb install -r nightshiftvinyl.apk`
+6. Launch from Library > Unknown Sources, or `adb shell monkey -p com.nmoffett.nightshiftvinyl -c android.intent.category.LAUNCHER 1`.
 7. Put the controllers down; the Quest switches to hand tracking.
 APK file: [PASTE FILE NAME / LINK]

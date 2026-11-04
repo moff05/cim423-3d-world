@@ -1,4 +1,4 @@
-/* The Chillhop Crate, playable in the browser.
+/* Night Shift Vinyl, playable in the browser.
    Same five steps as the VR sim, same audio files, driven by mouse or touch instead of hands.
    Exposes window.ChillhopAudio.analyser so the page header can dance to it. */
 (function () {

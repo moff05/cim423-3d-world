@@ -2,7 +2,7 @@
 layout: project
 theme: chillhop
 order: 3
-title: The Chillhop Crate
+title: Night Shift Vinyl
 slug_label: Project 3
 eyebrow: Unity · Meta Quest · CIM 423 · University of Miami
 thumb: /assets/images/chillhop/01-start.jpg
@@ -37,12 +37,12 @@ scripts:
 
 <h2 id="summary" class="reveal">Summary</h2>
 
-<p class="lead reveal"><b>The Chillhop Crate</b> is a stationary VR task simulation for Meta Quest, controlled entirely with optical hand tracking, no controllers. You stand (or sit) behind a warm, mood-lit vinyl DJ desk and build a lo-fi track one gesture at a time: load a record, drop the needle, tap a drum pad, open a filter, push up the master fader. Every step is a real, tactile hand action, and every step changes what you hear.</p>
+<p class="lead reveal"><b>Night Shift Vinyl</b> is a stationary VR task simulation for Meta Quest, controlled entirely with optical hand tracking, no controllers. You stand (or sit) behind a warm, mood-lit vinyl DJ desk and build a lo-fi track one gesture at a time: load a record, drop the needle, tap a drum pad, open a filter, push up the master fader. Every step is a real, tactile hand action, and every step changes what you hear.</p>
 
 <div class="callout reveal"><b>Why it suits hand tracking</b>Nothing moves you through space and nothing needs a fast arm swing. Every interaction is a natural gesture your hands already know: pinch an edge, set something down, poke a soft pad, turn a knob, push a slider.</div>
 
 <table class="reveal">
-<tr><th>Project title</th><td>The Chillhop Crate: Lo-Fi Vinyl Lounge</td></tr>
+<tr><th>Project title</th><td>Night Shift Vinyl: Lo-Fi Vinyl Lounge</td></tr>
 <tr><th>Platform</th><td>Meta Quest 3, optical hand tracking only</td></tr>
 <tr><th>Engine</th><td>Unity 6, XR Interaction Toolkit 3.x, OpenXR, XR Hands</td></tr>
 <tr><th>Interactions</th><td>5 required, plus a start menu and a conclusion</td></tr>
@@ -88,7 +88,7 @@ scripts:
 <figure class="video-card reveal">
 <div class="todo"><b>Video walkthrough placeholder</b><span>Drop the file at /assets/videos/chillhop-walkthrough.mp4, then replace this box with the video tag in the HTML comment below.</span></div>
 <!--
-<video controls preload="metadata" poster="/assets/images/chillhop/walkthrough-poster.jpg" aria-label="Chillhop Crate walkthrough">
+<video controls preload="metadata" poster="/assets/images/chillhop/walkthrough-poster.jpg" aria-label="Night Shift Vinyl walkthrough">
 <source src="/assets/videos/chillhop-walkthrough.mp4" type="video/mp4">
 </video>
 -->
@@ -247,7 +247,7 @@ void ApplyCutoff()
 
 <table class="reveal">
 <tr><th>Download</th><td><span class="todo-inline">[PASTE APK LINK / FILE NAME]</span></td></tr>
-<tr><th>Package name</th><td><code>com.nmoffett.chillhopcrate</code></td></tr>
+<tr><th>Package name</th><td><code>com.nmoffett.nightshiftvinyl</code></td></tr>
 <tr><th>Device</th><td>Meta Quest 3 (also Quest 2 and Pro). Hand tracking must be on.</td></tr>
 </table>
 
@@ -255,10 +255,10 @@ void ApplyCutoff()
 <ol>
 <li>Switch the project to Android (File > Build Profiles). Scripting Backend <b>IL2CPP</b>, Target Architecture <b>ARM64</b> only, Minimum API Level <b>32</b>, Texture Compression <b>ASTC</b>.</li>
 <li>Project Settings > XR Plug-in Management > Android: tick <b>OpenXR</b>. Features: <b>Meta Quest Support</b>, <b>Hand Tracking Subsystem</b>, <b>Meta Hand Tracking Aim</b>.</li>
-<li>Player Settings: set the Package Name to <code>com.nmoffett.chillhopcrate</code>.</li>
+<li>Player Settings: set the Package Name to <code>com.nmoffett.nightshiftvinyl</code>.</li>
 <li>On the headset: turn on Developer Mode in the Meta Horizon phone app, plug in over USB and accept "Allow USB debugging". Also turn on <b>Settings > Movement tracking > Hand tracking</b>.</li>
-<li>Build the APK, then install it: <code>adb install -r chillhopcrate.apk</code>.</li>
-<li>Launch it from the headset under <b>Library > Unknown Sources</b>, or run <code>adb shell monkey -p com.nmoffett.chillhopcrate -c android.intent.category.LAUNCHER 1</code>.</li>
+<li>Build the APK, then install it: <code>adb install -r nightshiftvinyl.apk</code>.</li>
+<li>Launch it from the headset under <b>Library > Unknown Sources</b>, or run <code>adb shell monkey -p com.nmoffett.nightshiftvinyl -c android.intent.category.LAUNCHER 1</code>.</li>
 <li>Put the controllers down. The Quest switches to hand tracking when it sees your hands.</li>
 </ol></details>
 
