@@ -132,7 +132,7 @@ header.site-header > canvas.eq { position:absolute; left:50%; transform:translat
 
 /* the playable desk */
 .demo-wrap { margin:1.2rem 0 2rem; }
-.demo { width:min(1120px,calc(100vw - 2rem)); position:relative; left:50%; transform:translateX(-50%); }
+.demo { width:min(1020px,calc(100vw - 2rem),max(620px,calc((100vh - 240px) * 1.55))); position:relative; left:50%; transform:translateX(-50%); }
 .demo-stage { position:relative; border-radius:20px; overflow:hidden; border:1px solid var(--rule); box-shadow:0 30px 80px -30px #000, 0 0 0 1px rgba(255,179,71,.08); background:#1a110a; line-height:0; }
 .demo-svg { width:100%; height:auto; display:block; touch-action:none; user-select:none; -webkit-user-select:none; }
 .demo-svg .wood-lines line { stroke:#000; stroke-opacity:.18; stroke-width:2; }
@@ -158,7 +158,7 @@ header.site-header > canvas.eq { position:absolute; left:50%; transform:translat
 @keyframes padpulse { to { fill:#ffb347; } }
 .demo[data-step="1"] #record .rec-inner, .demo[data-step="1"] #record .hit { animation:nudge 1.6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
 @keyframes nudge { 50% { transform:translateY(-5px); } }
-.demo[data-step="4"] #knob { animation:handle 1.8s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+.demo[data-step="4"] #knob > circle:first-child { animation:handle 1.8s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
 .demo[data-step="5"] #fader rect:first-child { filter:drop-shadow(0 0 8px rgba(255,179,71,.9)); }
 .demo-lamp { position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse 55% 70% at 22% 5%, rgba(255,190,100,.28), transparent 70%); mix-blend-mode:screen; transition:opacity 2.2s ease; }
 .demo.finale .demo-lamp { opacity:.12; }
@@ -218,7 +218,21 @@ header.site-header > canvas.eq { position:absolute; left:50%; transform:translat
 .tracks > li:hover { background:linear-gradient(90deg,rgba(255,179,71,.10),transparent); padding-left:.8rem; }
 
 @media (prefers-reduced-motion:reduce) {
-  header.site-header h1, .hero-cta .play, .demo-svg .arm-handle, .demo.finale .demo-neon, .demo[data-step] #record .rec-inner, .demo[data-step] #knob { animation:none !important; }
+  header.site-header h1, .hero-cta .play, .demo-svg .arm-handle, .demo.finale .demo-neon, .demo[data-step] #record .rec-inner, .demo[data-step] #knob > circle:first-child { animation:none !important; }
   .reveal { opacity:1; transform:none; }
 }
 .act.in { transition:transform .18s ease, border-color .2s, opacity .6s; }
+
+/* ---- layout fixes: balanced step text, 2x2 interaction cards, proper image gallery ---- */
+.tracks p, .lead, .act p { text-wrap:pretty; }
+.tracks p { text-wrap:balance; max-width:72ch; }
+.act-grid { grid-template-columns:repeat(2,minmax(0,1fr)); align-items:stretch; }
+@media (max-width:700px) { .act-grid { grid-template-columns:1fr; } }
+.gallery { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.gallery img { height:auto; aspect-ratio:16/9; }
+@media (max-width:900px) { .gallery { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:560px) { .gallery { grid-template-columns:1fr; } }
+.gallery figcaption { font-size:.85rem; line-height:1.4; }
+
+.demo-steps li { padding:.3rem .7rem .3rem .35rem; font-size:.82rem; white-space:nowrap; }
+.demo-hud { margin-top:.7rem; }

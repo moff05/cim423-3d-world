@@ -73,7 +73,7 @@
     // record
     '<g id="record" class="record" transform="translate(' + CRATE.x + ',' + CRATE.y + ')"><g class="rec-inner">' +
     '<circle r="125" fill="#0d0907"/>' + grooves + '<path d="M0 0 L125 0 A125 125 0 0 0 62.5 -108 Z" fill="url(#dSheen)"/><path d="M0 0 L-125 0 A125 125 0 0 0 -62.5 108 Z" fill="url(#dSheen)"/>' +
-    '<circle r="40" fill="#ec7461"/><circle r="40" fill="none" stroke="#17100b" stroke-width="3"/><text class="rec-text" y="-12" text-anchor="middle">CHILLHOP</text><text class="rec-text s" y="22" text-anchor="middle">SIDE A</text><circle r="3.5" fill="#150e09"/><circle cx="26" cy="0" r="3" fill="#fff" opacity=".7"/>' +
+    '<circle r="40" fill="#ec7461"/><circle r="40" fill="none" stroke="#17100b" stroke-width="3"/><text class="rec-text" y="-12" text-anchor="middle" style="font-size:8.5px;letter-spacing:.06em">NIGHT SHIFT</text><text class="rec-text s" y="22" text-anchor="middle">SIDE A</text><circle r="3.5" fill="#150e09"/><circle cx="26" cy="0" r="3" fill="#fff" opacity=".7"/>' +
     '</g><circle class="hit" r="130" fill="transparent"/></g>' +
     // tonearm
     '<g id="arm" transform="translate(' + P.x + ',' + P.y + ')"><circle r="30" fill="#2a2d31" stroke="#0d0f10" stroke-width="3"/>' +
