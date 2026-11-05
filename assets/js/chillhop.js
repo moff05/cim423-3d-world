@@ -31,7 +31,7 @@
   var header = document.querySelector('header.site-header');
   if (header) {
     var cta = document.createElement('div'); cta.className = 'hero-cta';
-    cta.innerHTML = '<a class="play" href="#play">▶ Play the session</a><span class="hint">Runs in your browser · sound on</span>';
+    cta.innerHTML = '<button type="button" class="play" data-open-demo>▶ Try it in your browser</button><span class="hint">Sound on</span>';
     var repo = header.querySelector('.repo-link');
     if (repo) repo.appendChild(cta); else header.appendChild(cta);
     var cv = document.createElement('canvas'); cv.className = 'eq'; cv.setAttribute('aria-hidden', 'true');
@@ -111,5 +111,26 @@
       });
       c.addEventListener('pointerleave', function () { c.style.transform = ''; });
     });
+  }
+
+  // browser demo lives in a pop-up: any [data-open-demo] opens it, Esc / backdrop / x closes it
+  var modal = document.getElementById('demo-modal');
+  if (modal) {
+    var fab = document.getElementById('demo-fab'), lastFocus = null;
+    document.body.appendChild(modal); if (fab) document.body.appendChild(fab);   // out of <main>'s stacking context, so nothing can draw over it
+    function openDemo() {
+      lastFocus = document.activeElement; modal.hidden = false;
+      document.documentElement.classList.add('modal-open'); if (fab) fab.hidden = true;
+      var c = document.getElementById('demo-close'); if (c) c.focus();
+    }
+    function closeDemo() {
+      modal.hidden = true; document.documentElement.classList.remove('modal-open'); if (fab) fab.hidden = false;
+      if (window.ChillhopDemo && window.ChillhopDemo.stop) window.ChillhopDemo.stop();
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    document.querySelectorAll('[data-open-demo]').forEach(function (b) { b.addEventListener('click', openDemo); });
+    document.getElementById('demo-close').addEventListener('click', closeDemo);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeDemo(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden && !lb.classList.contains('open')) closeDemo(); });
   }
 })();

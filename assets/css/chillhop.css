@@ -245,3 +245,31 @@ header.site-header > canvas.eq { position:absolute; left:50%; transform:translat
 .demo-svg .read { font-size:13px; }
 .demo-svg .pad-cap { fill:#c96f1f; }
 .demo-svg .pad:hover .pad-cap { fill:#e08a2e; }
+
+/* ---- header: descenders (g, y) are no longer clipped, and both buttons are the same size ---- */
+header.site-header h1 { line-height:1.06; padding-bottom:.16em; margin-bottom:.4rem; }
+.repo-link a, .hero-cta .play { display:inline-flex; align-items:center; justify-content:center; gap:.55rem; box-sizing:border-box; min-height:3.1rem; padding:.7rem 1.4rem; font:700 1rem/1.2 "DM Sans",sans-serif; border:1px solid var(--rule); border-radius:999px; margin:0 .75rem .5rem 0; text-decoration:none; }
+.repo-link a.btn-primary { border-color:transparent; }
+.hero-cta .play { margin:0 0 .5rem; border-color:transparent; cursor:pointer; }
+.hero-cta { margin:0 0 .5rem; }
+
+/* ---- the browser demo is a pop-up, opened by a floating button ---- */
+.demo-fab { position:fixed; right:1.3rem; bottom:1.3rem; z-index:60; display:flex; align-items:center; gap:.6rem; border:0; cursor:pointer; background:var(--amber); color:#241406; border-radius:999px; height:3.4rem; min-width:3.4rem; padding:0; box-shadow:0 10px 30px -6px rgba(0,0,0,.7), 0 0 0 0 rgba(255,179,71,.55); animation:ping 2.6s ease-out infinite; overflow:hidden; font:700 .9rem "DM Sans",sans-serif; }
+.demo-fab[hidden] { display:none; }
+.demo-fab-ic { width:3.4rem; height:3.4rem; display:grid; place-items:center; font-size:1.15rem; flex:none; }
+.demo-fab-tip { max-width:0; opacity:0; white-space:nowrap; transition:max-width .25s ease, opacity .2s ease, padding .25s ease; }
+.demo-fab:hover .demo-fab-tip, .demo-fab:focus-visible .demo-fab-tip { max-width:14rem; opacity:1; padding-right:1.2rem; }
+.demo-modal { position:fixed; inset:0; z-index:90; display:flex; align-items:center; justify-content:center; padding:1rem; background:rgba(8,5,3,.86); backdrop-filter:blur(3px); }
+.demo-modal[hidden] { display:none; }
+.demo-modal-card { position:relative; width:min(760px,100%); max-height:calc(100vh - 2rem); overflow:auto; background:#1c130c; border:1px solid var(--rule); border-radius:20px; padding:1.1rem 1.2rem 1.2rem; box-shadow:0 40px 100px -20px #000; }
+.demo-modal .demo-modal-lead { margin:0 2.2rem .8rem 0; font-size:.92rem; line-height:1.5; color:var(--muted); }
+.demo-modal .demo-modal-lead b { color:var(--text); }
+.demo-modal .demo-wrap { margin:0; }
+.demo-modal .demo { width:100%; left:0; transform:none; }
+.demo-modal .demo-note { margin:.7rem 0 0; font-size:.78rem; }
+.demo-close { position:absolute; right:.7rem; top:.6rem; width:2.2rem; height:2.2rem; border-radius:50%; border:1px solid var(--rule); background:transparent; color:var(--text); font-size:1.4rem; line-height:1; cursor:pointer; }
+.demo-close:hover { background:var(--panel); }
+html.modal-open { overflow:hidden; }
+@media (max-width:760px) { .demo-modal { padding:.5rem; } .demo-modal-card { padding:.8rem; } .demo-modal .demo-modal-lead { font-size:.82rem; } }
+@media (prefers-reduced-motion: reduce) { .demo-fab { animation:none; } }
+.hero-cta .play { animation:none; }

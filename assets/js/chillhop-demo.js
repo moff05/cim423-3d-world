@@ -360,6 +360,7 @@
     });
   });
 
+  window.ChillhopDemo = { stop: function () { if (S.step > 0) restart(); } };
   $('.go').addEventListener('click', start);
   $('.again').addEventListener('click', restart);
   var muteBtn = $('#demoMute');
