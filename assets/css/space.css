@@ -206,7 +206,7 @@
       z-index: -1;
       pointer-events: none;
       opacity: 0.5;
-      background-image: url("/assets/images/space/tile.png");
+      background-image: url("../images/space/tile.png");
       background-repeat: repeat;
       background-position: top left;
     }
@@ -235,7 +235,7 @@
 }
 @keyframes twinkle { from { background-position: 0 0; filter: brightness(.95); } to { filter: brightness(1.15); } }
 .theme-space header.site-header::after {
-  content: ""; position: absolute; right: 4%; top: 12%; width: 300px; height: 206px; background: url("/assets/images/planet.svg") no-repeat center / contain;
+  content: ""; position: absolute; right: 4%; top: 12%; width: 300px; height: 206px; background: url("../images/planet.svg") no-repeat center / contain;
   filter: drop-shadow(0 0 40px rgba(153, 58, 139, .55)); animation: float 7s ease-in-out infinite alternate;
 }
 @keyframes float { from { translate: 0 -8px; } to { translate: 0 10px; } }

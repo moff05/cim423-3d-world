@@ -6,7 +6,8 @@
   var mount = document.getElementById('demo-mount');
   if (!mount) return;
 
-  var BASE = '/assets/code/chillhop/audio/';
+  var scriptEl = document.currentScript || document.querySelector('script[src*="chillhop-demo.js"]');
+  var BASE = new URL('../code/chillhop/audio/', scriptEl ? scriptEl.src : location.href).href;   // works under any base path
   var FILES = ['drums_loop', 'keys_loop', 'vinyl_crackle_loop', 'platter_hum_loop', 'step_chime', 'complete_chime', 'pad_hit', 'button_click'];
   var LOOP_SECONDS = 12;      // drums and keys are both exactly 12 s at 80 BPM
   var BAR_SECONDS = 3;        // 4 beats at 80 BPM

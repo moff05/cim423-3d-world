@@ -31,8 +31,8 @@ scripts:
 <h2 id="watch" class="reveal">Watch the session</h2>
 
 <figure class="video-card reveal">
-<video controls preload="metadata" playsinline poster="/assets/images/chillhop/walkthrough-poster.jpg" aria-label="Night Shift Vinyl walkthrough">
-<source src="/assets/videos/chillhop-walkthrough.mp4" type="video/mp4">
+<video controls preload="metadata" playsinline poster="{{ site.baseurl }}/assets/images/chillhop/walkthrough-poster.jpg" aria-label="Night Shift Vinyl walkthrough">
+<source src="{{ site.baseurl }}/assets/videos/chillhop-walkthrough.mp4" type="video/mp4">
 </video>
 <figcaption>Walkthrough: the full session from START SESSION to SESSION MASTERED, recorded in a Quest 3 with hand tracking. That is me playing it, bottom right.</figcaption>
 </figure>
@@ -93,18 +93,18 @@ scripts:
 <p class="reveal">Stills from the real headset recording and from the Unity scene. Click an image to enlarge it, and use the arrow keys to flip through.</p>
 
 <div class="gallery reveal">
-<figure><img src="/assets/images/chillhop/01-start.jpg" alt="Headset view: the welcome panel, checklist and START SESSION button, with the next control outlined." loading="lazy" width="1600" height="900"><figcaption>Headset view: the welcome panel, checklist and START SESSION button, with the next control outlined.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/02-vinyl.jpg" alt="Step 1: pinching the record out of its crate to carry it to the platter." loading="lazy" width="1600" height="900"><figcaption>Step 1: pinching the record out of its crate to carry it to the platter.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/03-tonearm.jpg" alt="Step 2: pinching the tonearm handle and swinging the needle over the record." loading="lazy" width="1600" height="900"><figcaption>Step 2: pinching the tonearm handle and swinging the needle over the record.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/04-pad.jpg" alt="Step 3: the big orange pad, the level meter above it and the dial beside it." loading="lazy" width="1600" height="900"><figcaption>Step 3: the big orange pad, the level meter above it and the dial beside it.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/05-filter.jpg" alt="Step 4: a pinch and twist on the low-pass dial." loading="lazy" width="1600" height="900"><figcaption>Step 4: a pinch and twist on the low-pass dial.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/07-fader.jpg" alt="Step 5: sliding the flat master fader along the front edge of the board." loading="lazy" width="1600" height="900"><figcaption>Step 5: sliding the flat master fader along the front edge of the board.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/06-complete.jpg" alt="The finale: lamp dimmed, neon pulsing, SESSION MASTERED with a RESTART button." loading="lazy" width="1600" height="900"><figcaption>The finale: lamp dimmed, neon pulsing, SESSION MASTERED with a RESTART button.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/room-front.jpg" alt="The whole room from where you stand: window, curtains, pendant lamps, couch and the deck." loading="lazy" width="1600" height="900"><figcaption>The whole room from where you stand: window, curtains, pendant lamps, couch and the deck.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/room-deck.jpg" alt="The desk from above: turntable, mixer with level meter, pad, dial and fader, and the record crate." loading="lazy" width="1600" height="900"><figcaption>The desk from above: turntable, mixer with level meter, pad, dial and fader, and the record crate.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/room-couch.jpg" alt="The couch corner: a sleeping cat, string lights, a hanging pothos and framed posters." loading="lazy" width="1600" height="900"><figcaption>The couch corner: a sleeping cat, string lights, a hanging pothos and framed posters.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/room-neon.jpg" alt="The neon wall: a glowing moon, stars and music note, a record rack and a monstera." loading="lazy" width="1600" height="900"><figcaption>The neon wall: a glowing moon, stars and music note, a record rack and a monstera.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/room-door.jpg" alt="Behind the player: the door, three posters and the wainscoting, so every direction has something to look at." loading="lazy" width="1600" height="900"><figcaption>Behind the player: the door, three posters and the wainscoting, so every direction has something to look at.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/01-start.jpg" alt="Headset view: the welcome panel, checklist and START SESSION button, with the next control outlined." loading="lazy" width="1600" height="900"><figcaption>Headset view: the welcome panel, checklist and START SESSION button, with the next control outlined.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/02-vinyl.jpg" alt="Step 1: pinching the record out of its crate to carry it to the platter." loading="lazy" width="1600" height="900"><figcaption>Step 1: pinching the record out of its crate to carry it to the platter.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/03-tonearm.jpg" alt="Step 2: pinching the tonearm handle and swinging the needle over the record." loading="lazy" width="1600" height="900"><figcaption>Step 2: pinching the tonearm handle and swinging the needle over the record.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/04-pad.jpg" alt="Step 3: the big orange pad, the level meter above it and the dial beside it." loading="lazy" width="1600" height="900"><figcaption>Step 3: the big orange pad, the level meter above it and the dial beside it.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/05-filter.jpg" alt="Step 4: a pinch and twist on the low-pass dial." loading="lazy" width="1600" height="900"><figcaption>Step 4: a pinch and twist on the low-pass dial.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/07-fader.jpg" alt="Step 5: sliding the flat master fader along the front edge of the board." loading="lazy" width="1600" height="900"><figcaption>Step 5: sliding the flat master fader along the front edge of the board.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/06-complete.jpg" alt="The finale: lamp dimmed, neon pulsing, SESSION MASTERED with a RESTART button." loading="lazy" width="1600" height="900"><figcaption>The finale: lamp dimmed, neon pulsing, SESSION MASTERED with a RESTART button.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/room-front.jpg" alt="The whole room from where you stand: window, curtains, pendant lamps, couch and the deck." loading="lazy" width="1600" height="900"><figcaption>The whole room from where you stand: window, curtains, pendant lamps, couch and the deck.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/room-deck.jpg" alt="The desk from above: turntable, mixer with level meter, pad, dial and fader, and the record crate." loading="lazy" width="1600" height="900"><figcaption>The desk from above: turntable, mixer with level meter, pad, dial and fader, and the record crate.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/room-couch.jpg" alt="The couch corner: a sleeping cat, string lights, a hanging pothos and framed posters." loading="lazy" width="1600" height="900"><figcaption>The couch corner: a sleeping cat, string lights, a hanging pothos and framed posters.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/room-neon.jpg" alt="The neon wall: a glowing moon, stars and music note, a record rack and a monstera." loading="lazy" width="1600" height="900"><figcaption>The neon wall: a glowing moon, stars and music note, a record rack and a monstera.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/chillhop/room-door.jpg" alt="Behind the player: the door, three posters and the wainscoting, so every direction has something to look at." loading="lazy" width="1600" height="900"><figcaption>Behind the player: the door, three posters and the wainscoting, so every direction has something to look at.</figcaption></figure>
 </div>
 
 <h2 id="code" class="reveal">Code</h2>
@@ -242,7 +242,7 @@ void ApplyCutoff()
 <h2 id="apk" class="reveal">APK</h2>
 
 <table class="reveal">
-<tr><th>Download</th><td><a href="/assets/downloads/nightshiftvinyl.apk" download>nightshiftvinyl.apk</a> (52 MB, sideload with adb)</td></tr>
+<tr><th>Download</th><td><a href="{{ site.baseurl }}/assets/downloads/nightshiftvinyl.apk" download>nightshiftvinyl.apk</a> (52 MB, sideload with adb)</td></tr>
 <tr><th>Package name</th><td><code>com.nmoffett.nightshiftvinyl</code></td></tr>
 <tr><th>Device</th><td>Meta Quest 3 (also Quest 2 and Pro). Hand tracking must be on.</td></tr>
 </table>

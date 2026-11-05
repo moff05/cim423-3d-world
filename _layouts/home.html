@@ -6,7 +6,7 @@
 <title>VR Projects | Nicholas Moffett</title>
 <meta name="description" content="{{ site.description }}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,wght@1,800&family=Inter:wght@400;500;700;800&display=swap">
-<link rel="stylesheet" href="/assets/css/home.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/home.css">
 </head>
 <body>
 <header>
@@ -17,8 +17,8 @@
 <main class="cards">
   {% assign projs = site.projects | sort: "order" %}
   {% for p in projs %}{% assign n = forloop.index %}
-  <a class="card theme-{{ p.theme }}" href="{{ p.url }}">
-    <div class="card-art"{% if p.thumb %} style="background-image:url('{{ p.thumb }}')"{% endif %}></div>
+  <a class="card theme-{{ p.theme }}" href="{{ p.url | relative_url }}">
+    <div class="card-art"{% if p.thumb %} style="background-image:url('{{ p.thumb | relative_url }}')"{% endif %}></div>
     <div class="card-body">
       <span class="card-kicker"><b>0{{ n }}</b> {{ p.meta }}</span>
       <h2>{{ p.title }}</h2>

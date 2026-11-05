@@ -33,9 +33,9 @@ scripts:
 <p class="lead reveal"><b>Music World</b> is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. The space is never finished: it looks different after every visit, because the visitors decide who is on the wall. <a href="https://verse.mud.foundation/qx7dtAx" target="_blank" rel="noopener">Enter the space</a>.</p>
 
 <figure class="video-card reveal">
-<video controls preload="metadata" poster="/assets/images/music-world/walkthrough-poster.jpg" aria-label="Music World walkthrough, 2 minutes 43 seconds">
-<source src="/assets/videos/music-world-walkthrough.mp4" type="video/mp4">
-<track kind="captions" src="/assets/videos/music-world-walkthrough.vtt" srclang="en" label="English" default>
+<video controls preload="metadata" poster="{{ site.baseurl }}/assets/images/music-world/walkthrough-poster.jpg" aria-label="Music World walkthrough, 2 minutes 43 seconds">
+<source src="{{ site.baseurl }}/assets/videos/music-world-walkthrough.mp4" type="video/mp4">
+<track kind="captions" src="{{ site.baseurl }}/assets/videos/music-world-walkthrough.vtt" srclang="en" label="English" default>
 </video>
 <figcaption>Walkthrough (2:43, sped up 1.5x): the hub, all four rooms, liking artists and the Encore button.</figcaption>
 </figure>
@@ -99,14 +99,14 @@ scripts:
 <p class="reveal">Click any image to enlarge it.</p>
 
 <div class="gallery reveal">
-<figure><img src="/assets/images/music-world/hub.jpg" alt="The studio hub: four corridors, one per genre, and the How To Play sign." loading="lazy"><figcaption>The studio hub: four corridors, one per genre, and the How To Play sign.</figcaption></figure>
-<figure><img src="/assets/images/music-world/rock.jpg" alt="Rock room: the All-Time Four frames above the concert stage." loading="lazy"><figcaption>Rock room: the All-Time Four frames above the concert stage.</figcaption></figure>
-<figure><img src="/assets/images/music-world/hiphop.jpg" alt="Hip-Hop room: walkable DJ riser, record shop and the red Encore button." loading="lazy"><figcaption>Hip-Hop room: walkable DJ riser, record shop and the red Encore button.</figcaption></figure>
-<figure><img src="/assets/images/music-world/electronic.jpg" alt="Electronic room: checkered dance floor, lasers and arcade cabinets." loading="lazy"><figcaption>Electronic room: checkered dance floor, lasers and arcade cabinets.</figcaption></figure>
-<figure><img src="/assets/images/music-world/country.jpg" alt="Country room: the saloon, with a bar, longhorn and lounge." loading="lazy"><figcaption>Country room: the saloon, with a bar, longhorn and lounge.</figcaption></figure>
-<figure><img src="/assets/images/music-world/country-boards.jpg" alt="The live like boards: every artist in the room, ranked by votes." loading="lazy"><figcaption>The live like boards: every artist in the room, ranked by votes.</figcaption></figure>
-<figure><img src="/assets/images/music-world/like.jpg" alt="Click an artist and a toast confirms your like." loading="lazy"><figcaption>Click an artist and a toast confirms your like.</figcaption></figure>
-<figure><img src="/assets/images/music-world/encore.jpg" alt="The Encore button fires confetti for everyone in the room." loading="lazy"><figcaption>The Encore button fires confetti for everyone in the room.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/hub.jpg" alt="The studio hub: four corridors, one per genre, and the How To Play sign." loading="lazy"><figcaption>The studio hub: four corridors, one per genre, and the How To Play sign.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/rock.jpg" alt="Rock room: the All-Time Four frames above the concert stage." loading="lazy"><figcaption>Rock room: the All-Time Four frames above the concert stage.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/hiphop.jpg" alt="Hip-Hop room: walkable DJ riser, record shop and the red Encore button." loading="lazy"><figcaption>Hip-Hop room: walkable DJ riser, record shop and the red Encore button.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/electronic.jpg" alt="Electronic room: checkered dance floor, lasers and arcade cabinets." loading="lazy"><figcaption>Electronic room: checkered dance floor, lasers and arcade cabinets.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/country.jpg" alt="Country room: the saloon, with a bar, longhorn and lounge." loading="lazy"><figcaption>Country room: the saloon, with a bar, longhorn and lounge.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/country-boards.jpg" alt="The live like boards: every artist in the room, ranked by votes." loading="lazy"><figcaption>The live like boards: every artist in the room, ranked by votes.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/like.jpg" alt="Click an artist and a toast confirms your like." loading="lazy"><figcaption>Click an artist and a toast confirms your like.</figcaption></figure>
+<figure><img src="{{ site.baseurl }}/assets/images/music-world/encore.jpg" alt="The Encore button fires confetti for everyone in the room." loading="lazy"><figcaption>The Encore button fires confetti for everyone in the room.</figcaption></figure>
 </div>
 
 <h2 id="code" class="reveal">Code</h2>
