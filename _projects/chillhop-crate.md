@@ -280,7 +280,7 @@ void ApplyCutoff()
 
 </details>
 
-<button type="button" class="demo-fab" id="demo-fab" aria-label="Play the browser demo" data-open-demo><span class="demo-fab-ic">▶</span><span class="demo-fab-tip">Try it in your browser</span></button>
+<button type="button" class="demo-fab" id="demo-fab" aria-label="Play the browser demo" data-open-demo><span class="demo-fab-ic"><svg class="ico-play" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z" fill="currentColor"/></svg></span><span class="demo-fab-tip">Try it in your browser</span></button>
 
 <div class="demo-modal" id="demo-modal" hidden role="dialog" aria-modal="true" aria-label="Play Night Shift Vinyl in your browser">
 <div class="demo-modal-card">

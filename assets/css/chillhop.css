@@ -291,3 +291,6 @@ html.modal-open { overflow:hidden; }
 }
 .repo-link a:hover, .hero-cta .play:hover { opacity:1; transform:translateY(-2px); box-shadow:0 0 38px rgba(255,179,71,.55); }
 .repo-link a:active, .hero-cta .play:active { transform:translateY(0); }
+
+.ico-play { width:.8em; height:.95em; flex:none; display:inline-block; }
+.demo-fab-ic .ico-play { width:1.05rem; height:1.25rem; margin-left:.12rem; }
