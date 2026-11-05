@@ -294,3 +294,19 @@ html.modal-open { overflow:hidden; }
 
 .ico-play { width:.8em; height:.95em; flex:none; display:inline-block; }
 .demo-fab-ic .ico-play { width:1.05rem; height:1.25rem; margin-left:.12rem; }
+
+/* ---- pop-up fades and rises in, and fades out; the floating button expands as one smooth motion ---- */
+.demo-modal { animation:modalFade .55s cubic-bezier(.22,.7,.2,1) both; }
+.demo-modal .demo-modal-card { animation:cardRise .7s cubic-bezier(.22,.8,.2,1) both; }
+.demo-modal.closing { animation:modalFadeOut .26s ease both; pointer-events:none; }
+.demo-modal.closing .demo-modal-card { animation:cardSink .26s ease both; }
+@keyframes modalFade { from { opacity:0; backdrop-filter:blur(0); } to { opacity:1; } }
+@keyframes modalFadeOut { to { opacity:0; } }
+@keyframes cardRise { from { opacity:0; transform:translateY(22px) scale(.965); } to { opacity:1; transform:none; } }
+@keyframes cardSink { to { opacity:0; transform:translateY(10px) scale(.985); } }
+
+.demo-fab { width:3.4rem; transition:width .5s cubic-bezier(.22,.8,.2,1); will-change:width; }
+.demo-fab:hover, .demo-fab:focus-visible { width:15.2rem; }
+.demo-fab-tip { max-width:none; padding:0 1.3rem 0 .1rem; opacity:0; transform:translateX(-6px); transition:opacity .3s ease, transform .5s cubic-bezier(.22,.8,.2,1); transition-delay:0s; }
+.demo-fab:hover .demo-fab-tip, .demo-fab:focus-visible .demo-fab-tip { max-width:none; padding:0 1.3rem 0 .1rem; opacity:1; transform:none; transition-delay:.12s; }
+@media (prefers-reduced-motion: reduce) { .demo-modal, .demo-modal .demo-modal-card, .demo-modal.closing, .demo-modal.closing .demo-modal-card { animation:none; } .demo-fab, .demo-fab-tip { transition:none; } }

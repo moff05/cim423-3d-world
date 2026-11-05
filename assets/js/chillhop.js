@@ -119,14 +119,18 @@
     var fab = document.getElementById('demo-fab'), lastFocus = null;
     document.body.appendChild(modal); if (fab) document.body.appendChild(fab);   // out of <main>'s stacking context, so nothing can draw over it
     function openDemo() {
-      lastFocus = document.activeElement; modal.hidden = false;
+      lastFocus = document.activeElement; modal.classList.remove('closing'); modal.hidden = false;
       document.documentElement.classList.add('modal-open'); if (fab) fab.hidden = true;
       var c = document.getElementById('demo-close'); if (c) c.focus();
     }
     function closeDemo() {
-      modal.hidden = true; document.documentElement.classList.remove('modal-open'); if (fab) fab.hidden = false;
+      modal.classList.add('closing'); document.documentElement.classList.remove('modal-open');
       if (window.ChillhopDemo && window.ChillhopDemo.stop) window.ChillhopDemo.stop();
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      setTimeout(function () {
+        if (!modal.classList.contains('closing')) return;       // reopened during the fade
+        modal.hidden = true; modal.classList.remove('closing'); if (fab) fab.hidden = false;
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }, 260);
     }
     document.querySelectorAll('[data-open-demo]').forEach(function (b) { b.addEventListener('click', openDemo); });
     document.getElementById('demo-close').addEventListener('click', closeDemo);
