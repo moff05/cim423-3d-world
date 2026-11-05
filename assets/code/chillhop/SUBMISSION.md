@@ -22,22 +22,17 @@ Night Shift Vinyl is a stationary VR task simulation for Meta Quest, controlled 
 ## Highlighted Interesting Interactions
 **Tonearm drop.** The tonearm is a true hinge. While the player pinches the handle, the script measures the angle of the pinch point around the pivot every frame and rotates the arm to match, clamped between the rest position and the groove. When the needle is over the groove (within 5 degrees) it settles into contact, vinyl crackle fades in and the drum loop follows. Let go early and the arm glides back to rest. With no controller there is no trigger to pull: the position of the hand is the whole control, which is what makes it feel physical.
 
-**Filter dial.** The player pinches the dial and moves the hand around it. The script adds the change in angle each frame (not the absolute hand angle), so a lost tracking frame never makes the knob jump. 0 to 90 degrees maps to 800 Hz to 20,000 Hz on an exponential curve so the whole sweep is audible, and the AudioLowPassFilter on the listener opens the full mix.
+**Filter dial.** The player pinches the dial and either rolls the wrist or circles the hand around it, in either direction. The script adds the change in angle each frame (not the absolute hand angle), using whichever of the two moved more, so a lost tracking frame never makes the knob jump. 0 to 90 degrees maps to 800 Hz to 20,000 Hz on an exponential curve so the whole sweep is audible, and the AudioLowPassFilter on the listener opens the full mix.
 
 **Poke pad.** A kinematic fingertip trigger on each index finger pushes the pad cap down in proportion to how far the fingertip has travelled. The press only fires past 80 percent of travel, so brushing it does nothing. It flashes amber, and the piano loop is scheduled on the audio clock to enter exactly when the drum loop wraps.
 
-**Forgiving but ordered.** Handles have oversized colliders for noisy optical tracking, and a state machine only accepts the current step, so no control works early.
+**Forgiving but ordered.** Handles have oversized colliders for noisy optical tracking, and a state machine only accepts the current step, so no control works early. The held record cannot sink through the desk, deck, mixer or crate, settles flat when released, and glides back to the crate if released away from the desk, so it can never be lost. The next control to use gets a pulsing outline.
 
 ## Screenshots
-1. [Intro panel and START SESSION]
-2. [Vinyl on the spinning platter]
-3. [Tonearm over the groove]
-4. [MPC pad flashing amber]
-5. [Filter dial and master fader]
-6. [SESSION MASTERED slate]
+Real headset stills are in the gallery on the blog page: intro panel, record pinch, tonearm, pad, dial, fader and the SESSION MASTERED slate.
 
 ## Video Walkthrough
-[PASTE VIDEO LINK OR FILE NAME]
+https://cim423-3d-world.vercel.app/assets/videos/chillhop-walkthrough.mp4 (also embedded on the blog page)
 
 ## APK Build Instructions for Meta Quest
 1. File > Build Profiles: switch to Android. Scripting Backend IL2CPP, Target Architecture ARM64, Minimum API Level 32, Texture Compression ASTC.
@@ -47,4 +42,4 @@ Night Shift Vinyl is a stationary VR task simulation for Meta Quest, controlled 
 5. Build the APK, then: `adb install -r nightshiftvinyl.apk`
 6. Launch from Library > Unknown Sources, or `adb shell monkey -p com.nmoffett.nightshiftvinyl -c android.intent.category.LAUNCHER 1`.
 7. Put the controllers down; the Quest switches to hand tracking.
-APK file: [PASTE FILE NAME / LINK]
+APK file: https://cim423-3d-world.vercel.app/assets/downloads/nightshiftvinyl.apk

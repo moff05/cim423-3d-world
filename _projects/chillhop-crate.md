@@ -5,7 +5,7 @@ order: 3
 title: Night Shift Vinyl
 slug_label: Project 3
 eyebrow: Unity · Meta Quest · CIM 423 · University of Miami
-thumb: /assets/images/chillhop/01-start.jpg
+thumb: /assets/images/chillhop/room-front.jpg
 tagline: A lo-fi vinyl lounge you run with nothing but your bare hands.
 meta: Unity · Hand Tracking
 font_url: https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,wght@1,800&display=swap
@@ -30,7 +30,7 @@ scripts:
 
 <h2 id="play" class="reveal">Play the session</h2>
 
-<p class="lead reveal">This is the real flow from the headset, rebuilt for the browser so you can try it right now. Same five steps, same order, same audio files as the Quest build. Drag with a mouse or finger where the sim uses a pinch, and tap the pads where it uses a poke.</p>
+<p class="lead reveal">This is the real flow from the headset, rebuilt for the browser so you can try it right now. Same five steps, same order, same audio files as the Quest build. Drag with a mouse or finger where the sim uses a pinch, and tap the pad where it uses a poke.</p>
 
 <div class="demo-wrap" id="demo-mount"><noscript><p>The playable desk needs JavaScript. The screenshots and code below show the same session.</p></noscript></div>
 <p class="demo-note">Headphones help. On a phone, turn it sideways for a bigger desk. The browser version is a demo of the design; the graded build is the Quest app below.</p>
@@ -50,7 +50,7 @@ scripts:
 
 <h2 id="session" class="reveal">The Session</h2>
 
-<p class="reveal">A floating wooden panel above the desk welcomes you and lists the five steps. Poke the <b>START SESSION</b> button and the checklist comes alive: the step you are on glows amber, finished steps tick off in green.</p>
+<p class="reveal">A floating wooden panel above the desk welcomes you and lists the five steps. Poke the <b>START SESSION</b> button and the checklist comes alive: the step you are on glows amber with a one-line how-to underneath, and finished steps tick off in green. The control you need next also gets a soft pulsing outline, so you never have to guess what to touch. <b>Poke</b> means press with one fingertip; <b>pinch</b> means thumb and index finger together.</p>
 
 <div class="hud reveal"><small>Checklist panel</small>
 <b>[X]</b> 1. Load Vinyl Platter<br>
@@ -62,13 +62,13 @@ scripts:
 <ol class="tracks reveal">
   <li><h3>Load Vinyl Platter</h3><span class="gesture">Pinch · Place</span><p>Pinch the record out of its sleeve and set it on the platter. A trigger zone waits for you to let go, then glides the disc onto the spindle. The platter spins up smoothly and a quiet motor hum starts.</p></li>
   <li><h3>Drop the Stylus Needle</h3><span class="gesture">Pinch · Swing</span><p>Pinch the tonearm handle and swing the arm over the spinning record. When the needle is over the groove it drops into contact: surface crackle fades in, then a muted lo-fi drum beat follows.</p></li>
-  <li><h3>Trigger Beat Sample Pad</h3><span class="gesture">Poke · Tap</span><p>Tap the glowing silicone pad with your index finger. It depresses under your fingertip, flashes neon amber, and a warm electric piano loop enters on the next bar, locked to the drums.</p></li>
-  <li><h3>Open Low-Pass Filter</h3><span class="gesture">Pinch · Twist</span><p>The mix starts muffled at 800 Hz. Turn the chunky analog dial a quarter turn clockwise and the cutoff sweeps up to 20,000 Hz, opening the mix to full fidelity.</p></li>
-  <li><h3>Push Master Output Fader</h3><span class="gesture">Pinch · Push</span><p>Push the vertical fader from the bottom (30 percent volume) to the top (100 percent). The master level swells with your hand.</p></li>
+  <li><h3>Trigger Beat Sample Pad</h3><span class="gesture">Poke · Tap</span><p>Tap the big orange silicone pad with your index finger. It depresses under your fingertip, flashes neon amber, and a warm electric piano loop enters on the next bar, locked to the drums.</p></li>
+  <li><h3>Open Low-Pass Filter</h3><span class="gesture">Pinch · Twist</span><p>The mix starts muffled at 800 Hz. Pinch the chunky analog dial and turn it a quarter turn, either way, and the cutoff sweeps up to 20,000 Hz, opening the mix to full fidelity.</p></li>
+  <li><h3>Push Master Output Fader</h3><span class="gesture">Pinch · Push</span><p>Pinch the flat fader on the front edge of the board and slide it from the left (30 percent volume) to the right (100 percent), like a real DJ mixer. The master level swells with your hand.</p></li>
 </ol>
 
 <h3 class="reveal">The finale</h3>
-<p class="reveal">When the last step lands, the warm golden desk lamp dims and colored neon accents begin to pulse slowly with the beat. A slate drops in from above reading <b>SESSION MASTERED - 100% GROOVE</b>, shows your session time, and offers a <b>RESTART SESSION</b> poke button that puts the whole room back exactly as it was.</p>
+<p class="reveal">When the last step lands, the warm golden desk lamp dims and colored neon accents begin to pulse slowly with the beat. A slate drops in from above reading <b>SESSION MASTERED - 100% GROOVE</b>, shows your session time, and offers a <b>RESTART SESSION</b> poke button that puts the whole room back exactly as it was. An <b>EXIT GAME</b> poke button sits under the checklist the whole time, so a hands-only player can always leave.</p>
 
 <h2 id="hands" class="reveal">Hand Tracking</h2>
 
@@ -76,42 +76,44 @@ scripts:
 
 <div class="act-grid">
   <div class="act reveal"><span class="ic">Tonearm</span><h3>A hinge, not a handle</h3><p>The arm is a real hinge. The script measures the angle of your pinch point around the pivot, frame by frame, so the arm follows your hand like it is on a bearing. Let go early and it glides back to rest. Get the needle over the groove and it settles into the groove and the crackle swells. No button, no trigger: the position of your hand is the whole control.</p></div>
-  <div class="act reveal"><span class="ic">Filter dial</span><h3>Turn it by orbiting</h3><p>You do not twist your wrist like with a controller. You pinch the dial and move your hand around it, and the knob follows the angle. Because it tracks the change in angle, a lost tracking frame never makes it jump. The sweep is exponential, so the first turn is as audible as the last.</p></div>
-  <div class="act reveal"><span class="ic">Drum pad</span><h3>Depress and flash</h3><p>The pad cap travels with your fingertip and only fires once it passes 80 percent of its travel, so brushing it does nothing. Once it fires it flashes amber, and it springs back when you lift your finger.</p></div>
-  <div class="act reveal"><span class="ic">Ordering</span><h3>Forgiving but in order</h3><p>Controls are generous to pinch (big invisible colliders) but only count at the right moment. Touch the filter before the record is playing and it politely does nothing.</p></div>
+  <div class="act reveal"><span class="ic">Filter dial</span><h3>Twist it or orbit it</h3><p>Pinch the dial and either roll your wrist or circle your hand around it. The script measures both, uses whichever moved more, and counts a turn in either direction, with a little gain so a short twist is enough. Because it tracks the change in angle, a lost tracking frame never makes it jump. The sweep is exponential, so the first turn is as audible as the last.</p></div>
+  <div class="act reveal"><span class="ic">Drum pad</span><h3>Depress and flash</h3><p>The pad cap travels with your fingertip and only fires once it passes 80 percent of its travel, so brushing it does nothing. Once it fires it flashes amber, and it springs back when you lift your finger. Poking is a different gesture from pinching on purpose, so the two never get confused.</p></div>
+  <div class="act reveal"><span class="ic">The record</span><h3>It can never get lost</h3><p>The record follows your hand but cannot sink through the desk, the deck, the mixer or the crate, and when you let go it settles flat on the surface below. Let go anywhere that is not over the desk and it glides back to the crate. Controls are also generous to pinch (big invisible colliders) but only count at the right moment, so touching the filter early politely does nothing.</p></div>
 </div>
 
-<div class="callout reveal"><b>No haptics, so the world answers back</b>Hands cannot rumble, so feedback is built into sound and light: a chime on every step, the pad flash, the platter hum, the crackle fading in. On controllers the same events also send a haptic pulse.</div>
+<div class="callout reveal"><b>No haptics, so the world answers back</b>Hands cannot rumble, so feedback is built into sound and light: a chime on every step, the pad flash, the platter hum, the crackle fading in, a pulsing outline on the next control. On controllers the same events also send a haptic pulse.</div>
+
+<div class="callout reveal"><b>Tuned on a real headset</b>Playtesting on a Quest 3 changed several things: the sample rig only counted a pinch at a perfect 1.0 strength, which optical tracking almost never reports, so a pinch now registers at 80 percent. The player is scaled up 25 percent so the whole desk is within arm's reach, and the headset's high-frequency hand tracking is requested in the manifest.</div>
 
 <h2 id="media" class="reveal">Media</h2>
 
 <figure class="video-card reveal">
-<div class="todo"><b>Video walkthrough placeholder</b><span>Drop the file at /assets/videos/chillhop-walkthrough.mp4, then replace this box with the video tag in the HTML comment below.</span></div>
-<!--
-<video controls preload="metadata" poster="/assets/images/chillhop/walkthrough-poster.jpg" aria-label="Night Shift Vinyl walkthrough">
+<video controls preload="metadata" playsinline poster="/assets/images/chillhop/walkthrough-poster.jpg" aria-label="Night Shift Vinyl walkthrough">
 <source src="/assets/videos/chillhop-walkthrough.mp4" type="video/mp4">
 </video>
--->
-<figcaption>Walkthrough: the full session from START SESSION to RESTART SESSION, recorded on a Quest 3 with hand tracking.</figcaption>
+<figcaption>Walkthrough: the full session from START SESSION to SESSION MASTERED, recorded in a Quest 3 with hand tracking. That is me playing it, bottom right.</figcaption>
 </figure>
 
-<p class="reveal">Rendered from the actual Unity scene with a scripted test hand. Click an image to enlarge it, and use the arrow keys to flip through.</p>
+<p class="reveal">Stills from the real headset recording and from the Unity scene. Click an image to enlarge it, and use the arrow keys to flip through.</p>
 
 <div class="gallery reveal">
-<figure><img src="/assets/images/chillhop/01-start.jpg" alt="The welcome panel, checklist and START SESSION poke button, seen from where the player stands." loading="lazy" width="1600" height="900"><figcaption>The welcome panel, checklist and START SESSION poke button, seen from where the player stands.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/02-vinyl.jpg" alt="Step 1: the record seated on the spinning platter." loading="lazy" width="1600" height="900"><figcaption>Step 1: the record seated on the spinning platter.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/03-tonearm.jpg" alt="Step 2: the tonearm swung over the record, needle in the groove." loading="lazy" width="1600" height="900"><figcaption>Step 2: the tonearm swung over the record, needle in the groove.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/04-pad.jpg" alt="Step 3: a fingertip pressing the glowing sample pad." loading="lazy" width="1600" height="900"><figcaption>Step 3: a fingertip pressing the glowing sample pad.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/05-filter.jpg" alt="Steps 4 and 5: the filter dial and the master fader." loading="lazy" width="1600" height="900"><figcaption>Steps 4 and 5: the filter dial and the master fader.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/06-complete.jpg" alt="The finale: dimmed lamp, neon accents, the night-city window and the SESSION MASTERED slate with a RESTART button." loading="lazy" width="1600" height="900"><figcaption>The finale: dimmed lamp, neon accents, the night-city window and the SESSION MASTERED slate with a RESTART button.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/01-start.jpg" alt="Headset view: the welcome panel, checklist and START SESSION button, with the next control outlined." loading="lazy" width="1600" height="900"><figcaption>Headset view: the welcome panel, checklist and START SESSION button, with the next control outlined.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/02-vinyl.jpg" alt="Step 1: pinching the record out of its crate to carry it to the platter." loading="lazy" width="1600" height="900"><figcaption>Step 1: pinching the record out of its crate to carry it to the platter.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/03-tonearm.jpg" alt="Step 2: pinching the tonearm handle and swinging the needle over the record." loading="lazy" width="1600" height="900"><figcaption>Step 2: pinching the tonearm handle and swinging the needle over the record.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/04-pad.jpg" alt="Step 3: the big orange pad, the level meter above it and the dial beside it." loading="lazy" width="1600" height="900"><figcaption>Step 3: the big orange pad, the level meter above it and the dial beside it.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/05-filter.jpg" alt="Step 4: a pinch and twist on the low-pass dial." loading="lazy" width="1600" height="900"><figcaption>Step 4: a pinch and twist on the low-pass dial.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/07-fader.jpg" alt="Step 5: sliding the flat master fader along the front edge of the board." loading="lazy" width="1600" height="900"><figcaption>Step 5: sliding the flat master fader along the front edge of the board.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/06-complete.jpg" alt="The finale: lamp dimmed, neon pulsing, SESSION MASTERED with a RESTART button." loading="lazy" width="1600" height="900"><figcaption>The finale: lamp dimmed, neon pulsing, SESSION MASTERED with a RESTART button.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/room-front.jpg" alt="The whole room from where you stand: window, curtains, pendant lamps, couch and the deck." loading="lazy" width="1600" height="900"><figcaption>The whole room from where you stand: window, curtains, pendant lamps, couch and the deck.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/room-deck.jpg" alt="The desk from above: turntable, mixer with level meter, pad, dial and fader, and the record crate." loading="lazy" width="1600" height="900"><figcaption>The desk from above: turntable, mixer with level meter, pad, dial and fader, and the record crate.</figcaption></figure>
 <figure><img src="/assets/images/chillhop/room-couch.jpg" alt="The couch corner: a sleeping cat, string lights, a hanging pothos and framed posters." loading="lazy" width="1600" height="900"><figcaption>The couch corner: a sleeping cat, string lights, a hanging pothos and framed posters.</figcaption></figure>
-<figure><img src="/assets/images/chillhop/room-neon.jpg" alt="The neon wall: a glowing moon, stars and music note beside the window, a record rack and a monstera." loading="lazy" width="1600" height="900"><figcaption>The neon wall: a glowing moon, stars and music note beside the window, a record rack and a monstera.</figcaption></figure>
+<figure><img src="/assets/images/chillhop/room-neon.jpg" alt="The neon wall: a glowing moon, stars and music note, a record rack and a monstera." loading="lazy" width="1600" height="900"><figcaption>The neon wall: a glowing moon, stars and music note, a record rack and a monstera.</figcaption></figure>
 <figure><img src="/assets/images/chillhop/room-door.jpg" alt="Behind the player: the door, three posters and the wainscoting, so every direction has something to look at." loading="lazy" width="1600" height="900"><figcaption>Behind the player: the door, three posters and the wainscoting, so every direction has something to look at.</figcaption></figure>
 </div>
 
 <h2 id="code" class="reveal">Code</h2>
 
-<p class="reveal">Ten small C# scripts drive everything. The central one is a state machine that only accepts steps in order, so no interaction can be done early. These three pieces show the hand-tracking ideas. I compiled the scripts against XR Interaction Toolkit 3.6 in Unity 6 and ran them in Play mode with automated checks for the step order, snap zone, poke button, knob, fader and tonearm.</p>
+<p class="reveal">About twenty small C# scripts drive everything (the room's lights, speakers and plants are scripts too). The central one is a state machine that only accepts steps in order, so no interaction can be done early. These three pieces show the hand-tracking ideas. I compiled the scripts against XR Interaction Toolkit 3.6 in Unity 6 and ran them in Play mode with 27 automated checks for the step order, snap zone, poke button, knob, fader, tonearm and reset, all passing, then tuned the feel on a real Quest 3.</p>
 
 <table class="reveal">
 <tr><th>Link to code</th><td><a href="https://github.com/moff05/cim423-3d-world/tree/main/assets/code/chillhop" target="_blank" rel="noopener">github.com/moff05/cim423-3d-world / assets / code / chillhop</a></td></tr>
@@ -119,27 +121,23 @@ scripts:
 <tr><th>Unity project repo</th><td><span class="todo-inline">[PASTE LINK TO YOUR CHILLHOP UNITY PROJECT REPO]</span></td></tr>
 </table>
 
-<div class="snip reveal"><h3>1. The filter dial follows your hand's angle</h3><p>Each frame it measures how far your pinch point has orbited the dial since the last frame and adds that to the knob. A missed frame costs nothing, because it only ever applies the change.</p><pre><code>void UpdateRotary()
+<div class="snip reveal"><h3>1. The filter dial follows your hand</h3><p>Each frame it measures how far your pinch point has orbited the dial, and how far your wrist has rolled, since the last frame, and adds whichever moved more. A missed frame costs nothing, because it only ever applies the change.</p><pre><code>void UpdateRotary()
 {
-    Vector3 axisWorld = AxisWorld;
-    if (!VRDragMath.TryPlanarDirection(attach.position, movingPart.position, axisWorld, out Vector3 dir))
-    {
-        hasPrevDir = false;
-        return;
-    }
-    if (!hasPrevDir)
-    {
-        prevDir = dir;
-        hasPrevDir = true;
-        return;
-    }
-
-    float sign = invertRotation ? -1f : 1f;
-    float delta = Vector3.SignedAngle(prevDir, dir, axisWorld) * sign;
+    float orbit = Vector3.SignedAngle(prevDir, dir, axisWorld);        // hand circling the dial
     prevDir = dir;
 
-    float angle = Mathf.Clamp(Value * rotaryRange + delta, 0f, rotaryRange);
-    SetValueInternal(rotaryRange &gt; 0f ? angle / rotaryRange : 0f, true);
+    // wrist twist: how much the pinching hand itself rolled about the dial axis
+    float twist = 0f;
+    if (VRDragMath.TryPlanarDirection(attach.position + attach.right, attach.position, axisWorld, out Vector3 tw))
+    {
+        if (hasPrevTwist) twist = Vector3.SignedAngle(prevTwist, tw, axisWorld);
+        prevTwist = tw;
+        hasPrevTwist = true;
+    }
+
+    float delta = (Mathf.Abs(twist) &gt; Mathf.Abs(orbit) ? twist : orbit) * rotarySensitivity;
+    turn = Mathf.Clamp(turn + delta, bothDirections ? -rotaryRange : 0f, rotaryRange);
+    SetValueInternal(Mathf.Abs(turn) / rotaryRange, true);
 }</code></pre></div>
 
 <div class="snip reveal"><h3>2. The record lands on the platter</h3><p>The zone waits until you let go, switches off the grab, freezes the physics, then glides the disc onto the snap point and advances the checklist.</p><pre><code>IEnumerator SnapRoutine(Rigidbody rb, XRGrabInteractable grab)
@@ -221,19 +219,22 @@ void ApplyCutoff()
 
 <details class="reveal"><summary>Player rig: hands, poke and direct interaction</summary>
 <ul>
-<li>Use the XRI sample rig <b>XR Origin Hands (XR Rig)</b>. Delete locomotion and teleport so the scene stays stationary.</li>
+<li>Use the XRI sample rig <b>XR Origin Hands (XR Rig)</b>. Delete locomotion and teleport so the scene stays stationary. Also import the XR Hands package sample <b>HandVisualizer</b>: the rig's hand models need its script.</li>
+<li>Add an <b>Input Action Manager</b> to the scene and give it the <i>XRI Default Input Actions</i> asset. Without it nothing enables the pinch action, and the hands see objects but cannot grab them.</li>
+<li>The rig's pinch reader asks for a perfect 1.0 strength. Set each <code>ReleaseThresholdButtonReader</code> to press 0.8 and release 0.6 so ordinary optical pinches register.</li>
 <li>Keep each hand's <b>Near-Far Interactor</b> (pinch, near and far) and <b>Poke Interactor</b>. In XRI 2.x the near interactor is the XR Direct Interactor.</li>
 <li>Under each Poke Interactor's attach point, add a small child with <code>VRFingertip</code> (trigger sphere, kinematic Rigidbody, radius 8 mm). The drum pad and the START and RESTART buttons feel this.</li>
 <li>On the camera, keep the Audio Listener and add an <b>Audio Low Pass Filter</b>.</li>
 </ul></details>
 
-<details class="reveal"><summary>Physics so the record survives optical tracking</summary>
+<details class="reveal"><summary>Keeping the record from glitching under optical tracking</summary>
 <ul>
-<li>Vinyl Rigidbody: mass 0.2, damping 1 and 2, <b>Interpolate</b> on, <b>Continuous Dynamic</b> collision.</li>
-<li>Collider: a box about 1.2 cm thick, thicker than the visible disc, so it cannot tunnel through the desk. Desk and floor use thick box colliders.</li>
-<li>XR Grab Interactable: <b>Kinematic</b> movement with smoothing on, throw off, dynamic attach on. This filters out hand jitter before it reaches physics.</li>
-<li>A tiny <code>RespawnIfFallen</code> script returns the record if tracking drops mid-grab.</li>
-<li>Tonearm, knob and fader handles: Simple Interactable, kinematic Rigidbody, generous 2 to 3 cm colliders.</li>
+<li>Vinyl Rigidbody: <b>Kinematic</b>, no gravity. The record never falls, bounces or gets thrown, so it cannot tunnel through anything.</li>
+<li><code>HeldSurfaceClamp</code> holds a short list of surface rectangles (desk, deck, mixer, crate floor, each with a minimum height). While held, the record cannot go below the surface under it; on release it settles onto that surface and lies flat; released away from the desk it glides back to the crate.</li>
+<li>Collider: a thin box for the disc plus a thicker pinch zone above it, so a pinch near the record counts.</li>
+<li>XR Grab Interactable: <b>Kinematic</b> movement with smoothing on and throw off. This filters out hand jitter.</li>
+<li>Tonearm, knob and fader handles: Simple Interactable, kinematic Rigidbody, generous 7 to 8 cm colliders.</li>
+<li>Build settings: add an <code>Assets/link.xml</code> that preserves the XR Hands and XR Interaction Toolkit assemblies, and keep managed stripping at Minimal. Without it IL2CPP strips the hand-tracking components that only appear inside prefabs, and the hands never move on the headset.</li>
 </ul></details>
 
 <details class="reveal"><summary>Hierarchy for audio and UI</summary>
@@ -246,7 +247,7 @@ void ApplyCutoff()
 <h2 id="apk" class="reveal">APK</h2>
 
 <table class="reveal">
-<tr><th>Download</th><td><span class="todo-inline">[PASTE APK LINK / FILE NAME]</span></td></tr>
+<tr><th>Download</th><td><a href="/assets/downloads/nightshiftvinyl.apk" download>nightshiftvinyl.apk</a> (52 MB, sideload with adb)</td></tr>
 <tr><th>Package name</th><td><code>com.nmoffett.nightshiftvinyl</code></td></tr>
 <tr><th>Device</th><td>Meta Quest 3 (also Quest 2 and Pro). Hand tracking must be on.</td></tr>
 </table>
@@ -258,8 +259,8 @@ void ApplyCutoff()
 <li>Player Settings: set the Package Name to <code>com.nmoffett.nightshiftvinyl</code>.</li>
 <li>On the headset: turn on Developer Mode in the Meta Horizon phone app, plug in over USB and accept "Allow USB debugging". Also turn on <b>Settings > Movement tracking > Hand tracking</b>.</li>
 <li>Build the APK, then install it: <code>adb install -r nightshiftvinyl.apk</code>.</li>
-<li>Launch it from the headset under <b>Library > Unknown Sources</b>, or run <code>adb shell monkey -p com.nmoffett.nightshiftvinyl -c android.intent.category.LAUNCHER 1</code>.</li>
-<li>Put the controllers down. The Quest switches to hand tracking when it sees your hands.</li>
+<li>Launch it from the headset under <b>Library > Unknown Sources</b> (use the filter at the top right of the Library), or run <code>adb shell monkey -p com.nmoffett.nightshiftvinyl -c android.intent.category.LAUNCHER 1</code>.</li>
+<li>Put the controllers down. The Quest switches to hand tracking when it sees your hands. Poke <b>EXIT GAME</b> under the checklist to leave.</li>
 </ol></details>
 
 <h2 id="credits" class="reveal">Credits</h2>
@@ -276,8 +277,9 @@ void ApplyCutoff()
 <p>Third-party software I built on, not assets I downloaded:</p>
 <ul>
 <li>Unity 6 with the Universal Render Pipeline, TextMeshPro, OpenXR and Meta Quest support (Unity Technologies).</li>
-<li>XR Interaction Toolkit and XR Hands packages, plus the toolkit's <i>Hands Interaction Demo</i> sample rig for the hand visuals (Unity Technologies, Unity Companion License).</li>
+<li>XR Interaction Toolkit and XR Hands packages, plus the toolkit's <i>Hands Interaction Demo</i> sample rig and the XR Hands <i>HandVisualizer</i> sample for the hand models (Unity Technologies, Unity Companion License).</li>
 <li>Blender (Blender Foundation, GPL), used only to author the models.</li>
+<li>Walkthrough video: recorded with the Quest's built-in capture, with my phone footage cut out using Apple's Vision person segmentation and combined with ffmpeg.</li>
 <li>Web fonts on this page: DM Sans, DM Mono and Fraunces from Google Fonts (SIL Open Font License).</li>
 </ul>
 

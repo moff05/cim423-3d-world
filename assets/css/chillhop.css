@@ -236,3 +236,12 @@ header.site-header > canvas.eq { position:absolute; left:50%; transform:translat
 
 .demo-steps li { padding:.3rem .7rem .3rem .35rem; font-size:.82rem; white-space:nowrap; }
 .demo-hud { margin-top:.7rem; }
+
+/* ---- browser mixer mirrors the headset board ---- */
+.demo-svg .vu { fill:#14241b; }
+.demo-svg .pad.glow .pad-base { stroke:#ffb347; stroke-width:3; }
+.demo[data-step="5"] #fader > rect:first-child { stroke:#ffb347; }
+.demo-svg #fader { cursor:grab; }
+.demo-svg .read { font-size:13px; }
+.demo-svg .pad-cap { fill:#c96f1f; }
+.demo-svg .pad:hover .pad-cap { fill:#e08a2e; }
