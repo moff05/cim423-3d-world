@@ -273,3 +273,13 @@ html.modal-open { overflow:hidden; }
 @media (max-width:760px) { .demo-modal { padding:.5rem; } .demo-modal-card { padding:.8rem; } .demo-modal .demo-modal-lead { font-size:.82rem; } }
 @media (prefers-reduced-motion: reduce) { .demo-fab { animation:none; } }
 .hero-cta .play { animation:none; }
+
+/* ---- header buttons: one row, same height, same baseline; floating button is a true circle ---- */
+.repo-link { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin-top:1.6rem; }
+.repo-link a, .hero-cta .play { margin:0; }
+.hero-cta { display:contents; }
+.demo-fab { gap:0; width:3.4rem; transition:width .25s ease; }
+.demo-fab:hover, .demo-fab:focus-visible { width:15.5rem; }
+.demo-fab-ic { padding-left:.14rem; }
+.demo-fab-tip { padding:0; }
+.demo-fab:hover .demo-fab-tip, .demo-fab:focus-visible .demo-fab-tip { padding-right:0; }

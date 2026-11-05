@@ -31,7 +31,7 @@
   var header = document.querySelector('header.site-header');
   if (header) {
     var cta = document.createElement('div'); cta.className = 'hero-cta';
-    cta.innerHTML = '<button type="button" class="play" data-open-demo>▶ Try it in your browser</button><span class="hint">Sound on</span>';
+    cta.innerHTML = '<button type="button" class="play" data-open-demo>▶ Try it in your browser</button>';
     var repo = header.querySelector('.repo-link');
     if (repo) repo.appendChild(cta); else header.appendChild(cta);
     var cv = document.createElement('canvas'); cv.className = 'eq'; cv.setAttribute('aria-hidden', 'true');
