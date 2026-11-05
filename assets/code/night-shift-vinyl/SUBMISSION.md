@@ -7,10 +7,10 @@ Night Shift Vinyl: Lo-Fi Vinyl Lounge
 Night Shift Vinyl is a stationary VR task simulation for Meta Quest, controlled entirely with optical hand tracking (no controllers). The player stands or sits behind a warm, mood-lit vinyl DJ desk and builds a lo-fi track through five tactile steps: load a record onto the platter, drop the tonearm needle, tap an MPC drum pad, turn an analog low-pass filter dial, and push the master output fader. A floating World-Space panel introduces the task and shows a live checklist, a START SESSION poke button begins the session, and a final "SESSION MASTERED - 100% GROOVE" slate shows the completion time with a RESTART SESSION poke button. Built in Unity 6 with the XR Interaction Toolkit, OpenXR and XR Hands.
 
 ## Link to Code and AI-Generated Chats
-- Code: https://github.com/moff05/cim423-3d-world/tree/main/assets/code/chillhop
+- Code: https://github.com/moff05/cim423-3d-world/tree/main/assets/code/night-shift-vinyl
 - Unity project repo: [PASTE LINK]
 - AI chats (Claude): [PASTE SHARE LINK(S)]
-- Blog write-up: https://cim423-3d-world.vercel.app/chillhop-crate/
+- Blog write-up: https://cim423-3d-world.vercel.app/night-shift-vinyl/
 
 ## Rubric Checklist
 - Introduction and task briefing: welcome panel plus checklist, START SESSION poke button

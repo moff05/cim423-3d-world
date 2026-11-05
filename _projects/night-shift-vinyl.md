@@ -11,7 +11,7 @@ meta: Unity · Hand Tracking
 font_url: https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,wght@1,800&display=swap
 links:
   - label: Code on GitHub
-    url: https://github.com/moff05/cim423-3d-world/tree/main/assets/code/chillhop
+    url: https://github.com/moff05/cim423-3d-world/tree/main/assets/code/night-shift-vinyl
     primary: true
 sections:
   - {id: watch, label: Watch}
@@ -76,8 +76,8 @@ scripts:
 <h2 id="code" class="reveal">Code</h2>
 
 <table class="reveal">
-<tr><th>Link to code</th><td><a href="https://github.com/moff05/cim423-3d-world/tree/main/assets/code/chillhop" target="_blank" rel="noopener">github.com/moff05/cim423-3d-world / assets / code / chillhop</a></td></tr>
-<tr><th>Built with</th><td>Claude Code (Anthropic) wrote the C# scripts, Blender models, textures and audio from my direction. A state machine accepts the five steps only in order, and the room is rebuilt from code by <code>ChillhopBuilder</code>. The <a href="https://github.com/moff05/cim423-3d-world/blob/main/assets/code/chillhop/SETUP.md" target="_blank" rel="noopener">setup guide</a> is in the repo.</td></tr>
+<tr><th>Link to code</th><td><a href="https://github.com/moff05/cim423-3d-world/tree/main/assets/code/night-shift-vinyl" target="_blank" rel="noopener">github.com/moff05/cim423-3d-world / assets / code / night-shift-vinyl</a></td></tr>
+<tr><th>Built with</th><td>Claude Code (Anthropic) wrote the C# scripts, Blender models, textures and audio from my direction. A state machine accepts the five steps only in order, and the room is rebuilt from code by <code>ChillhopBuilder</code>. The <a href="https://github.com/moff05/cim423-3d-world/blob/main/assets/code/night-shift-vinyl/SETUP.md" target="_blank" rel="noopener">setup guide</a> is in the repo.</td></tr>
 <tr><th>Engine</th><td>Unity 6, XR Interaction Toolkit 3.6, OpenXR, XR Hands</td></tr>
 </table>
 
