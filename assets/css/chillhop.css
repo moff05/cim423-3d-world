@@ -283,3 +283,11 @@ html.modal-open { overflow:hidden; }
 .demo-fab-ic { padding-left:.14rem; }
 .demo-fab-tip { padding:0; }
 .demo-fab:hover .demo-fab-tip, .demo-fab:focus-visible .demo-fab-tip { padding-right:0; }
+
+/* ---- the two header buttons share ONE set of rules: same colour, glow, hover and press ---- */
+.repo-link a, .hero-cta .play {
+  background:var(--amber); color:#241406; border:1px solid transparent; opacity:1; animation:none;
+  box-shadow:0 0 30px rgba(255,179,71,.4); transition:transform .15s ease, box-shadow .15s ease;
+}
+.repo-link a:hover, .hero-cta .play:hover { opacity:1; transform:translateY(-2px); box-shadow:0 0 38px rgba(255,179,71,.55); }
+.repo-link a:active, .hero-cta .play:active { transform:translateY(0); }
