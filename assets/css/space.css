@@ -31,8 +31,8 @@ header.site-header h1 { position:relative; z-index:2; font-size:clamp(4rem,15vw,
 .repo-link a:hover { background:#7ee8ff22; box-shadow:0 0 22px #7ee8ff66; }
 
 /* nav: floating pill */
-.chapter-nav { position:sticky; top:.8rem; z-index:20; max-width:900px; margin:0 auto; padding:0 1.5rem; }
-.chapter-nav .chapter-nav-inner { max-width:none; margin:0; display:flex; flex-wrap:wrap; align-items:center; gap:.3rem 1.2rem; padding:.65rem 1.4rem; font-size:.84rem;
+.chapter-nav { position:sticky; top:0; z-index:20; padding:.8rem 1.5rem 1.4rem; background:linear-gradient(180deg,#080b1b 0,#080b1b 62%,rgba(8,11,27,0) 100%); pointer-events:none; }
+.chapter-nav .chapter-nav-inner { pointer-events:auto; max-width:852px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; gap:.3rem 1.2rem; padding:.65rem 1.4rem; font-size:.84rem;
   background:rgba(10,14,34,.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(126,232,255,.22); border-radius:999px; box-shadow:0 10px 40px -12px rgba(0,0,0,.6); }
 .chapter-nav a { color:var(--muted); text-decoration:none; font-weight:500; border:none; transition:color .2s; }
 .chapter-nav a:hover, .chapter-nav a.current { color:var(--text); }
