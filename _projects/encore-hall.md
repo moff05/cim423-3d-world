@@ -2,7 +2,7 @@
 layout: project
 theme: music
 order: 2
-title: Music World
+title: Encore Hall
 slug_label: Project 2
 eyebrow: MUD Foundation · CIM 423 · University of Miami
 thumb: /assets/images/music-world/hub.jpg
@@ -30,10 +30,10 @@ scripts:
 
 <h2 id="summary" class="reveal">Summary</h2>
 
-<p class="lead reveal"><b>Music World</b> is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. The space is never finished: it looks different after every visit, because the visitors decide who is on the wall. <a href="https://verse.mud.foundation/qx7dtAx" target="_blank" rel="noopener">Enter the space</a>.</p>
+<p class="lead reveal"><b>Encore Hall</b> is a shared virtual recording studio in MUD Foundation. Visitors walk through four genre rooms (Rock, Hip-Hop, Electronic, Country), like their favorite artists, and watch the community's top four fill each room's All-Time Four frames. The space is never finished: it looks different after every visit, because the visitors decide who is on the wall. <a href="https://verse.mud.foundation/qx7dtAx" target="_blank" rel="noopener">Enter the space</a>.</p>
 
 <figure class="video-card reveal">
-<video controls preload="metadata" poster="{{ site.baseurl }}/assets/images/music-world/walkthrough-poster.jpg" aria-label="Music World walkthrough, 2 minutes 43 seconds">
+<video controls preload="metadata" poster="{{ site.baseurl }}/assets/images/music-world/walkthrough-poster.jpg" aria-label="Encore Hall walkthrough, 2 minutes 43 seconds">
 <source src="{{ site.baseurl }}/assets/videos/music-world-walkthrough.mp4" type="video/mp4">
 <track kind="captions" src="{{ site.baseurl }}/assets/videos/music-world-walkthrough.vtt" srclang="en" label="English" default>
 </video>
