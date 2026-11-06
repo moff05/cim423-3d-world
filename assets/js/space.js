@@ -47,40 +47,6 @@
     });
   });
 
-  // run stepper
-  var steps = [
-    ['Airlock door', 'Hover glows the door, select starts ECHO\'s briefing. In VR you grab the wheel handle and move your hand in a circle (TwistHandle.cs) to open it.'],
-    ['Corridor door', 'Same vault-door pattern, tied to its own step so the wheel only turns on its turn. This one used to have no wheel at all, which soft-locked the run.'],
-    ['Terminal', 'Selecting the console opens an information panel with the crew\'s last journal entry, Day 180. It closes itself after the final line.'],
-    ['Lab door', 'Last door. The Lab light flickers here, the only room that needs to.'],
-    ['Recorder', 'Hover scales it up and lights it up. Select it and it plays the last thing it ever recorded: static, one ragged breath, nothing.'],
-    ['Artifact', 'Material shifts from dim blue to bright white, the room shakes, the lights go red, then you are floating in open space for about twelve seconds before everything snaps back.']
-  ];
-  var btns = document.querySelectorAll('.rs'), detail = document.getElementById('runDetail'), fill = document.getElementById('runFill'), play = document.getElementById('runPlay'), timer = null;
-  function go(i) {
-    btns.forEach(function (b, n) { b.classList.toggle('active', n === i); b.classList.toggle('done', n < i); });
-    if (detail) detail.innerHTML = '<b>Step ' + (i + 1) + ' of 6: ' + steps[i][0] + '</b>' + steps[i][1];
-    if (fill) fill.style.width = (i / 5 * 100) + '%';
-  }
-  btns.forEach(function (b) { b.addEventListener('click', function () { stop(); go(+b.getAttribute('data-step')); }); });
-  function stop() { if (timer) { clearInterval(timer); timer = null; if (play) play.textContent = '▶ Play the run'; } }
-  if (play) play.addEventListener('click', function () {
-    if (timer) { stop(); return; }
-    var i = 0; go(0); play.textContent = '❚❚ Pause';
-    timer = setInterval(function () { i++; if (i > 5) { stop(); return; } go(i); }, 2600);
-  });
-  if (detail) go(0);
-
-  // count-up on stats
-  document.querySelectorAll('[data-count]').forEach(function (el) {
-    var end = +el.getAttribute('data-count'); if (reduced) return;
-    var seen = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return; seen.disconnect();
-      var t0 = performance.now();
-      (function tick(t) { var p = Math.min((t - t0) / 900, 1); el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(tick); })(t0);
-    }); seen.observe(el);
-  });
-
   // gallery lightbox
   var lb = document.createElement('div'); lb.className = 'lightbox'; lb.innerHTML = '<img alt=""><p></p>'; document.body.appendChild(lb);
   document.querySelectorAll('.gallery img').forEach(function (im) {

@@ -20,12 +20,12 @@ header.site-header, main, footer, .chapter-nav-inner { max-width:900px; margin-l
 
 /* hero */
 header.site-header { position:relative; padding-top:5rem; padding-bottom:3rem; max-width:900px; }
-header.site-header::after { content:""; position:absolute; right:1.5rem; top:2.2rem; width:min(380px,38vw); aspect-ratio:300/206; background:url("../images/planet.svg") no-repeat center/contain;
+header.site-header::after { content:""; position:absolute; right:0; top:1.6rem; width:min(330px,32vw); aspect-ratio:300/206; background:url("../images/planet.svg") no-repeat center/contain;
   filter:drop-shadow(0 0 50px rgba(153,58,139,.7)); animation:float 7s ease-in-out infinite alternate; }
 @keyframes float { from { translate:0 -10px; rotate:-2deg; } to { translate:0 12px; rotate:2deg; } }
 .eyebrow { font-family:"Space Mono",monospace; font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--cyan); position:relative; z-index:2; }
-header.site-header h1 { position:relative; z-index:2; font-size:clamp(4rem,15vw,9rem); font-weight:700; letter-spacing:-.05em; line-height:.9; margin:.7rem 0 1.2rem;
-  padding-right:.1em; background:linear-gradient(90deg,#fff,#9be9ff 45%,#e0a8ff); -webkit-background-clip:text; background-clip:text; color:transparent;
+header.site-header h1 { position:relative; z-index:2; font-size:clamp(4rem,15vw,9rem); font-weight:700; letter-spacing:-.05em; line-height:.95; margin:.7rem 0 0;
+  padding:0 .1em .16em 0; margin-bottom:.9rem; background:linear-gradient(90deg,#fff,#9be9ff 45%,#e0a8ff); -webkit-background-clip:text; background-clip:text; color:transparent;
   filter:drop-shadow(0 0 26px rgba(126,232,255,.4)); }
 .accent-bar { height:4px; width:110px; border-radius:4px; background:linear-gradient(90deg,var(--cyan),var(--violet)); position:relative; z-index:2; }
 .tagline { position:relative; z-index:2; font-size:1.3rem; color:#dcd7f5; margin:1.3rem 0 0; max-width:520px; }

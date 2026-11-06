@@ -1,15 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300">
   <defs>
-    <radialGradient id="p" cx="32%" cy="28%" r="80%"><stop offset="0" stop-color="#f0d4ff"/><stop offset=".5" stop-color="#993A8B"/><stop offset="1" stop-color="#3b1245"/></radialGradient>
-    <linearGradient id="r" x1="0" x2="1"><stop offset="0" stop-color="#ffe6cf"/><stop offset=".5" stop-color="#ffc9a8"/><stop offset="1" stop-color="#ffe6cf"/></linearGradient>
+    <radialGradient id="body" cx="34%" cy="28%" r="85%">
+      <stop offset="0" stop-color="#ffe3f4"/><stop offset=".28" stop-color="#e07ac4"/><stop offset=".62" stop-color="#8d3ba8"/><stop offset="1" stop-color="#2a0f4d"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="30%" cy="26%" r="95%">
+      <stop offset=".45" stop-color="#08031a" stop-opacity="0"/><stop offset="1" stop-color="#08031a" stop-opacity=".78"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset=".6" stop-color="#e07ac4" stop-opacity=".35"/><stop offset="1" stop-color="#e07ac4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="moon" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#eaf6ff"/><stop offset=".6" stop-color="#8fb4d6"/><stop offset="1" stop-color="#243a58"/></radialGradient>
+    <clipPath id="orb"><circle cx="210" cy="150" r="84"/></clipPath>
+    <clipPath id="back"><rect x="0" y="0" width="420" height="150"/></clipPath>
+    <clipPath id="front"><rect x="0" y="150" width="420" height="150"/></clipPath>
+    <g id="rings" fill="none">
+      <ellipse cx="210" cy="150" rx="185" ry="40" stroke="#f6dcc4" stroke-opacity=".55" stroke-width="5"/>
+      <ellipse cx="210" cy="150" rx="168" ry="36" stroke="#e9b896" stroke-opacity=".9" stroke-width="16"/>
+      <ellipse cx="210" cy="150" rx="146" ry="31" stroke="#fff0e0" stroke-opacity=".85" stroke-width="7"/>
+      <ellipse cx="210" cy="150" rx="130" ry="27.5" stroke="#d99f84" stroke-opacity=".75" stroke-width="10"/>
+    </g>
   </defs>
-  <g transform="rotate(-18 160 110)" fill="none" stroke="url(#r)" stroke-linecap="round">
-    <path d="M 20 110 A 140 34 0 0 1 300 110" stroke-width="9" opacity=".85"/>
-    <path d="M 38 110 A 122 27 0 0 1 282 110" stroke-width="3" opacity=".6"/>
+  <circle cx="210" cy="150" r="130" fill="url(#glow)"/>
+  <g transform="rotate(-16 210 150)">
+    <g clip-path="url(#back)"><use href="#rings"/></g>
+    <g clip-path="url(#orb)" transform="rotate(16 210 150)">
+      <circle cx="210" cy="150" r="84" fill="url(#body)"/>
+      <g opacity=".5">
+        <rect x="120" y="100" width="180" height="10" fill="#ffd0ec" opacity=".55" transform="rotate(-8 210 150)"/>
+        <rect x="120" y="124" width="180" height="16" fill="#5a1f86" opacity=".6" transform="rotate(-8 210 150)"/>
+        <rect x="120" y="152" width="180" height="8" fill="#ffc2e6" opacity=".5" transform="rotate(-8 210 150)"/>
+        <rect x="120" y="172" width="180" height="14" fill="#4a1873" opacity=".6" transform="rotate(-8 210 150)"/>
+        <rect x="120" y="198" width="180" height="9" fill="#f0a0d8" opacity=".4" transform="rotate(-8 210 150)"/>
+      </g>
+      <circle cx="210" cy="150" r="84" fill="url(#shade)"/>
+    </g>
+    <circle cx="210" cy="150" r="84" fill="none" stroke="#ffd6f1" stroke-opacity=".35" stroke-width="1.5" transform="rotate(16 210 150)"/>
+    <g clip-path="url(#front)"><use href="#rings"/></g>
   </g>
-  <circle cx="160" cy="110" r="64" fill="url(#p)"/>
-  <g transform="rotate(-18 160 110)" fill="none" stroke="url(#r)" stroke-linecap="round">
-    <path d="M 20 110 A 140 34 0 0 0 300 110" stroke-width="9"/>
-    <path d="M 38 110 A 122 27 0 0 0 282 110" stroke-width="3" opacity=".7"/>
-  </g>
+  <circle cx="345" cy="62" r="13" fill="url(#moon)"/>
 </svg>
