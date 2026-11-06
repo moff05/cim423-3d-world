@@ -22,7 +22,7 @@
     {% assign projs = site.projects | sort: "order" %}
     {% for p in projs %}{% assign n = forloop.index %}
     <a class="card theme-{{ p.theme }}" href="{{ p.url | relative_url }}">
-      <div class="card-art"{% if p.thumb %} style="background-image:url('{{ p.thumb | relative_url }}')"{% endif %}></div>
+      <div class="card-art"{% if p.thumb %} style="background-image:url('{{ p.thumb | relative_url }}');background-position:{{ p.thumb_pos | default: 'center' }}"{% endif %}></div>
       <div class="card-body">
         <span class="card-kicker"><b>0{{ n }}</b> {{ p.meta }}</span>
         <h2>{{ p.title }}</h2>
