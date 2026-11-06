@@ -20,9 +20,6 @@ header.site-header, main, footer, .chapter-nav-inner { max-width:900px; margin-l
 
 /* hero */
 header.site-header { position:relative; padding-top:5rem; padding-bottom:3rem; max-width:900px; }
-header.site-header::after { content:""; position:absolute; right:0; top:1.6rem; width:min(330px,32vw); aspect-ratio:300/206; background:url("../images/planet.svg") no-repeat center/contain;
-  filter:drop-shadow(0 0 50px rgba(153,58,139,.7)); animation:float 7s ease-in-out infinite alternate; }
-@keyframes float { from { translate:0 -10px; rotate:-2deg; } to { translate:0 12px; rotate:2deg; } }
 .eyebrow { font-family:"Space Mono",monospace; font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--cyan); position:relative; z-index:2; }
 header.site-header h1 { position:relative; z-index:2; font-size:clamp(4rem,15vw,9rem); font-weight:700; letter-spacing:-.05em; line-height:.95; margin:.7rem 0 0;
   padding:0 .1em .16em 0; margin-bottom:.9rem; background:linear-gradient(90deg,#fff,#9be9ff 45%,#e0a8ff); -webkit-background-clip:text; background-clip:text; color:transparent;
@@ -140,10 +137,9 @@ footer { display:flex; flex-direction:column; gap:.5rem; color:var(--muted); fon
 footer a { color:var(--cyan); }
 
 @media (max-width:700px) {
-  header.site-header::after { opacity:.35; width:60vw; top:1rem; right:-8%; }
   .run-steps { grid-template-columns:repeat(3,1fr); row-gap:1rem; } .run-track { display:none; }
   .gallery { grid-template-columns:1fr; } .comm.you { margin-left:.6rem; }
 }
 @media (prefers-reduced-motion:reduce) {
-  header.site-header::after, .ticker-track { animation:none; } .rv { opacity:1; transform:none; transition:none; }
+  .ticker-track { animation:none; } .rv { opacity:1; transform:none; transition:none; }
 }
